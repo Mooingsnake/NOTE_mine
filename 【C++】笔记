@@ -17,11 +17,6 @@ vector < vector < int >>因为编译器对于>>有别的定义
 定义方式和遍历方式：
 
 vector < int > v(10);
-for (int i = 0; i < 10; i++) { 
+for (int i = 0; i < 10; i++) {
 v[i] = (i + 1) * (i + 1);
 }
-
-
-
-
-
