@@ -1,0 +1,27 @@
+POWER UP C++ WITH THE STANDARD TEMPLATE LIBRARY PART ONE
+
+网址：https://www.topcoder.com/thrive/articles/Power%20up%20C++%20with%20the%20Standard%20Template%20Library%20Part%20One
+#1容器
+
+对于C语言而言容器只有数组
+#注意事项
+
+嵌套的vector应该这样定义：vector < vector < int > >中间有一个空格
+
+而不是：
+vector < vector < int >>因为编译器对于>>有别的定义
+#VECTOR
+
+唯一对C有兼容的容器，也就是一个数组
+
+定义方式和遍历方式：
+
+vector < int > v(10);
+for (int i = 0; i < 10; i++) { 
+v[i] = (i + 1) * (i + 1);
+}
+
+
+
+
+
