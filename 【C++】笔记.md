@@ -13,6 +13,7 @@ POWER UP C++ WITH THE STANDARD TEMPLATE LIBRARY PART ONE
 
 而不是：
  ``` vector < vector < int >>```因为编译器对于>>有别的定义
+ STL是需要#include的，下面出现的所有容器都是STL
 
 ## VECTOR
 
@@ -118,7 +119,7 @@ end:指向的不是最后一个元素，而是**第一个非法元素，或者�
 c.size() = c.end() - c.begin()
 c.empty() = (c.ebign() == c.end());
 
-对STL兼容的反转函数如下：
+对STL兼容的反转函数如下,体现了模板的优点：
 ```
 template < typename T > void reverse_array_stl_compliant(T * begin, T * end) {
   // We should at first decrement ‘end’
@@ -141,7 +142,111 @@ template < typename T > void reverse_array_stl_compliant(T * begin, T * end) {
   }
 }
 ```
+另外浅拷贝的赋值语句可以这么写
+```
+vector < int > v;
+// …
+vector < int > v2(v);
+vector < int > v3(v.begin(), v.end()); // v3 equals to v2
+// …
+vector < int > v4(v.begin(), v.begin() + (v.size() / 2));//相当v的前半部分
+```
+另外，把[]数组赋值到vector,如下所示
+```
+int data[5] = {
+  1,
+  5,
+  2,
+  4,
+  3
+};
+vector < int > X(data, data + 5);
+```
+由此可见data，iterator都是类似指针
 
+ ##### rbegin() rend()
+【补充：反向迭代器primer p363】
+```
+递增递减的含义会倒过来，例如++it的意思是移动到前一个元素，--it则会移动到下一个元素
+容器基本上都支持反向迭代器
+sort(vec.begin(),vec.end());//正向排序
+sort(vec.rbegin(),vec.rend());//逆向排序
+```
+#####如何定义和使用iterator
+```
+//遍历vector
+for (vector < int > ::iterator it = v.begin(); it != v.end(); it++) {
+  * it++; // Increment the value iterator is pointing to
+}
+```
+**！=比<效率更高，empty()比size()!=0效率更高**，只要想一下汇编的时候判断大小和比较等于哪个更容易就知道了、
+##### 关于最大最小函数
+```
+int data[5] = {
+  1,
+  5,
+  2,
+  4,
+  3
+};
+vector < int > X(data, data + 5);
+int v1 = * max_element(X.begin(), X.end()); // Returns value of max element in vector
+int i1 = min_element(X.begin(), X.end())– X.begin(); // Returns index of min element in vector
+int v2 = * max_element(data, data + 5); // Returns value of max element in array
+int i3 = min_element(data, data + 5)– data; // Returns index of min element in array
 
+```
+ * max_element(X.begin(), X.end())找到最小值    【c语言里面，* p是解引用，把指针地址解为值，& a是取地址，把值的存储地址找到】
+ 
+min_element(X.begin(), X.end())– X.begin() 找到最小值的下标，返回的虽然是int，但是是iterator的地址
+##### iterator的排序（没咋看懂这个宏定义）
+```
+#define all© c.begin(), c.end()
+sort(X.begin(), X.end()); // Sort array in ascending order
+sort(all(X)); // Sort array in ascending order, use our #define
+sort(X.rbegin(), X.rend()); // Sort array in descending order using with reverse iterators
+```
+rbegin其实是end的位置  [ ， )
 
+## COMPILING STL PROGRAMS
+STL的报错信息很重要
+【没懂宏这里怎么设置的】
+遍历一个常量vector 不能使用iterator，需要用const_iterator   
+iterator 可读可写，const_iterator可读不写，和常量指针差不多,那么要如何编写遍历？
+```
+void f(const vector < int > & v) {
+  int r = 0;
+  // Traverse the vector using const_iterator
+  for (vector < int > ::const_iterator it = v.begin(); it != v.end(); it++) {
+    r += (it)( * it);
+  }
+  return r;
+}
+```
 
+## DATA MANIPULATION IN VECTOR 数据操纵
+```
+vector < int > v;
+// …
+v.insert(1, 42); // 把42插在第一个后面，也就是index 0 ，原先[1,last]都往后移
+```
+如果要多次插入，最好只用一次insert函数
+```
+vector < int > v;
+vector < int > v2;
+// …
+
+// Shift all elements from second to last to the appropriate number of elements.
+// 把整个V2放在V1第一个数后面
+v.insert(1, all(v2));
+```
+## STRING
+区别于vector<char> 主要在函数和内存分配上有差异
+ 
+string s = “hello”;
+string
+s1 = s.substr(0, 3), // “hel”
+  s2 = s.substr(1, 3), // “ell”
+  s3 = s.substr(0, s.length() - 1), “hell”
+s4 = s.substr(1); // “ello”
+ ##  SET
