@@ -2,6 +2,13 @@ POWER UP C++ WITH THE STANDARD TEMPLATE LIBRARY PART ONE
 
 网址：https://www.topcoder.com/thrive/articles/Power%20up%20C++%20with%20the%20Standard%20Template%20Library%20Part%20One
 
+##### 本文尚未学习的知识点
+```
+1.宏定义如何解决迭代器复用
+2. r += (it)( * it);
+3. something->   vs  (*something)
+```
+
 ## 1容器
 
 对于C语言而言容器只有数组
@@ -242,11 +249,51 @@ v.insert(1, all(v2));
 ```
 ## STRING
 区别于vector<char> 主要在函数和内存分配上有差异
- 
+ ```
 string s = “hello”;
 string
 s1 = s.substr(0, 3), // “hel”
   s2 = s.substr(1, 3), // “ell”
   s3 = s.substr(0, s.length() - 1), “hell”
 s4 = s.substr(1); // “ello”
- ##  SET
+ ```
+ ## SET
+ set可以随意增加，删去元素或者检测是否存在（O(log N)时间内）
+ insert已经有的不会报错，什么都不干
+ 是乱序的，所以push_back()是不会出现的，也不会有index的
+ 除非用iterator做遍历
+ ```
+ // Calculate the sum of elements in set
+set < int > S;
+// …
+int r = 0;
+for (set < int > ::const_iterator it = S.begin(); it != S.end(); it++) {
+  r += * it;
+}
+ ```
+ 其实这种遍历是比较麻烦的，比如遇到了二维三维嵌套的时候
+ 它那里说的是用遍历宏，然后就会变成这个样子
+ ```
+ set < pair < string, pair < int, vector < int > > > > SS;
+int total = 0;
+tr(SS, it) {
+  total += it - > second.first;
+}
+ ```
+ **对不起完全没有看懂**
+ 
+当然拉，我们使用find()查看一个set里面是否存在了这个目标,但是不要用全局的find()，那个是O（N）
+ 使用set::find()可以将消耗缩到O（log N），当然也return的是一个iterator，要么是找到的那个元素，要么是s.end()
+ ```
+ set < int > s;
+// …
+if (s.find(42) != s.end()) {
+  // 42 presents in set
+} else {
+  // 42 not presents in set
+}
+ ```
+ 
+ 
+ 
+ 
