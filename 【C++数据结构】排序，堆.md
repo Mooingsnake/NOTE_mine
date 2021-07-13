@@ -48,3 +48,45 @@ while(步长从1-2-4-8-----n){
   while(对i-（i+步长）){}迭代
 }
 ```
+
+### 快速排序
+warning：接近有序的时候退化成0（n²）
+1.基本思路是让第一个元素移到中间，使左边的都小于它，右边的都大于它
+![image](https://user-images.githubusercontent.com/47411365/125406350-52266600-e3eb-11eb-881e-28dd345be826.png)
+2.具体解释是标记j和i，让其他被遍历的数放在j或者i旁边
+如果新数大于j，那么不用动位置，如果新数小于j，那么把j+1和当前新数坐标置换
+![image](https://user-images.githubusercontent.com/47411365/125406532-84d05e80-e3eb-11eb-8212-08f8e622f2b1.png)
+3.最后把v和j位置交换(注意开闭区间)
+```
+func(把当前v前/后分区) // 基本就是遍历，二分（近似），插入
+{
+  while(遍历这个分区){
+    func(前后分区){
+    
+    }
+  }
+}
+```
+#### 优化
+1.在一个较小数量级的时候可以换成插入排序
+2.在近乎有序的情况下v的标记可以每次随机一个数，而不是用第一个元素
+补充随机方式
+```
+template <typename T>
+int __partition(T arr[], int l, int r) {
+	std::swap(arr[l], arr[rand() % (r-l+1)+l]);
+........
+}
+
+template<typename T>
+void quickSort(T arr[],int n) {
+	srand(time(NULL));
+	__quickSort(arr, 0,n - 1);
+}
+```
+3.在有非常多重复键值对的时候还是会退化到O（N²）
+这是因为大量重复键值容易让分区不平衡二分
+![image](https://user-images.githubusercontent.com/47411365/125436431-9ac34c62-8112-4728-b886-d1c70ef75c12.png)
+避免了大量=V的元素集中在橙色/紫色
+
+## 堆
