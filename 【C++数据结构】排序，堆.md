@@ -1,3 +1,9 @@
+## 目录
+[排序](#sort)
+[堆](#heap)
+
+
+<span id ="sort"></span>
 ## O（n²）排序
 ### 选择排序
 ![image](https://user-images.githubusercontent.com/47411365/125230656-d3a6c700-e30b-11eb-9cee-8e0447564338.png)
@@ -89,4 +95,24 @@ void quickSort(T arr[],int n) {
 ![image](https://user-images.githubusercontent.com/47411365/125436431-9ac34c62-8112-4728-b886-d1c70ef75c12.png)
 避免了大量=V的元素集中在橙色/紫色
 
+<span id="heap"></span>
 ## 堆
+1.堆是一颗具有特定性质的二叉树，堆的基本要求就是堆中所有结点的值必须 __大于或等于（或小于或等于）其孩子结点的值__，这也称为堆的性质；
+2..堆还有另一个性质，就是当 h > 0 时，所有叶子结点都处于第 h 或 h - 1 层（其中 h 为树的高度，完全二叉树），也就是说， __堆应该是一颗完全二叉树__；
+
+__有完全二叉树的性质后可以用一个数组存储堆__
+1.每个结点的左孩子为下标i的2倍：left child(i) = i * 2；每个结点的右孩子为下标i的2倍加1：right child(i) = i * 2 + 1
+2.每个结点的父亲结点为下标的二分之一：parent(i) = i / 2，注意这里是整数除，2和3除以2都为1，大家可以验证一下；
+### 向堆中添加元素和Sift Up
+![image](https://user-images.githubusercontent.com/47411365/125750818-7ab68dba-8504-47b8-9d61-e60e1eb8c748.png)
+像泡泡一样向上替换
+### 向堆中删去最大值（删东西）
+![image](https://user-images.githubusercontent.com/47411365/125751321-2cc1c2ea-c886-43dd-937a-d57df4aac21a.png)
+向下替换
+### 二叉堆
+基本上市面上的堆都是二叉堆
+### 最大堆
+父节点大于子节点，左右节点无所谓
+### 最小堆
+父节点小于子节点，左右节点无所谓
+
