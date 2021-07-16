@@ -103,10 +103,10 @@ void quickSort(T arr[],int n) {
 __有完全二叉树的性质后可以用一个数组存储堆__
 1.每个结点的左孩子为下标i的2倍：left child(i) = i * 2；每个结点的右孩子为下标i的2倍加1：right child(i) = i * 2 + 1
 2.每个结点的父亲结点为下标的二分之一：parent(i) = i / 2，注意这里是整数除，2和3除以2都为1，大家可以验证一下；
-### 向堆中添加元素和Sift Up
+### 向堆中添加元素和Shift Up
 ![image](https://user-images.githubusercontent.com/47411365/125750818-7ab68dba-8504-47b8-9d61-e60e1eb8c748.png)
 像泡泡一样向上替换
-### 向堆中删去最大值（删东西）
+### 向堆中删去最大值（删东西）Shift Down（logn）
 ![image](https://user-images.githubusercontent.com/47411365/125751321-2cc1c2ea-c886-43dd-937a-d57df4aac21a.png)
 向下替换
 ### 二叉堆
@@ -115,4 +115,7 @@ __有完全二叉树的性质后可以用一个数组存储堆__
 父节点大于子节点，左右节点无所谓
 ### 最小堆
 父节点小于子节点，左右节点无所谓
+## O（nlogn）堆排序
+1.把一个元素吐出来用的是二分，所以是logn
+2.把所有元素按顺序吐出来，是n
 
