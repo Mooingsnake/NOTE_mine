@@ -152,14 +152,115 @@ function inorderSort(x){
 4.insert()，delete(需要翻转子树)
 5.successor(x)，predecessor(x)（后继和前驱）
 ### 红黑树
-二叉搜索树不能保证最坏情况的时间效率，红黑树是平衡的二叉树
-平衡二叉树追求绝对平衡，红黑树更宽松更广泛更易用
+1.二叉搜索树不能保证最坏情况的时间效率，红黑树是平衡的二叉树2.平衡二叉树追求绝对平衡，红黑树更宽松更广泛更易用
+
 组成：
-1.包含颜色，左，右，父，值
-2.根节点和叶子节点黑色
-3.如果节点是红，则两个子节点是黑
+- 包含颜色，左，右，父，值
+- 根节点和叶子节点黑色
+- 如果节点是红，则两个子节点是黑
+
 性质：
 节点往下，每一个路径黑色节点个数相同
+
 黑高：
 某节点之下（不包含本节点）的一条路径的黑色节点数量。
 
+一个通用哨兵T：
+1.有一个T.nil表示红黑树，所有的叶子节点的空子节点
+2.有一个T.root表示红黑树的根节点
+
+#### 旋转
+![image](https://user-images.githubusercontent.com/47411365/126056049-f5b5243f-3c66-48b3-a811-74fbd0e7669e.png)
+```
+LEFT-ROTATE(T,x)
+  y = x.right
+  x.right = y.left
+  if(y.left != T.nil)
+    y.left.p = x;
+  y.p = x.p
+  if(x.p == T.nil)
+    T.root = y;
+  else if(x == x.p.left)
+    x.p.right = y;
+  else x.p.right = y;
+  y.left = x;
+  x.p = y;
+```
+ #### 插入（O（logN））
+ 插入其实很容易，本身就是一个二叉树所以只需要O(lgn)就能找到合适的位置，规定每次插入都是红色点，难点在修正函数
+ ```
+ // neel是nullptr一样的玩意
+void insert_fixup(root, z, node*& neel) {
+	while (z.p.color == RED) {
+
+		if (z.p == z.p.p.left) {
+			node* y = z.p.p.right;
+			if (y.color == RED) {
+				z.p.color = 'b';
+				y.color = 'b';
+				z.p.p.color = RED;
+				z = z.p.p;
+			}
+			else if (z == z.p.right) {
+				z = z.p;
+				left_rotate(root, z, neel);
+
+				z.p.color = 'b';
+				z.p.p.color = RED;
+				right_rotate(root, z.p.p, neel);
+			}
+			else {
+				z.p.color = 'b';
+				z.p.p.color = RED;
+				right_rotate(root, z.p.p, neel);
+			}
+		}
+		else {                                   //i.e. (z.p == z.p.p.right)
+			node* y = z.p.p.left;
+			if (y.color == RED) {
+				z.p.color = 'b';
+				y.color = 'b';
+				z.p.p.color = RED;
+				z = z.p.p;
+			}
+			else if (z == z.p.left) {
+				z = z.p;
+				right_rotate(root, z, neel);
+
+				z.p.color = 'b';
+				z.p.p.color = RED;
+				left_rotate(root, z.p.p, neel);
+			}
+			else {
+				z.p.color = 'b';
+				z.p.p.color = RED;
+				left_rotate(root, z.p.p, neel);
+			}
+		}
+	}
+	root.color = 'b';
+}
+ ```
+ 
+ 以下图片来自http://alrightchiu.github.io/SecondRound/red-black-tree-insertxin-zeng-zi-liao-yu-fixupxiu-zheng.html
+ ![image](https://user-images.githubusercontent.com/47411365/126066544-6e6ad983-8477-4e6c-bd33-362292550914.png)
+
+case1：
+如果新增点（current，在算法导论里是z）是红，父亲是红，叔叔是红
+
+那么指针（current / z）移到爷爷，爷爷变红，父&叔叔变黑
+不旋转
+![image](https://user-images.githubusercontent.com/47411365/126066840-e76a7fae-a4c7-4bfa-b18a-a93438fb39ca.png)
+
+case2：
+如果当前点（current/z）红，父亲是红，且z是右节点
+
+那么指针移到它爸，并左转
+![image](https://user-images.githubusercontent.com/47411365/126066858-5426533d-3ac1-4517-90e4-4b7933f8da34.png)
+
+case3：
+如果当前点（current/z）红，父亲是红，且z是左节点
+
+那么指针移到爷爷，并右转
+
+#### 删除
