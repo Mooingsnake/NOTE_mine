@@ -250,6 +250,7 @@ case1：
 
 那么指针（current / z）移到爷爷，爷爷变红，父&叔叔变黑
 不旋转
+
 ![image](https://user-images.githubusercontent.com/47411365/126066840-e76a7fae-a4c7-4bfa-b18a-a93438fb39ca.png)
 
 case2：
