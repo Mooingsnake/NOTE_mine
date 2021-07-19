@@ -3,7 +3,7 @@
 - [堆](#heap)
 - [二叉树](#binarytree)
 - [B树](#Btree)
-- [并查集](#union-find set)
+- [并查集](#union-find-set)
 - [图](#graph)
 <span id ="sort"></span>
 ## O（n²）排序
@@ -336,3 +336,13 @@ B-TREE-CREATE(T){
 有一套很复杂的情况，不过原则上就是，结点里的key，左右的空就是给孩子插的，所以一个n一个n+1
 
 这种时候我们每次删除要保证：1.孩子有空可插 2.左右两个结点都是t-1的时候就合并 3.保证每个结点关键字个数不少于t-1，如果少了要向爸爸要，爸爸向别的孩子要（稳定的三角传递关系）
+![image](https://user-images.githubusercontent.com/47411365/126203417-f1c1d63b-4c3e-4f1b-847a-31a1d49dfa5f.png)
+![image](https://user-images.githubusercontent.com/47411365/126203433-b7846ad3-57e3-412d-9826-fc7f8b3dc217.png)
+
+
+<span id="union-find-set"></span>
+## 并查集
+
+
+
+
