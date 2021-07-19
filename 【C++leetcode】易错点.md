@@ -88,6 +88,7 @@ reference binding to misaligned address
     }
 ```
 这样的写法下，vec[1]以后的都是0，这是因为vector新建的时候就是（n+1,0）emplace_back()在后面增加
+
 还有个写法
 ```
 vector<int> vec;
@@ -95,7 +96,9 @@ vec[1] = 1;
 ```
 将会导致空指针(leetcode 报错信息：reference binding to null pointer of type 'value_type')，因为这里初始化下vec的大小是0；
 __总结__：
+
 关于一个容器大小，初始化的时候分配了空间就是[n]下标流
+
 如果没分配空间，就是emplace_back函数
 
 ### 大数注意
