@@ -74,3 +74,29 @@ reference binding to misaligned address
 
 ### 构造函数里不需要清空栈
 栈在声明时是空的
+
+### vector.emplace_back()，push_back()
+```
+        if(n <=1) return n;
+        vector<long long>vec(n+1,0);
+        vec[0] = 0;
+        vec[1] = 1;
+        for(int i = 2; i <= n; i++){
+            vec.emplace_back(((long long)vec[i - 1] % (long long)(1e9+7)+ vec[i - 2]%(long long)(1e9+7)) %(long long )((1e9+7)));
+        } 
+        return (int)vec[2];
+    }
+```
+这样的写法下，vec[1]以后的都是0，这是因为vector新建的时候就是（n+1,0）emplace_back()在后面增加
+还有个写法
+```
+vector<int> vec;
+vec[1] = 1;
+```
+将会导致空指针(leetcode 报错信息：reference binding to null pointer of type 'value_type')，因为这里初始化下vec的大小是0；
+__总结__：
+关于一个容器大小，初始化的时候分配了空间就是[n]下标流
+如果没分配空间，就是emplace_back函数
+
+### 大数注意
+(long)((long)+(long))
