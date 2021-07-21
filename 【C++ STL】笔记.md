@@ -13,6 +13,12 @@ POWER UP C++ WITH THE STANDARD TEMPLATE LIBRARY PART ONE
 
 对于C语言而言容器只有数组
 
+我大约理解的时候把容器看作是一个需要程序员负责的内存空间，比方说vector<int> arr(99,0);然后就成功给这个容器定义了一个99个int大小的空间，每个元素都是0
+ 
+ 单纯的定义vector<int> arr 也会让它在内存空间存在，但是需要通过emplace_back()或者push_back()动态分配空间，这两个函数效果一样，不过emplace_back()能把int参数插进vector<vector<int>>里面去，很灵活，但是会给阅读造成困难。
+ 从源码上（以及非常极端需要效率的时候）讲emplace_back()更快，因为它直接在内存新建，push_back()需要复制
+ 原文：https://abseil.io/tips/112
+
 ## 注意事项
 
 嵌套的vector应该这样定义：
