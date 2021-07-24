@@ -113,6 +113,8 @@ __总结__：
 int 转 string
 
     string str = std::tostring(num);
+    
+char 转string
 ### 内置排序或者内置规则
 
 内置一个快排
@@ -172,3 +174,7 @@ public:
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
+### 循环的效率问题
+我不知道为什么，我写for(int i = 0; i < nums.size(); i++)的时候效率是4ms
+
+写for(auto x: nums)的时候效率是0ms
