@@ -186,4 +186,14 @@ public:
 
 如果实在觉得要记得一个头结点又要遍历一个工具人结点困难，就用哨兵做头结点前一个，工具人结点 = 哨兵，所有的结点都是.next；
 
-
+### 递归的时候的内存问题
+```
+ TreeNode* mirrorTree(TreeNode* root) {
+        if(root == nullptr)return nullptr;
+        TreeNode* tmp = root->left;
+        root->left = mirrorTree(root->right);
+         root->right = mirrorTree(tmp); <----------注意这里，如果tmp是root->left会报一个heap-use-after-free的错误，而这种错误只出现在free(arr)后调用arr[1]上
+         return root;
+    }
+```
+至今仍未知道它在递归的时候是怎么被释放的。
