@@ -197,3 +197,17 @@ public:
     }
 ```
 至今仍未知道它在递归的时候是怎么被释放的。
+
+### for_each的leetcode骚操作
+用于C++17：
+```
+for (const auto& [key, value] : myMap) {
+    std::cout << key << " has value " << value << std::endl;
+}
+```
+用于C++11
+```
+for (const auto& kv : myMap) {
+    std::cout << kv.first << " has value " << kv.second << std::endl;
+}
+```
