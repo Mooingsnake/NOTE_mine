@@ -211,3 +211,31 @@ for (const auto& kv : myMap) {
     std::cout << kv.first << " has value " << kv.second << std::endl;
 }
 ```
+### 得到子序列最小操作次数
+要用map和数组，用下标的情况显示
+
+首先我们要求的是经过改变后的arr能找出target的匹配的子序列
+
+    arr = {1, 4, 5, 3, 0, 6, 2}
+    target = {0, 1, 2, 3, 4, 5, 6}
+    
+然后找arr里面有序的部分
+### 子问题：求最大递增子序列
+一：dp(n²)
+
+实际上对于动态规划，最后一步f(n) = f(n-1) + 1是容易得出的
+
+主要关键是每一次的f(n)它一定要包括nums[n]
+
+然后在所有dp[]之中选择最大值
+
+另外,下面的写法很不错
+```*max_element(dp.begin(), dp.end());```
+二：二分法和贪心(nlogn)
+
+在上面的动态规划里面，之所以出现了n²，是因为一个循环遍历nums，在循环里面每次都要回去找最大的那个dp[x]然后再加上本身+1
+
+二分法则是需要把dp重新变成n下最大递增子序列（没有必须包括nums[n]的限制），这样dp就是有序的，有序才能二分
+
+![image](https://user-images.githubusercontent.com/47411365/127093482-d4eb650a-3579-46f3-b192-5d8c721df863.png)
+
