@@ -240,3 +240,30 @@ for (const auto& kv : myMap) {
 
 ![image](https://user-images.githubusercontent.com/47411365/127093482-d4eb650a-3579-46f3-b192-5d8c721df863.png)
 
+我太难了难成傻逼我直接unravel，这段小小的代码在来姨妈的时候折磨了我整整一天一夜，凸(艹皿艹 )
+```
+ int n = target.size();
+        unordered_map<int, int> pos;
+        for (int i = 0; i < n; ++i) {
+            pos[target[i]] = i;
+        }
+        vector<int> d;
+        for (int val : arr) {
+            if (pos.count(val)) { // 如果有含有target的元素
+                int idx = pos[val];  // 记录那个元素在target中的值
+                auto it = lower_bound(d.begin(), d.end(), idx); // 在新数组里找更小的，这里函数是二分
+                if (it != d.end()) { // 如果找到了
+                    *it = idx; // 就记录那个值
+                } else {
+                    d.push_back(idx); // 如果没找到，就加上去
+                }
+            }
+        }
+        return n - d.size();
+    }
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/minimum-operations-to-make-a-subsequence/solution/de-dao-zi-xu-lie-de-zui-shao-cao-zuo-ci-hefgl/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
