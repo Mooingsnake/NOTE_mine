@@ -231,6 +231,7 @@ for (const auto& kv : myMap) {
 
 另外,下面的写法很不错
 ```*max_element(dp.begin(), dp.end());```
+
 二：二分法和贪心(nlogn)
 
 在上面的动态规划里面，之所以出现了n²，是因为一个循环遍历nums，在循环里面每次都要回去找最大的那个dp[x]然后再加上本身+1
