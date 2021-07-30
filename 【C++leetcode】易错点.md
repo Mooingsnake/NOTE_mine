@@ -36,6 +36,9 @@ arr.back();
 链接：https://leetcode-cn.com/problems/single-number/solution/zhi-chu-xian-yi-ci-de-shu-zi-by-leetcode-solution/
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+更效率的
+
 ```
 #### 这是简单进位
 ```
@@ -53,6 +56,13 @@ arr.back();
 链接：https://leetcode-cn.com/problems/er-jin-zhi-zhong-1de-ge-shu-lcof/solution/er-jin-zhi-zhong-1de-ge-shu-by-leetcode-50bb1/
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+更效率的方式：
+  int count = 0;
+        for(int i = 0; i< 32;i++){
+             count += ((n >> i) & 1);
+        }
+        return count;
+    }
 ```
 
 ### 快慢指针
