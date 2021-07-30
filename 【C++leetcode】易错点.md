@@ -22,6 +22,7 @@ arr.back();
 ```
 
 ### 位运算
+#### 这是异或
 寻找只出现一次的数，时间消耗是0（N）不允许有额外的空间，所以禁哈希表
 此时需要位运算
 ```
@@ -33,6 +34,23 @@ arr.back();
 
 作者：LeetCode-Solution
 链接：https://leetcode-cn.com/problems/single-number/solution/zhi-chu-xian-yi-ci-de-shu-zi-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+#### 这是简单进位
+```
+ int hammingWeight(uint32_t n) {
+        int ret = 0;
+        for (int i = 0; i < 32; i++) {
+            if (n & (1 << i)) {
+                ret++;
+            }
+        }
+        return ret;
+    }
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/er-jin-zhi-zhong-1de-ge-shu-lcof/solution/er-jin-zhi-zhong-1de-ge-shu-by-leetcode-50bb1/
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
