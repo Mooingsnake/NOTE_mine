@@ -389,5 +389,20 @@ class 并查集{
 
 连通分量：一个子图，是最大连通图，简称连通分量
 
+### DFS 深度优先遍历
+![image](https://user-images.githubusercontent.com/47411365/127746578-dd69154f-93b5-41ad-8d3d-6ab197a9ec70.png)
+
+准备两个表：一个是parent，实际不用在dfs而是另外一个打印路径的函数需要使用(dfs负责记录)， 一个是visited，每次前进的时候遍历一边下个能走的结点确保不走重路
+
+因为是这样,递归程序会用栈的方式记录分叉点，dfs是void的函数，做完这些事就可以走了，不需要return
+```
+	for(遍历临近点){
+	    if( !visited ){
+	       dfs(xxx);
+	    }
+	}
+```
+
+
 
 
