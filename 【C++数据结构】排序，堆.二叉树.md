@@ -389,6 +389,8 @@ class 并查集{
 
 连通分量：一个子图，是最大连通图，简称连通分量
 
+最小生成树：带权重，且所有线权重之和是最小
+
 ### DFS 深度优先遍历
 ![image](https://user-images.githubusercontent.com/47411365/127746578-dd69154f-93b5-41ad-8d3d-6ab197a9ec70.png)
 
@@ -402,6 +404,24 @@ class 并查集{
 	    }
 	}
 ```
+### BFS 广度优先遍历
+![image](https://user-images.githubusercontent.com/47411365/127757845-e8c7a36a-3079-4f8a-8d33-b397f8786180.png)
+
+准备两个表（visited，parent） + 一个队列，把队列当前元素的（！visited）邻接点插入，然后弹出点，先入的先出，是队列
+
+因为每次弹出前都要先遍历周围一圈，所以是广度优先
+
+### KRUSKAL 算法
+维护一个set（结点，-1），统一把互相联通的部分用一个结点表示，结点本身用负数表示，每个边都事先排序过
+
+![image](https://user-images.githubusercontent.com/47411365/127764851-79616c99-e655-49ca-b3c0-51dfd51ceb89.png)
+
+每次加上不同的树（如果是相同的树就不加了）
+
+
+### prim 算法
+
+每探索一个点把所有路径列出，然后选择最小的连上去。不用回退，可以使用优先队列存储那些未包含的边
 
 
 
