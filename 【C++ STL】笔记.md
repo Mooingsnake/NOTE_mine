@@ -49,7 +49,7 @@ POWER UP C++ WITH THE STANDARD TEMPLATE LIBRARY PART ONE
 
 内存分配不会出问题么？
 
-不会，每次push_back的时候不止加一个元素
+不会，每次push_back的时候不止加一个元素，并且在需要的时候将会重新分配内存空间，再把旧的元素放到新的空间。
 
 ```
 vector < int > v(20);
