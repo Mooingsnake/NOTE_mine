@@ -321,3 +321,21 @@ int gcd(int a,int b){
     return a;
 }
 ```
+
+### acm 模式
+循环输出用例直到结尾：
+```
+	while (cin >> n >> a) {
+		int i = 0;
+		int bn = 0;
+		while (i < n) {
+			cin >> bn;
+			if (a > bn)a += bn;
+			else {
+				a += bcd(a, bn);
+			}
+			i++;
+		}
+		cout << a << endl;
+	}
+```
