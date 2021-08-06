@@ -310,3 +310,14 @@ for (const auto& kv : myMap) {
 堆排序的查找时间是O（n），很合适。
 
 二分查找需要手写代码，堆排序可以使用现成代码：
+
+### 辗转相除法求公约数
+```
+int gcd(int a,int b){
+    int tmp;
+    while(b){
+        tmp = b; b = a % b ; a = tmp;
+    }
+    return a;
+}
+```
