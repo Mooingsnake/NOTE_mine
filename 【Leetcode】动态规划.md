@@ -92,3 +92,40 @@ for ()..
 		做些处理；
 		
 ```
+## 例题
+
+### 第一题
+![image](https://user-images.githubusercontent.com/47411365/129543176-1e260179-48f0-4f68-baff-f444a174a9cb.png)
+
+1.求所有不重复字串 等价于 求以arr[i] 结尾的所有不重复子串
+
+2.瓶颈有2：在index：i-1的时候往前推多少是不重复的子串    ；在index ：i的时候往前推多少遇到相同的value
+
+因为第一个瓶颈其实是可以复用的滚动的值，即所有i都依赖i-1的结果，所以可以把dp数组换成这个变量，节省空间
+
+![image](https://user-images.githubusercontent.com/47411365/129546537-89897ba1-634b-45bc-ba60-d87c38e8f68f.png)
+
+preMaxLen ： 瓶颈1
+
+last[0-25] : 字符上次出现的位置
+
+### 第二题
+
+![image](https://user-images.githubusercontent.com/47411365/129547749-0792ccc5-be43-48d4-9787-d7ef1fd5cc32.png)
+
+给每个字符串写摘要，ascii的顺序有就写没有就不写
+
+![image](https://user-images.githubusercontent.com/47411365/129549339-f6d2fc67-a235-48ed-8ac3-29b54d697d28.png)
+
+### 第三题
+![image](https://user-images.githubusercontent.com/47411365/129549510-8d26383e-841c-401a-b392-757bb72e1ab6.png)
+
+首先确定概念： __子序列就是每一位要/不要，也就是2^n，也就是01011010__ 
+
+然后累加子序列内所有数字和，加完以后还要取一个input 数取模，求模完以后的最大值
+
+#### 解答
+
+dp[i][j] 表示arr[0..i]中是否能够凑出j
+
+子序列：要么前i-1个元素能自己凑出j   要么i-1个元素能凑出j-arr[i]
