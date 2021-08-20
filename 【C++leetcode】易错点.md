@@ -346,3 +346,15 @@ int gcd(int a,int b){
 		cout << a << endl;
 	}
 ```
+
+### 字符串倒转
+看清楚，迭代器可以直接加减，reverse是常用函数，最重要的是min(i+k,n)这样子就可以精准狙击各种第一遍和最后一遍k不足的情况。
+```
+    string reverseStr(string s, int k) {
+        for(int i = 0; i < s.size(); i += k *2){
+            int n = s.size() ;
+            reverse(s.begin()+i,s.begin() + min(i+k,n));
+        }
+        return s;
+    }
+```
