@@ -53,7 +53,8 @@ POWER UP C++ WITH THE STANDARD TEMPLATE LIBRARY PART ONE
 
 ```
 vector < int > v(20);
-v.resize(25);
+v.resize(25);  //会自己调整数组的个数
+v.reserve(25)； // 单纯修改一个capacity，表示能用的内存被扩大了，但是里面的内容和element没有初始化或者删掉，所以直接访问可能会越界
 ```
 
 另外，其实push_back永远都是额外增加
@@ -129,8 +130,11 @@ iterator分两种，普通的和随机访问的：“normal iterators” and “
 一般而言STL里都有两个迭代器： “begin” and “end.” 
 begin:第一个
 end:指向的不是最后一个元素，而是**第一个非法元素，或者最后一个元素之后那个**
+
+ ``` 
 c.size() = c.end() - c.begin()
 c.empty() = (c.ebign() == c.end());
+```
 
 对STL兼容的反转函数如下,体现了模板的优点：
 ```
@@ -155,15 +159,23 @@ template < typename T > void reverse_array_stl_compliant(T * begin, T * end) {
   }
 }
 ```
-另外浅拷贝的赋值语句可以这么写
+另外赋值语句可以这么写
 ```
 vector < int > v;
 // …
-vector < int > v2(v);
+vector < int > v2(v);  //是深拷贝
 vector < int > v3(v.begin(), v.end()); // v3 equals to v2
 // …
 vector < int > v4(v.begin(), v.begin() + (v.size() / 2));//相当v的前半部分
 ```
+实际上，C++ 11 还实现了浅拷贝赋值
+  
+![image](https://user-images.githubusercontent.com/47411365/130231694-0a1081f9-7a6d-46c2-b856-58de3c89ec09.png)
+ 
+![image](https://user-images.githubusercontent.com/47411365/130232712-d683d7e9-d2d7-4b0b-9056-1a0f4fbb9300.png)
+
+有意思的是如果移动了那么原来的那个
+ 
 另外，把[]数组赋值到vector,如下所示
 ```
 int data[5] = {
