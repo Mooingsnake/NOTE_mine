@@ -380,7 +380,7 @@ https://leetcode-cn.com/problems/string-compression/solution/ya-suo-zi-fu-chuan-
                     }
                     reverse(&chars[anchor], &chars[write]);   // 但是需要反序，这里reverse(,)只需要两个指针就可以了
                 }
-                left = read + 1;   	//不要忘记给left+1
+                left = read + 1;   	//不要忘记给left+1,这里left和read是一个维度，write是另外一个关系
             }
         }
         return write;
