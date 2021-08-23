@@ -363,6 +363,7 @@ int gcd(int a,int b){
 ### 压缩字符串
 https://leetcode-cn.com/problems/string-compression/solution/ya-suo-zi-fu-chuan-by-leetcode-solution-kbuc/
 
+双指针，记录写入的坐标和相同的字符的串的最后一个位置，然后取每个位数的时候记得反向
 ```
  int compress(vector<char>& chars) {
         int n = chars.size();
