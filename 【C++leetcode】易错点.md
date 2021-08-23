@@ -358,3 +358,31 @@ int gcd(int a,int b){
         return s;
     }
 ```
+
+
+### 压缩字符串
+https://leetcode-cn.com/problems/string-compression/solution/ya-suo-zi-fu-chuan-by-leetcode-solution-kbuc/
+
+```
+ int compress(vector<char>& chars) {
+        int n = chars.size();
+        int write = 0, left = 0;
+        for (int read = 0; read < n; read++) {
+            if (read == n - 1 || chars[read] != chars[read + 1]) {  // 首先确定是否会越界，然后挑中数个一样字符的最后一个
+                chars[write++] = chars[read];   // 下一个就写上这一串字符的字符类型
+                int num = read - left + 1;  // 然后我们要知道一共有多少个这样的字符，用双指针记录
+                if (num > 1) {   	 	
+                    int anchor = write;       // 新建一个锚用来遍历管理每一位
+                    while (num > 0) {
+                        chars[write++] = num % 10 + '0';
+                        num /= 10;
+                    }
+                    reverse(&chars[anchor], &chars[write]);   // 但是需要反序，这里reverse(,)只需要两个指针就可以了
+                }
+                left = read + 1;   	//不要忘记给left+1
+            }
+        }
+        return write;
+    }
+
+```
