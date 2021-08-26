@@ -111,7 +111,7 @@ for(auto&& f: flights){
   
 ![image](https://user-images.githubusercontent.com/47411365/130948974-0528aed2-962f-4687-8224-272205865f37.png)
 
-如果使用了move的话，其实不算赋值，而是真的移动了，原来的名字下面的空间会清零，如下图所示：
+如果使用了move的话，其实不算拷贝，而是真的移动了，原来的名字下面的空间会清零，如下图所示：
 
  ![image](https://user-images.githubusercontent.com/47411365/130949124-ecf96262-423d-4d61-9e11-5e4696bce140.png)
 
