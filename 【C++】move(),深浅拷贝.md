@@ -4,7 +4,7 @@
 
 大多数时候拷贝用的都是a=b;  默认的复制构造函数是什么都没有的，也不会开辟新内存，所以需要自己写，所有标准库容器都实现了深拷贝的复制构造函数，所以vector<int> a = b;是重新开辟空间遍历赋值的
   
-浅拷贝会遇到的问题(实测微软没有，垃圾教科书)：
+浅拷贝会遇到的问题(实测微软编译器没有，垃圾教科书)：
 
 ```
  class ArrayPoint{
@@ -98,3 +98,21 @@ int k = 1024, &ref = k;   这是正确的
 传统的C把&当作一个取地址符号，是个纯粹的运算符，现代C++兼容了过去的写法，但是更提倡把&ref当成一个值来看待。
 
 然后还搞出了纯右值（prvalue，pure right value）和将亡值（xvalue，expiring value）
+  
+### 简单的右值引用的方式
+Tips：遍历的时候可以用右值引用遍历
+```
+for(auto&& f: flights){
+   xxxxxx
+}
+```
+
+一般stl的容器，都会有一个copy constructor和一个move constructor，比如vector： 
+  
+![image](https://user-images.githubusercontent.com/47411365/130948974-0528aed2-962f-4687-8224-272205865f37.png)
+
+如果使用了move的话，其实不算赋值，而是真的移动了，原来的名字下面的空间会清零，如下图所示：
+
+ ![image](https://user-images.githubusercontent.com/47411365/130949124-ecf96262-423d-4d61-9e11-5e4696bce140.png)
+
+
