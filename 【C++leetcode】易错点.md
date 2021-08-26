@@ -387,3 +387,29 @@ https://leetcode-cn.com/problems/string-compression/solution/ya-suo-zi-fu-chuan-
     }
 
 ```
+
+### K 站中转内最便宜的航班，DP,BFS,图
+
+__DP__
+
+Q:这道题出现了一个图状的数据结构，对于dp而言一般都是线性的遍历方式，怎么办？
+
+A:直接遍历它的信息矩阵，然后一遍遍更新即可
+
+Q:如何从图的结构寻找转移方程？
+
+A:![image](https://user-images.githubusercontent.com/47411365/130937146-f79d4493-393a-4836-8de2-f6722be2b207.png)
+
+![image](https://user-images.githubusercontent.com/47411365/130937254-4122fa37-d22b-4ec1-9afa-eb10a1dce965.png)
+
+简单地再解释下，还是一条路径就一定会有A->B->C 那么BC段就是基于AB的转移状态    之后只要寻找寻找结果的最小值
+
+
+Tips：遍历的时候可以用右值引用遍历
+```
+for(auto&& f: flights){
+   xxxxxx
+}
+```
+
+__BFS__
