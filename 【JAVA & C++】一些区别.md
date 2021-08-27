@@ -23,5 +23,7 @@ https://stackoverflow.com/questions/14116003/difference-between-constexpr-and-co
 
 这里有一个概念是，常量表达式 ！= 常量
 
+## struct 和class
+安全性，struct不能禁止访问，class可以
 
 
