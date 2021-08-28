@@ -271,6 +271,7 @@ v.insert(1, all(v2));
 string s = “hello”;
 string
 s1 = s.substr(0, 3), // “hel”
+ 
   s2 = s.substr(1, 3), // “ell”
   s3 = s.substr(0, s.length() - 1), “hell”
 s4 = s.substr(1); // “ello”
@@ -311,7 +312,9 @@ if (s.find(42) != s.end()) {
   // 42 not presents in set
 }
  ```
- 
- 
- 
+ ## unordered_map
+ ```
+ 添加： mp[key] = value;
+ 删除 mp.erase(key);
+ ```
  
