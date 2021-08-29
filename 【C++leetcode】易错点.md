@@ -413,3 +413,37 @@ for(auto&& f: flights){
 ```
 
 __BFS__
+
+
+## 所有奇数长度数组的和 前缀和 概率论
+方法一：前缀和
+```
+class Solution {
+public:
+    int sumOddLengthSubarrays(vector<int>& arr) {
+
+        vector<int> presum = {0};
+        for(int e: arr) presum.push_back(presum.back() + e);   // 前缀和    O（n）
+
+        int res = 0;
+        for(int i = 0; i < arr.size(); i ++)
+            for(int sz = 1; i + sz - 1 < arr.size(); sz += 2)
+                res += presum[i + sz] - presum[i];            // 用差一个个表示所有O（n2）
+
+        return res;
+    }
+};
+
+作者：liuyubobobo
+链接：https://leetcode-cn.com/problems/sum-of-all-odd-length-subarrays/solution/cong-on3-dao-on-de-jie-fa-by-liuyubobobo/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+#### 方法二：概率论论证每个数字将会被加多少遍，如果在前面选择了偶数个数字，那么在后面，也必须选择偶数个数字，这样加上它自身，才构成奇数长度的数组；
+
+如果在前面选择了奇数个数字，那么在后面，也必须选择奇数个数字，这样加上它自身，才构成奇数长度的数组；
+
+数字前面共有 left 个选择，其中偶数个数字的选择方案有 left_even = (left + 1) / 2 个，奇数个数字的选择方案有 left_odd = left / 2 个；
+
+数字后面共有 right 个选择，其中偶数个数字的选择方案有 right_even = (right + 1) / 2 个，奇数个数字的选择方案有 right_odd = right / 2 个；
+
