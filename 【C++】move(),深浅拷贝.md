@@ -115,4 +115,13 @@ for(auto&& f: flights){
 
  ![image](https://user-images.githubusercontent.com/47411365/130949124-ecf96262-423d-4d61-9e11-5e4696bce140.png)
 
+很奇怪的是，好像只有stl的右值引用函数会剥夺原来的空间，如下图所示：
+  
+![image](https://user-images.githubusercontent.com/47411365/131488737-af81d216-948c-495e-be90-4883492075c6.png)
 
+  vector也是，但是如果是int，就不会有这种情况，如下图所示：
+ 
+  ![image](https://user-images.githubusercontent.com/47411365/131488857-7bd9f5a7-a175-40f7-8c01-ee6000b64cca.png)
+
+ 
+  
