@@ -449,3 +449,102 @@ public:
 
 数字后面共有 right 个选择，其中偶数个数字的选择方案有 right_even = (right + 1) / 2 个，奇数个数字的选择方案有 right_odd = right / 2 个；
 
+## 按权重随机选择  前缀和 二分查找
+
+太长不看版：
+```
+1.mt19937头文件是<random> 是伪随机数产生器，用于产生高性能的随机数
+2.uniform_int_distribution 头文件在<random>中，是一个随机数分布类，参数为生成随机数的类型，构造函数接受两个值表示区间段
+3.accumulate 头文件在<numeric>中，求特定范围内所有元素的和。
+4.spartial_sum函数的头文件在<numeric>，对(first, last)内的元素逐个求累计和，放在result容器内
+5.back_inserter函数头文件<iterator>，用于在末尾插入元素。
+6.lower_bound头文件在<algorithm>，用于找出范围内不大于num的第一个元素
+```
+
+#### 首先介绍一下一个随机数写法:mt19937
+#### 2^19937 – 1 which means mt19937 produces a sequence of 32-bit integers that only repeats itself after 2^19937 – 1 number have been generated.
+意思是生成的数字一直到2^19937以后才开始重复
+```
+// C++ program for demonstrating
+// similaritites
+#include <ctime>
+#include <iostream>
+#include <random>
+using namespace std;
+
+int main()
+{
+// Initializing the sequence
+// with a seed value
+// similar to srand()
+mt19937 mt(time(nullptr));
+mt19937 my1(random_device{}());    // 只是不同的seed value，每一个seed value只能产生一个相同的随机数结果，要想每次都不同，就需要用机器时间拉之类的东西设置不同的seed value
+
+
+// Printing a random number
+// similar to rand()
+cout << mt() << '\n';             // 是一个随机数  ，在当前程序内多次调用产生不同的mt(),但是程序多次启动的时候，如果seed value一直都是一样的，就会一直保持和第一次运行一样的结果，见下图
+cout << "the minimum integer it can generate is " << 
+           mt.min() << endl;         // 是0
+  cout << "mt19937 can generate random numbers upto " << 
+           mt.max() << endl;           // 是 2^32 – 1 = 4294967295
+return 0;
+}
+```
+
+![image](https://user-images.githubusercontent.com/47411365/131485339-72e48be3-af7a-430c-8dac-6bb9afb84b4f.png)
+
+#### 然后介绍一下极值写法
+```
+#include <limits>
+...
+std::numeric_limits<T>::min();    // 基本写法就是这样
+...
+```
+
+![image](https://user-images.githubusercontent.com/47411365/131479624-89560b16-7b84-4d0d-b3b1-9a97995a238e.png)
+
+可以看到，关于浮点数的时候，min是指最小最精确的正数，lowest是指一个很大的负数，就是头发丝和马里亚纳海沟的区别
+
+#### 介绍一下离散均匀分布类：
+```
+std::uniform_int_distribution<> d; // Distribution over 0 to max for type int, inclusive
+std::cout << "Range from 0 to "<< std::numeric_limits<std::uniform_int_distribution<> :: result_type>::max()<<std::endl; // Range from 0 to 2147483647
+
+//单纯给你看看uniform_int_distribution这个类的最大值是多少,即2147483647
+```
+#### 介绍一下函数 accumulate（）
+```
+#include <iostream>
+#include <vector>
+#include <numeric>
+#include <string>
+#include <functional>
+ 
+int main()
+{
+    std::vector<int> v{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+ 
+    int sum = std::accumulate(v.begin(), v.end(), 0);          // 求和
+ 
+    int product = std::accumulate(v.begin(), v.end(), 1, std::multiplies<int>());   //求积
+ 
+    auto dash_fold = [](std::string a, int b) {
+                         return std::move(a) + '-' + std::to_string(b);
+                     };                                                           // lambda 设置一个函数能通过不断调用把int连成stringz  这里move(a)不用也行不会出错
+ 
+    std::string s = std::accumulate(std::next(v.begin()), v.end(),
+                                    std::to_string(v[0]), // start with first element    // 连成string
+                                    dash_fold);
+ 
+    // Right fold using reverse iterators
+    std::string rs = std::accumulate(std::next(v.rbegin()), v.rend(),
+                                     std::to_string(v.back()), // start with last element  // 连成反向string
+                                     dash_fold);
+ 
+    std::cout << "sum: " << sum << '\n'
+              << "product: " << product << '\n'
+              << "dash-separated string: " << s << '\n'
+              << "dash-separated string (right-folded): " << rs << '\n';
+}
+```
