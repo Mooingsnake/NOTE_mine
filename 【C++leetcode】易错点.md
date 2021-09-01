@@ -576,6 +576,21 @@ int main()
     The first 10 even numbers are: 2 4 6 8 10 12 14 16 18 20 
     The first 10 powers of 2 are: 2 4 8 16 32 64 128 256 512 1024
 ```
+
+#### 介绍一下back_inserter
+一个末尾插入的函数
+```
+    std::vector<int> v1{ 1, 2, 3, 4, 5, 6 };
+
+    *(std::back_inserter(v1)) = 10;
+    v1:   1    2       3       4       5       6       10
+    
+    拷贝v2到v1末尾
+        std::vector<int> v1{ 1, 2, 3, 4, 5, 6};
+    std::vector<int> v2{ 10, 20, 30, 40, 50, 60};
+
+    std::copy(v2.begin(), v2.end(), std::back_inserter(v1));
+```
 #### 介绍一下lower_bound（）
 返回第一个不小于i的 __迭代器__，如果没有就返回end()
 ```
