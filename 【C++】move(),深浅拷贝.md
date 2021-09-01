@@ -124,4 +124,5 @@ for(auto&& f: flights){
 ![image](https://user-images.githubusercontent.com/47411365/131491291-7c578ee2-6fd6-4c57-b7da-7dd2f12dfa6c.png)
 
  
+ 这个网址可以解答上面的情况：基本类型类似int是表示拷贝，但是在遇到指针或者stl的时候是移动语义（Move Semantics），另外虽然被移动了为空，但是其实仍然合法（还是可以调用.size()），不过也仅仅只是可以调用，size和capacity都被置0，可见只剩一个指针和一个类型信息：https://zhuanlan.zhihu.com/p/107445960
   
