@@ -556,7 +556,26 @@ int main()
               << "dash-separated string (right-folded): " << rs << '\n';
 }
 ```
-
+#### 介绍一下 partial_sum()
+和求和唯一不太一样的地方在于，会累加，1 1+2 1+2+3 这样
+```
+    std::vector<int> v = {2, 2, 2, 2, 2, 2, 2, 2, 2, 2}; // or std::vector<int>v(10, 2);
+ 
+    std::cout << "The first 10 even numbers are: ";
+    std::partial_sum(v.begin(), v.end(), 
+                     std::ostream_iterator<int>(std::cout, " "));
+    std::cout << '\n';
+ 
+    std::partial_sum(v.begin(), v.end(), v.begin(), std::multiplies<int>());
+    std::cout << "The first 10 powers of 2 are: ";
+    for (auto n : v) {
+        std::cout << n << " ";
+    }
+    std::cout << '\n';
+    
+    The first 10 even numbers are: 2 4 6 8 10 12 14 16 18 20 
+    The first 10 powers of 2 are: 2 4 8 16 32 64 128 256 512 1024
+```
 #### 介绍一下lower_bound（）
 返回第一个不小于i的 __迭代器__，如果没有就返回end()
 ```
