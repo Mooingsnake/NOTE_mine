@@ -1,5 +1,20 @@
+- [边界](#bound)
+- [位运算](#bitcal)
+- [快慢指针](#fast_slow_ptr)
+- [链表](#linknode)
+- [排序](#sort)
+- [动态规划](#dp)
+- [递归](#recursion)
+- [字符串](#string)
+- [一些函数](#functions)
 
 
+
+
+
+
+
+<span id ="bound"></span>
 ## 边界问题
 ### vector.size() = 0
 nums1 或者 nums2 为空的时候，用 nums1.size()-1 或者 nums2.size() - 1 是危险的。因为 vector.size() 返回的是无符号整数。
@@ -14,145 +29,16 @@ l/2+r/2的话应该可以
 ### 最大值
 int maxprice = 1e9;
 
-### 排序
+### 大数注意
+(long)((long)+(long))
+
+<span id ="sort"></span>
+## 排序
 leetcode里面可以使用
 ```
 sort(arr.begin(), arr.end());
 arr.back();
 ```
-
-### 位运算
-#### 这是异或
-寻找只出现一次的数，时间消耗是0（N）不允许有额外的空间，所以禁哈希表
-此时需要位运算
-```
-    int singleNumber(vector<int>& nums) {
-        int ret = 0;
-        for (auto e: nums) ret ^= e;
-        return ret;
-    }
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/single-number/solution/zhi-chu-xian-yi-ci-de-shu-zi-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
-更效率的
-
-```
-#### 这是简单进位
-```
- int hammingWeight(uint32_t n) {
-        int ret = 0;
-        for (int i = 0; i < 32; i++) {
-            if (n & (1 << i)) {
-                ret++;
-            }
-        }
-        return ret;
-    }
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/er-jin-zhi-zhong-1de-ge-shu-lcof/solution/er-jin-zhi-zhong-1de-ge-shu-by-leetcode-50bb1/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-更效率的方式：
-  int count = 0;
-        for(int i = 0; i< 32;i++){
-             count += ((n >> i) & 1);
-        }
-        return count;
-    }
-```
-
-### 快慢指针
-我只要跑的比我妈快就一定会在某一时刻遇见我妈（成环的时候），步长为1和2的时候最小公倍数就是相遇的契机。
-适合用在O（1）空间消耗的情况下
-
-什么时候决定结束？
-链表结束的时候
-
-实际上可以如果是一个环形的链表或者数组，那么可以看作是图的形式——
-
-我们需要一个额外空间记录visited，但是一旦记录了以后，成环就会变得简单。
-
-### 双指针
-双指针可以给两个链表使用，a指针遍历完去b链，反之同样。
-适合用在O（1）空间消耗的情况下
----------
-双指针还可以用在判断子序列上面，
-需要注意的是指针一般指到最后一个元素+1，也就是end()的位置
-
-### 链表空指针
-首先是head == nullptr,head -> next == nullptr
-然后循环的写法也是以判断为先
-```
-        while (slow != fast) {
-            if (fast == nullptr || fast->next == nullptr) {
-                return false;
-            }
-            slow = slow->next;
-            fast = fast->next->next;
-        }
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/linked-list-cycle/solution/huan-xing-lian-biao-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
-
-### 最大子数组之和
-学不会的动态规划，如何体现连续，和最大？
-1.让动态方程只能连续（可以抛弃/不抛弃之前的串，但永远加上当前的arr[i]当作下次循环的pre）
-2.用一个max来维护最大
-第二种 分治解法（线段树）
-
-### 从股票问题到最大子数组之和
-中间只差了一步转价格为价格变化的数组
-
-### 访问越界reference binding to misaligned address
-reference binding to misaligned address
-比如说将行下标对应的整型数作为列的下标索引对数组进行访问
-比如说stack为空但是有stack.pop()指令
-
-### 构造函数里不需要清空栈
-栈在声明时是空的
-
-### vector.emplace_back()，push_back()
-```
-        if(n <=1) return n;
-        vector<long long>vec(n+1,0);
-        vec[0] = 0;
-        vec[1] = 1;
-        for(int i = 2; i <= n; i++){
-            vec.emplace_back(((long long)vec[i - 1] % (long long)(1e9+7)+ vec[i - 2]%(long long)(1e9+7)) %(long long )((1e9+7)));
-        } 
-        return (int)vec[2];
-    }
-```
-这样的写法下，vec[1]以后的都是0，这是因为vector新建的时候就是（n+1,0）emplace_back()在后面增加
-
-还有个写法
-```
-vector<int> vec;
-vec[1] = 1;
-```
-将会导致空指针(leetcode 报错信息：reference binding to null pointer of type 'value_type')，因为这里初始化下vec的大小是0；
-__总结__：
-
-关于一个容器大小，初始化的时候分配了空间就是[n]下标流
-
-如果没分配空间，就是emplace_back函数
-
-### 大数注意
-(long)((long)+(long))
-
-### 类型强制转换
-int 转 string
-
-    string str = std::tostring(num);
-    
-char 转string
 ### 内置排序或者内置规则
 
 内置一个快排
@@ -212,10 +98,90 @@ public:
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
-### 循环的效率问题
-我不知道为什么，我写for(int i = 0; i < nums.size(); i++)的时候效率是4ms
 
-写for(auto x: nums)的时候效率是0ms
+<span id ="bitcal"></span>
+## 位运算
+#### 这是异或
+寻找只出现一次的数，时间消耗是0（N）不允许有额外的空间，所以禁哈希表
+此时需要位运算
+```
+    int singleNumber(vector<int>& nums) {
+        int ret = 0;
+        for (auto e: nums) ret ^= e;
+        return ret;
+    }
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/single-number/solution/zhi-chu-xian-yi-ci-de-shu-zi-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+更效率的
+
+```
+#### 这是简单进位
+```
+ int hammingWeight(uint32_t n) {
+        int ret = 0;
+        for (int i = 0; i < 32; i++) {
+            if (n & (1 << i)) {
+                ret++;
+            }
+        }
+        return ret;
+    }
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/er-jin-zhi-zhong-1de-ge-shu-lcof/solution/er-jin-zhi-zhong-1de-ge-shu-by-leetcode-50bb1/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+更效率的方式：
+  int count = 0;
+        for(int i = 0; i< 32;i++){
+             count += ((n >> i) & 1);
+        }
+        return count;
+    }
+```
+<span id ="fast_slow_ptr"></span>
+### 快慢指针
+我只要跑的比我妈快就一定会在某一时刻遇见我妈（成环的时候），步长为1和2的时候最小公倍数就是相遇的契机。
+适合用在O（1）空间消耗的情况下
+
+什么时候决定结束？
+链表结束的时候
+
+实际上可以如果是一个环形的链表或者数组，那么可以看作是图的形式——
+
+我们需要一个额外空间记录visited，但是一旦记录了以后，成环就会变得简单。
+
+### 双指针
+
+双指针可以给两个链表使用，a指针遍历完去b链，反之同样。
+
+适合用在O（1）空间消耗的情况下
+
+双指针还可以用在判断子序列上面，需要注意的是指针一般指到最后一个元素+1，也就是end()的位置
+
+<span id ="linknode"></span>
+## 链表
+### 链表空指针
+首先是head == nullptr,head -> next == nullptr
+然后循环的写法也是以判断为先
+```
+        while (slow != fast) {
+            if (fast == nullptr || fast->next == nullptr) {
+                return false;
+            }
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/linked-list-cycle/solution/huan-xing-lian-biao-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 
 ### 两个链表合并
 我并没有发现当出while(l1&l2)循环之后就只剩下一条线，是可以直接拎过来用的。
@@ -224,6 +190,59 @@ public:
 
 如果实在觉得要记得一个头结点又要遍历一个工具人结点困难，就用哨兵做头结点前一个，工具人结点 = 哨兵，所有的结点都是.next；
 
+### 最大子数组之和
+学不会的动态规划，如何体现连续，和最大？
+1.让动态方程只能连续（可以抛弃/不抛弃之前的串，但永远加上当前的arr[i]当作下次循环的pre）
+2.用一个max来维护最大
+第二种 分治解法（线段树）
+
+### 从股票问题到最大子数组之和
+中间只差了一步转价格为价格变化的数组
+
+### 访问越界reference binding to misaligned address
+reference binding to misaligned address
+比如说将行下标对应的整型数作为列的下标索引对数组进行访问
+比如说stack为空但是有stack.pop()指令
+
+### 构造函数里不需要清空栈
+栈在声明时是空的
+
+### vector.emplace_back()，push_back()
+```
+        if(n <=1) return n;
+        vector<long long>vec(n+1,0);
+        vec[0] = 0;
+        vec[1] = 1;
+        for(int i = 2; i <= n; i++){
+            vec.emplace_back(((long long)vec[i - 1] % (long long)(1e9+7)+ vec[i - 2]%(long long)(1e9+7)) %(long long )((1e9+7)));
+        } 
+        return (int)vec[2];
+    }
+```
+这样的写法下，vec[1]以后的都是0，这是因为vector新建的时候就是（n+1,0）emplace_back()在后面增加
+
+还有个写法
+```
+vector<int> vec;
+vec[1] = 1;
+```
+将会导致空指针(leetcode 报错信息：reference binding to null pointer of type 'value_type')，因为这里初始化下vec的大小是0；
+__总结__：
+
+关于一个容器大小，初始化的时候分配了空间就是[n]下标流
+
+如果没分配空间，就是emplace_back函数
+
+
+
+
+### 循环的效率问题
+我不知道为什么，我写for(int i = 0; i < nums.size(); i++)的时候效率是4ms
+
+写for(auto x: nums)的时候效率是0ms
+
+<span id ="recursion"></span>
+## 递归
 ### 递归的时候的内存问题
 ```
  TreeNode* mirrorTree(TreeNode* root) {
@@ -249,6 +268,8 @@ for (const auto& kv : myMap) {
     std::cout << kv.first << " has value " << kv.second << std::endl;
 }
 ```
+<span id ="dp"></span>
+## 动态规划
 ### 得到子序列最小操作次数
 要用map和数组，用下标的情况显示
 
@@ -346,7 +367,14 @@ int gcd(int a,int b){
 		cout << a << endl;
 	}
 ```
+<span id ="string"></span>
+## 字符串
+### 类型强制转换
+int 转 string
 
+    string str = std::tostring(num);
+    
+char 转string
 ### 字符串倒转
 看清楚，迭代器可以直接加减，reverse是常用函数，最重要的是min(i+k,n)这样子就可以精准狙击各种第一遍和最后一遍k不足的情况。
 ```
@@ -414,7 +442,7 @@ for(auto&& f: flights){
 
 __BFS__
 
-
+<span id ="functions"></span>
 ## 所有奇数长度数组的和 前缀和 概率论
 方法一：前缀和
 ```
