@@ -206,7 +206,7 @@ public:
             prev = curr;
             curr = next;
         }
-        return prev;
+        return prev;              // 循环结束node是nullptr，所以是pre，这很重要
     }
 
 作者：LeetCode-Solution
@@ -219,8 +219,22 @@ public:
 
 移动，先用tmp记录下一个，然后断掉关系再平移挪位，然后建立关系。
 
-
-
+递归解法：
+```
+    public ListNode reverseList(ListNode head) {
+        return recur(head, null);    // 调用递归并返回
+    }
+    private ListNode recur(ListNode cur, ListNode pre) {
+/*
+本递归方法返回的永远是最后一个节点，无论是哪一层递归
+*/
+        if (cur == null) return pre; // 终止条件，这里的pre是最后一个节点
+        ListNode res = recur(cur.next, cur);  // 递归后继节点，res是最后一个节点
+        cur.next = pre;//注意此pre一直在变化
+        return res;                  // 返回反转链表的头节点，返回最后一个节点res
+    }
+``` 
+// 循环结束node是nullptr，所以是pre，这很重要，  还有就是return 回最后一个元素的技巧，pre一直在变化的技巧
 ### 构造函数里不需要清空栈
 栈在声明时是空的
 
