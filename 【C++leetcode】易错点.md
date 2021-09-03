@@ -7,8 +7,7 @@
 - [递归](#recursion)
 - [字符串](#string)
 - [一些函数](#functions)
-
-
+- [数据结构模拟](#数据结构模拟)
 
 
 
@@ -722,6 +721,43 @@ public:
 
 作者：LeetCode-Solution
 链接：https://leetcode-cn.com/problems/random-pick-with-weight/solution/an-quan-zhong-sui-ji-xuan-ze-by-leetcode-h13t/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+## 数据结构模拟
+<span id ="数据结构模拟"></span>
+### 辅助栈
+#### 如果下面有min函数，那么就需要用std::min（）或者::min()
+```
+class MinStack {
+    stack<int> x_stack;
+    stack<int> min_stack;
+public:
+    MinStack() {
+        min_stack.push(INT_MAX);
+    }
+    
+    void push(int x) {
+        x_stack.push(x);
+        min_stack.push(min(min_stack.top(), x));   // 表示在目前为止最小
+    }
+    
+    void pop() {
+        x_stack.pop();
+        min_stack.pop();   // 一起弹出，因为min_stk有重复，且天然记录在...[index]之前最小，所以没有问题
+    }
+    
+    int top() {
+        return x_stack.top();
+    }
+    
+    int min() {
+        return min_stack.top();
+    }
+};
+
+作者：demigodliu
+链接：https://leetcode-cn.com/problems/bao-han-minhan-shu-de-zhan-lcof/solution/fu-zhu-zhan-bao-han-minhan-shu-de-zhan-b-fx7t/
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
