@@ -43,6 +43,15 @@ leetcode里面可以使用
 sort(arr.begin(), arr.end());
 arr.back();
 ```
+### 数组中出现超过一半的数字
+1.排序，中点必为那个数字
+
+2.摩尔投票法
+
+![image](https://user-images.githubusercontent.com/47411365/132016131-a2df76eb-dca2-4df4-ae3f-cf3bc49a1e51.png)
+
+
+
 ### 内置排序或者内置规则
 
 内置一个快排
