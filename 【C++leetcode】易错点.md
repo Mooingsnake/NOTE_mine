@@ -287,6 +287,13 @@ __总结__：
 ```
 至今仍未知道它在递归的时候是怎么被释放的。
 
+### 递归的调用顺序和 return之间的问题 【原题】反转链表 (双指针)
+
+![image](https://user-images.githubusercontent.com/47411365/131963232-91b60e41-3da2-46aa-b49a-6062cb00838d.png)
+
+你仔细看好，你每次recur(a, b)是不是正常的，很明显第二个不对了，因为cur->next被改了
+
+
 ### for_each的leetcode骚操作
 用于C++17：
 ```
