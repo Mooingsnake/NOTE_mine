@@ -260,6 +260,7 @@ __总结__：
 
 <span id ="recursion"></span>
 ## 递归
+最典型的递归是树的遍历（先中后根遍历）
 ### 递归的时候的内存问题
 ```
  TreeNode* mirrorTree(TreeNode* root) {
