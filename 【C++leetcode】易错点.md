@@ -26,6 +26,11 @@ nums1 或者 nums2 为空的时候，用 nums1.size()-1 或者 nums2.size() - 1 
 int 类型的l或者r会遇到特别大的数的时候会溢出
 l/2+r/2的话应该可以
 
+### 访问越界reference binding to misaligned address
+reference binding to misaligned address
+比如说将行下标对应的整型数作为列的下标索引对数组进行访问
+比如说stack为空但是有stack.pop()指令
+
 ### 最大值
 int maxprice = 1e9;
 
@@ -45,7 +50,7 @@ arr.back();
 ```
 class Solution {
 public:
-    string minNumber(vector<int>& nums) {
+    string minNumber(vector<int>& nums) {          
         vector<string> strs;
         for(int i = 0; i < nums.size(); i++)
             strs.push_back(to_string(nums[i]));
@@ -56,7 +61,7 @@ public:
         return res;
     }
 private:
-    void quickSort(vector<string>& strs, int l, int r) {
+    void quickSort(vector<string>& strs, int l, int r) {         // 手写快排现场
         if(l >= r) return;
         int i = l, j = r;
         while(i < j) {
@@ -86,7 +91,7 @@ public:
         string res;
         for(int i = 0; i < nums.size(); i++)
             strs.push_back(to_string(nums[i]));
-        sort(strs.begin(), strs.end(), [](string& x, string& y){ return x + y < y + x; });
+        sort(strs.begin(), strs.end(), [](string& x, string& y){ return x + y < y + x; });    // 内置新的排序方法
         for(int i = 0; i < strs.size(); i++)
             res.append(strs[i]);
         return res;
@@ -182,7 +187,6 @@ public:
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
-
 ### 两个链表合并
 我并没有发现当出while(l1&l2)循环之后就只剩下一条线，是可以直接拎过来用的。
 
@@ -190,19 +194,32 @@ public:
 
 如果实在觉得要记得一个头结点又要遍历一个工具人结点困难，就用哨兵做头结点前一个，工具人结点 = 哨兵，所有的结点都是.next；
 
-### 最大子数组之和
-学不会的动态规划，如何体现连续，和最大？
-1.让动态方程只能连续（可以抛弃/不抛弃之前的串，但永远加上当前的arr[i]当作下次循环的pre）
-2.用一个max来维护最大
-第二种 分治解法（线段树）
+### 反转链表
+1.while()里面是curr，还是curr->next?        2.如何正确记录前中后个节点且不会打架且可以迭代？
+```
+    ListNode* reverseList(ListNode* head) {
+        ListNode* prev = nullptr;
+        ListNode* curr = head;
+        while (curr) {
+            ListNode* next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
+    }
 
-### 从股票问题到最大子数组之和
-中间只差了一步转价格为价格变化的数组
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/fan-zhuan-lian-biao-lcof/solution/fan-zhuan-lian-biao-by-leetcode-solution-jvs5/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 
-### 访问越界reference binding to misaligned address
-reference binding to misaligned address
-比如说将行下标对应的整型数作为列的下标索引对数组进行访问
-比如说stack为空但是有stack.pop()指令
+![image](https://user-images.githubusercontent.com/47411365/131944136-01907dd3-5962-46f8-9db8-c518e5c69cac.png)
+
+移动，先用tmp记录下一个，然后断掉关系再平移挪位，然后建立关系。
+
+
 
 ### 构造函数里不需要清空栈
 栈在声明时是空的
@@ -270,6 +287,15 @@ for (const auto& kv : myMap) {
 ```
 <span id ="dp"></span>
 ## 动态规划
+### 最大子数组之和
+学不会的动态规划，如何体现连续，和最大？
+1.让动态方程只能连续（可以抛弃/不抛弃之前的串，但永远加上当前的arr[i]当作下次循环的pre）
+2.用一个max来维护最大
+第二种 分治解法（线段树）
+
+### 从股票问题到最大子数组之和
+中间只差了一步转价格为价格变化的数组
+
 ### 得到子序列最小操作次数
 要用map和数组，用下标的情况显示
 
