@@ -353,6 +353,28 @@ public:
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
+### 平衡二叉树  递归 剪枝
+当左右子树已经不平衡的时候，就直接return函数，这个return在平衡的时候记录深度，在不平衡的时候返回-1结束游戏，达到剪枝的效果。
+
+return 的是是或否，如何记录左右子树深度？
+```
+class Solution {
+public:
+    int recur(TreeNode* root){
+        if(root == nullptr)return 0;
+        int left = recur(root->left);    
+        if(left == -1)return -1;          // 剪枝
+        int right = recur(root->right);
+        if(right == -1)return -1;	 // 剪枝
+        return abs(left-right)>=2?-1:max(left,right)+1;   // 在不平衡的时候表示-1，在平衡的时候记录深度
+    }
+    bool isBalanced(TreeNode* root) {
+        return recur(root)!= -1;
+    }
+};
+https://leetcode-cn.com/problems/ping-heng-er-cha-shu-lcof/submissions/
+```
+
 ### 递归的调用顺序和 return之间的问题 【原题】反转链表 (双指针)
 
 ![image](https://user-images.githubusercontent.com/47411365/131963232-91b60e41-3da2-46aa-b49a-6062cb00838d.png)
