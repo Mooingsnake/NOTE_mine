@@ -4,7 +4,7 @@
 - [链表](#linknode)
 - [排序](#sort)
 - [动态规划](#dp)
-- [递归](#recursion)
+- [递归-二叉树](#recursion)
 - [字符串](#string)
 - [一些函数](#functions)
 - [数据结构模拟](#数据结构模拟)
@@ -294,6 +294,35 @@ __总结__：
     }
 ```
 至今仍未知道它在递归的时候是怎么被释放的。
+
+### dfs解二叉搜索树第k大的点
+二叉搜索树用右，根，左顺序看是有序的，别慌.            递归情况下，会出现k==0 和node==nullptr都应该结束返回的情况，应该使用void，在函数内手动记录
+```
+class Solution {
+private:
+    int k,res;
+    void bfs(TreeNode* node){
+        if(node == nullptr) return ;
+        bfs(node->right);
+        if(k == 0)return;          从k开始，k=0结束，合情合理，比如如果是第一大的点，那就先归零，然后在下次循环游戏结束。
+        if(--k == 0){             // 前缀就是先减后赋值 
+            res = node->val;
+        }
+        bfs(node->left);
+    }
+public:
+    int kthLargest(TreeNode* root, int k) {
+        this->k = k;
+        bfs(root);
+        return res;
+    }
+};
+
+作者：lin-shen-shi-jian-lu-k
+链接：https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-di-kda-jie-dian-lcof/solution/zui-jian-jie-yi-dong-de-dai-ma-tu-wen-bi-spxa/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 
 ### 递归的调用顺序和 return之间的问题 【原题】反转链表 (双指针)
 
