@@ -4,7 +4,7 @@
 - [链表](#linknode)
 - [排序](#sort)
 - [动态规划](#dp)
-- [递归-二叉树](#recursion)
+- [递归-二叉树-栈-队列](#recursion)
 - [字符串](#string)
 - [一些函数](#functions)
 - [数据结构模拟](#数据结构模拟)
@@ -281,7 +281,7 @@ __总结__：
 写for(auto x: nums)的时候效率是0ms
 
 <span id ="recursion"></span>
-## 递归
+## 递归-二叉树-栈-队列
 最典型的递归是树的遍历（先中后根遍历）
 ### 递归的时候的内存问题
 ```
@@ -323,7 +323,36 @@ public:
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
+### 二叉树按层存储
+使用队列  ，吐出来一个就塞进去
+```
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        queue<TreeNode*> q;
+        vector<vector<int> > ans;
+        if(root==NULL){				// 需要先处理边界情况
+            return ans;
+        }
+        q.push(root);				// 需要先埋种子
+        while(!q.empty()){                  //一轮又一轮，记得准备好vector<int>作为每层的容器
+            vector<int> temp;
+            for(int i=q.size();i>0;i--){  // 这里的循环只会将队列q最初的长度值赋给i，所以后面入队的元素不影响, q.size()天然规定了一轮多少个
+                TreeNode* node = q.front();
+                q.pop();
+                temp.push_back(node->val);
+                if(node->left!=NULL) q.push(node->left);   // 要记住始终检查空指针
+                if(node->right!=NULL) q.push(node->right);
+            }
+            ans.push_back(temp);//存下当前层的元素
+        }
 
+        return ans;
+    }
+
+作者：zai-ye-bu-hui
+链接：https://leetcode-cn.com/problems/cong-shang-dao-xia-da-yin-er-cha-shu-ii-lcof/solution/bfs-an-ceng-cun-chu-by-zai-ye-bu-hui-i4r3/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 ### 递归的调用顺序和 return之间的问题 【原题】反转链表 (双指针)
 
 ![image](https://user-images.githubusercontent.com/47411365/131963232-91b60e41-3da2-46aa-b49a-6062cb00838d.png)
