@@ -296,7 +296,7 @@ __总结__：
 至今仍未知道它在递归的时候是怎么被释放的。
 
 ### dfs解二叉搜索树第k大的点
-二叉搜索树用右，根，左顺序看是有序的，别慌.            递归情况下，会出现k==0 和node==nullptr都应该结束返回的情况，应该使用void，在函数内手动记录
+二叉搜索树用右，根，左顺序看是从小到大有序的，别慌.            递归情况下，会出现k==0 和node==nullptr都应该结束返回的情况，应该使用void，在函数内手动记录
 ```
 class Solution {
 private:
@@ -323,6 +323,28 @@ public:
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
+### 二叉搜索树找最近公共祖先
+再次强调，二叉搜索树的性质是 __左<中<右__  所以能直接判断大致在左子树还是在右子树上
+```
+若 root.val < p.valroot.val<p.val ，则 pp 在 rootroot 右子树 中；
+若 root.val > p.valroot.val>p.val ，则 pp 在 rootroot 左子树 中；
+若 root.val = p.valroot.val=p.val ，则 pp 和 rootroot 指向 同一节点 。
+```
+```
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        while(root!=nullptr){
+            if(p->val < root->val && q->val < root->val){
+                root = root->left;                            // ##神仙迭代法，多学学啊你
+            }else if(p->val > root->val && q->val > root->val){
+                root = root->right;
+            }
+            else break;           // 只能再这里break，不然返回void
+        }
+        return root;
+    }
+```
+
+
 ### 二叉树按层存储
 使用队列  ，吐出来一个就塞进去
 ```
