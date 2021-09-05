@@ -359,6 +359,10 @@ UNION(x,y):删掉原来的xy，组成新的合并的集合
 
 FIND-SET(x):返回一个指针，是那个包含了x的集合的那个
 
+并查集可以用在求最大连通子图，求最小生成树的 Kruskal 算法和求最近公共祖先（Least Common Ancestors, LCA）等，下面是一个比较好的网址
+
+https://www.cnblogs.com/cyjb/p/UnionFindSets.html
+
 ### 操作这些基本函数
 假设要计算一个无向图的连通分量（确实会有岛屿状的图，连通的子图是需要被计算的）
 
