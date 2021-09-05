@@ -281,7 +281,7 @@ __总结__：
 写for(auto x: nums)的时候效率是0ms
 
 <span id ="recursion"></span>
-## 递归-二叉树-栈-队列
+## 递归-迭代-二叉树-栈-队列
 最典型的递归是树的遍历（先中后根遍历）
 ### 递归的时候的内存问题
 ```
@@ -323,7 +323,7 @@ public:
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
-### 二叉搜索树找最近公共祖先
+### 二叉搜索树找最近公共祖先  最简单的while迭代
 再次强调，二叉搜索树的性质是 __左<中<右__  所以能直接判断大致在左子树还是在右子树上
 ```
 若 root.val < p.valroot.val<p.val ，则 pp 在 rootroot 右子树 中；
@@ -343,7 +343,43 @@ public:
         return root;
     }
 ```
+### 二叉树找最近公共祖先  bfs递归
+![image](https://user-images.githubusercontent.com/47411365/132119075-fdcf0f21-42ed-4c00-b1c7-8e4ea7db0559.png)
 
+__考虑通过递归对二叉树进行先序遍历，当遇到节点 p 或 q 时返回。从底至顶回溯，当节点 p, q 在节点 root的左右子树上时，节点 root 即为最近公共祖先，则向上返回 root 。__
+
+Q什么 root 一定能返回到最近的祖先节点？
+
+![image](https://user-images.githubusercontent.com/47411365/132119362-fe050f5c-421c-4a59-92d9-09b3e2379da1.png)
+
+A为其他支路的节点都是空的，所以保留了第一个祖先节点的数字。
+
+Q何判断在左右子树上？
+
+A在left和right都不是空的时候。
+
+
+![image](https://user-images.githubusercontent.com/47411365/132119152-b69453e7-cc4a-4907-aa76-0dcfeca15ee2.png)
+
+
+```
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(root == nullptr || root == p || root == q) return root;           // A 为空，或者相遇，返回相遇的元素（或者空）
+        TreeNode *left = lowestCommonAncestor(root->left, p, q);		// 递归
+        TreeNode *right = lowestCommonAncestor(root->right, p, q);		// 递归
+        if(left == nullptr) return right;					// 
+        if(right == nullptr) return left;
+        return root;
+    }
+};
+
+作者：jyd
+链接：https://leetcode-cn.com/problems/er-cha-shu-de-zui-jin-gong-gong-zu-xian-lcof/solution/mian-shi-ti-68-ii-er-cha-shu-de-zui-jin-gong-gon-7/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 
 ### 二叉树按层存储
 使用队列  ，吐出来一个就塞进去
