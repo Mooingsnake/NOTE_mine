@@ -358,10 +358,6 @@ Q何判断在左右子树上？
 
 A在left和right都不是空的时候。
 
-
-![image](https://user-images.githubusercontent.com/47411365/132119152-b69453e7-cc4a-4907-aa76-0dcfeca15ee2.png)
-
-
 ```
 class Solution {
 public:
