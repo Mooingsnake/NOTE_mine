@@ -377,6 +377,9 @@ public:
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
+![image](https://user-images.githubusercontent.com/47411365/132119792-5d7a0108-efdb-426a-a022-f7bd9df19f2f.png)
+
+
 ### 二叉树按层存储
 使用队列  ，吐出来一个就塞进去
 ```
