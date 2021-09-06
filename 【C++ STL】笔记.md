@@ -2,13 +2,6 @@ POWER UP C++ WITH THE STANDARD TEMPLATE LIBRARY PART ONE
 
 网址：https://www.topcoder.com/thrive/articles/Power%20up%20C++%20with%20the%20Standard%20Template%20Library%20Part%20One
 
-##### 本文尚未学习的知识点
-```
-1.宏定义如何解决迭代器复用
-2. r += (it)( * it);
-3. something->   vs  (*something)
-```
-
 ## 1容器
 
 对于C语言而言容器只有数组
@@ -214,6 +207,7 @@ int data[5] = {
   4,
   3
 };
+                           // 实际上是，迭代器就是指针，完全可以用*it的方式解引用获得原值
 vector < int > X(data, data + 5);
 int v1 = * max_element(X.begin(), X.end()); // Returns value of max element in vector
 int i1 = min_element(X.begin(), X.end())– X.begin(); // Returns index of min element in vector
@@ -224,15 +218,35 @@ int i3 = min_element(data, data + 5)– data; // Returns index of min element in
  * max_element(X.begin(), X.end())找到最小值    【c语言里面，* p是解引用，把指针地址解为值，& a是取地址，把值的存储地址找到】
  
 min_element(X.begin(), X.end())– X.begin() 找到最小值的下标，返回的虽然是int，但是是iterator的地址
-##### iterator的排序（没咋看懂这个宏定义）
+##### iterator的排序
 ```
 #define all© c.begin(), c.end()
 sort(X.begin(), X.end()); // Sort array in ascending order
 sort(all(X)); // Sort array in ascending order, use our #define
 sort(X.rbegin(), X.rend()); // Sort array in descending order using with reverse iterators
 ```
-rbegin其实是end的位置  [ ， )
+ 
+ __rbegin其实是end的位置  [ ， )__
 
+ #### 关于next和prev
+ 具体用法就是
+```
+    std::vector<int> v{ 4, 5, 6 };
+ 
+    auto it = v.begin();
+    auto nx = std::next(it, 2);
+    std::cout << *it << ' ' << *nx << '\n';
+ 
+    it = v.end();
+    nx = std::next(it, -2);
+    std::cout << ' ' << *nx << '\n';
+ 
+    std::next(it); // 返回下一个迭代器
+```
+ http://c.biancheng.net/view/7384.html
+ Q： 既然it+12345 就能方便的访问数组任意位置，那为什么要有next和prev
+ 当我们使用迭代器的时候，不希望迭代器改变值
+ 
 ## COMPILING STL PROGRAMS
 STL的报错信息很重要
 【没懂宏这里怎么设置的】
