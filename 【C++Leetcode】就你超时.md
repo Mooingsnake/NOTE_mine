@@ -30,4 +30,27 @@ public:
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
+### 翻转单词顺序
+垃圾的代码：先寻找方法切成vector<string>,然后用accumulate的函数逆序拼回去，结果还不知道处理首尾那些空格。
 
+优秀的代码- 双指针，非常干净的逻辑，for循环达到该点然后直接处理，没有内层结构。
+```
+     string reverseWords(string s) {
+        int n = s.size(), l, r = n - 1;
+        string ret;
+        while(r >= 0){  
+            while(r >= 0 && s[r] == ' ') --r; // 去掉所有的空格，包括后缀和中间的空格
+            if(r < 0) break;
+            for(l = r; l >= 0 && s[l] != ' '; --l); // 用一个for让l每次来到空格停下来
+            ret += (s.substr(l + 1, r - l) + " ");
+            r = l;                            // 让r离开当前单词
+        }
+        if(ret.size()) ret.pop_back();     // 把最后一个空格去掉
+        return ret;
+    }
+
+作者：nobodyyyyy
+链接：https://leetcode-cn.com/problems/fan-zhuan-dan-ci-shun-xu-lcof/solution/jian-zhi-offer-58-i-fan-zhuan-dan-ci-shu-vvjl/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```    
