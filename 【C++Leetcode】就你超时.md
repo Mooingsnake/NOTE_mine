@@ -43,9 +43,9 @@ public:
             if(r < 0) break;
             for(l = r; l >= 0 && s[l] != ' '; --l); // 用一个for让l每次来到空格停下来
             ret += (s.substr(l + 1, r - l) + " ");
-            r = l;                            // 让r离开当前单词
-        }
-        if(ret.size()) ret.pop_back();     // 把最后一个空格去掉
+            r = l;                            // 让r离开当前单词，我发现“ ” ' ' 都可以
+         }
+        if(!ret.empty()) ret.pop_back();     // 把最后一个空格去掉,if是为了防止空字符串
         return ret;
     }
 
