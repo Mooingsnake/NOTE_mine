@@ -754,7 +754,7 @@ int main()
 {
     std::vector<int> v{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
  
-    int sum = std::accumulate(v.begin(), v.end(), 0);          // 求和
+    int sum = std::accumulate(v.begin(), v.end(), 0);          // 求和,(初始iterator， 终结iterator（尾部向后一格），初始化的sum值)
  
     int product = std::accumulate(v.begin(), v.end(), 1, std::multiplies<int>());   //求积
  
@@ -763,7 +763,7 @@ int main()
                      };                                                           // lambda 设置一个函数能通过不断调用把int连成stringz  这里move(a)不用也行不会出错
  
     std::string s = std::accumulate(std::next(v.begin()), v.end(),
-                                    std::to_string(v[0]), // start with first element    // 连成string
+                                    std::to_string(v[0]), // start with first element    // 连成string  ，因为初始化的sum值是1，所以需要std::next(v.begin())指向2
                                     dash_fold);
  
     // Right fold using reverse iterators
