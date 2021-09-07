@@ -31,9 +31,9 @@ public:
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 ### 翻转单词顺序
-垃圾的代码：先寻找方法切成vector<string>,然后用accumulate的函数逆序拼回去，结果还不知道处理首尾那些空格。
+__垃圾的代码__ 先寻找方法切成vector<string>,然后用accumulate的函数逆序拼回去，结果还不知道处理首尾那些空格。
 
-优秀的代码- 双指针，非常干净的逻辑，for循环达到该点然后直接处理，没有内层结构。
+#### __优秀的代码__- 双指针，非常干净的逻辑，for循环达到该点然后直接处理，没有内层结构。
 ```
      string reverseWords(string s) {
         int n = s.size(), l, r = n - 1;
@@ -41,7 +41,7 @@ public:
         while(r >= 0){  
             while(r >= 0 && s[r] == ' ') --r; // 去掉所有的空格，包括后缀和中间的空格
             if(r < 0) break;
-            for(l = r; l >= 0 && s[l] != ' '; --l); // 用一个for让l每次来到空格停下来
+            for(l = r; l >= 0 && s[l] != ' '; --l) ; // 用一个for让l每次来到空格停下来,这里有个;注意
             ret += (s.substr(l + 1, r - l) + " ");
             r = l;                            // 让r离开当前单词，我发现“ ” ' ' 都可以
          }
@@ -54,3 +54,20 @@ public:
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```    
+#### 优秀的代码 栈，使用了istringstream 
+```
+    string reverseWords(string s) {
+        stack<string> stk;
+        string res,str;
+        istringstream ss(s);    // 把s包装成了一个istream，这样就可以直接去掉多余空格了
+        while (ss >> str) stk.push(str), stk.push(" ");    
+        if (!stk.empty()) stk.pop();
+        while (!stk.empty()) res += stk.top(), stk.pop();
+        return res;
+    }
+
+作者：OrangeMan
+链接：https://leetcode-cn.com/problems/fan-zhuan-dan-ci-shun-xu-lcof/solution/cshuang-bai-zhan-by-orange-32/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
