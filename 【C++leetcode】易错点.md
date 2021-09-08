@@ -156,6 +156,24 @@ public:
         return count;
     }
 ```
+#### 位运算计算加法
+https://www.jianshu.com/p/3f165f976edd
+```
+int Add(int num1, int num2)
+{
+  int res1 = num1^num2;
+  int res2 = (num1&num2)<<1;
+  while(res2)
+  {
+    num1 = res1^res2;
+    num2 = (res1&res2)<<1;
+    res1 = num1;
+    res2 = num2;
+  }
+  return res1;
+}
+```
+
 <span id ="fast_slow_ptr"></span>
 ### 快慢指针
 我只要跑的比我妈快就一定会在某一时刻遇见我妈（成环的时候），步长为1和2的时候最小公倍数就是相遇的契机。
