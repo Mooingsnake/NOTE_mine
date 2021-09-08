@@ -159,19 +159,14 @@ public:
 #### 位运算计算加法
 https://www.jianshu.com/p/3f165f976edd
 ```
-int Add(int num1, int num2)
-{
-  int res1 = num1^num2;
-  int res2 = (num1&num2)<<1;
-  while(res2)
-  {
-    num1 = res1^res2;
-    num2 = (res1&res2)<<1;
-    res1 = num1;
-    res2 = num2;
-  }
-  return res1;
-}
+ int add(int a, int b) {
+        while(b){
+            int carry = (unsigned int)(a & b)<<1;   // unsigned 是防止出错，这一步与和进位代表进位。  进位一定是两个1，这样我们就与一下然后进位就型了  
+            a ^= b;				//  相加，且不算进位，一定是01 = 1 ，10 = 1， 11=0，00 = 1，所以是异或 
+            b = carry;				//  每次不断更新b作为进位，让a做那个sum值，一直到进无可进的时候b会自动归0
+        }
+        return a; 
+    }
 ```
 
 <span id ="fast_slow_ptr"></span>
