@@ -296,6 +296,37 @@ __总结__：
 <span id ="recursion"></span>
 ## 递归-迭代-二叉树-栈-队列
 最典型的递归是树的遍历（先中后根遍历）
+### 约瑟夫问题 （迭代 递归
+```
+int f = 0;
+        for (int i = 2; i != n + 1; ++i) {
+            f = (m + f) % i;
+        }
+        return f;
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-lcof/solution/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-by-lee/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+```
+    int f(int n, int m) {
+        if (n == 1) {
+            return 0;
+        }
+        int x = f(n - 1, m);
+        return (m + x) % n;
+    }
+public:
+    int lastRemaining(int n, int m) {
+        return f(n, m);
+    }
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-lcof/solution/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-by-lee/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 ### 递归的时候的内存问题
 ```
  TreeNode* mirrorTree(TreeNode* root) {
