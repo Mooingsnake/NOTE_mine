@@ -4,6 +4,7 @@
 - [链表](#linknode)
 - [排序](#sort)
 - [动态规划](#dp)
+- [BFS](#bfs)
 - [递归-二叉树-栈-队列](#recursion)
 - [字符串](#string)
 - [一些函数](#functions)
@@ -586,6 +587,33 @@ int gcd(int a,int b){
     return a;
 }
 ```
+## BFS 
+### 矩阵中的路径 时间：O(3^kMN) k是字符串word长度，mn是矩阵长宽,3^k是指每个方块的选择是去掉上一个方块方向的剩下三个选择   空间：O(mn)
+```
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        rows = board.size();
+        cols = board[0].size();
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < cols; j++) {
+                if(dfs(board, word, i, j, 0)) return true;
+            }
+        }
+        return false;
+    }
+private:
+    int rows, cols;
+    bool dfs(vector<vector<char>>& board, string word, int i, int j, int k) {
+        if(i >= rows || i < 0 || j >= cols || j < 0 || board[i][j] != word[k]) return false;  // 去掉越界情况和不相同情况
+        if(k == word.size() - 1) return true;							// 最终串完一整串的时候返回true
+        board[i][j] = '\0';									//表示访问过了现在是空的
+        bool res = dfs(board, word, i + 1, j, k + 1) || dfs(board, word, i - 1, j, k + 1) || 	// 四个方向找路
+                      dfs(board, word, i, j + 1, k + 1) || dfs(board, word, i , j - 1, k + 1);
+        board[i][j] = word[k];   // board还会在其他递归分支里用到，所以得还原，比如左-右-右-下，左-下-下-右的时候当然不希望第二个格子是空的
+        return res;
+    }
+```
+？？实话我没有看明白为什么这里四个dfs但是他认为是3^k，而且也没有看见他用'\0'当判定条件，噢这里可能是包含在 board[i][j] != word[k]里面了
 
 ### acm 模式
 循环输出用例直到结尾：
