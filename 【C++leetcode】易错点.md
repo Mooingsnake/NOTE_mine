@@ -297,13 +297,19 @@ __总结__：
 <span id ="recursion"></span>
 ## 递归-迭代-二叉树-栈-队列
 最典型的递归是树的遍历（先中后根遍历）
+
+![image](https://user-images.githubusercontent.com/47411365/132642841-cab76f5e-b905-462f-b28b-b9e4c1a5a92a.png)
+
 ### 约瑟夫问题 （迭代 递归
 ```
-int f = 0;
+// 迭代  避免使用栈空间，空间复杂度O（1），只使用常数个变量
+    int lastRemaining(int n, int m) {
+        int f = 0;
         for (int i = 2; i != n + 1; ++i) {
             f = (m + f) % i;
         }
         return f;
+    }
 
 作者：LeetCode-Solution
 链接：https://leetcode-cn.com/problems/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-lcof/solution/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-by-lee/
@@ -311,6 +317,8 @@ int f = 0;
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 ```
+// 递归
+private:
     int f(int n, int m) {
         if (n == 1) {
             return 0;
@@ -393,15 +401,15 @@ public:
 
 __考虑通过递归对二叉树进行先序遍历，当遇到节点 p 或 q 时返回。从底至顶回溯，当节点 p, q 在节点 root的左右子树上时，节点 root 即为最近公共祖先，则向上返回 root 。__
 
-Q什么 root 一定能返回到最近的祖先节点？
+Q：什么 root 一定能返回到最近的祖先节点？
 
 ![image](https://user-images.githubusercontent.com/47411365/132119362-fe050f5c-421c-4a59-92d9-09b3e2379da1.png)
 
-A为其他支路的节点都是空的，所以保留了第一个祖先节点的数字。
+A：为其他支路的节点都是空的，所以保留了第一个祖先节点的数字。
 
-Q何判断在左右子树上？
+Q：何判断在左右子树上？
 
-A在left和right都不是空的时候。
+A：在left和right都不是空的时候。
 
 ```
 class Solution {
@@ -476,7 +484,56 @@ public:
 };
 https://leetcode-cn.com/problems/ping-heng-er-cha-shu-lcof/submissions/
 ```
+### 重建二叉树 递归
+给出前序和后序，比如preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]   ，可以看到3自动把左右子树分成【9 | 15，20，7 】
 
+Q：对于一个链子，二叉树而言，如何做到在递归的时候还能找到自己的头节点？
+
+A：返回它自己，在返回之前设置左右
+```
+recur(root:0,0,0);
+
+TreeNode* recur(int root, int left, int right){	
+	TreeNode* node = new TreeNode(root);
+	root->left = recur(left, left+1,right);
+	root->right = recur(right, left,right-1);
+	return node;
+}
+```
+
+Q:这是一个什么样的递归？
+
+A：我们可以通过中根inorder判断任意节点的左右子树，我们可以通过明确左右子树来反过来确认先根preorder的下一个根在哪里
+
+换言之，根是可以被求出来的，那么node->left = recur(); 这个函数，当然可以返回一个根的值。而这个值是根据当前子树的左右边界和map了inorder一起决定的
+
+
+
+```
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        this->preorder = preorder;
+        for(int i = 0; i < inorder.size(); i++)
+            dic[inorder[i]] = i;
+        return recur(0, 0, inorder.size() - 1);
+    }
+private:
+    vector<int> preorder;
+    unordered_map<int, int> dic;
+    TreeNode* recur(int root, int left, int right) { 
+        if(left > right) return nullptr;                        // 递归终止
+        TreeNode* node = new TreeNode(preorder[root]);          // 建立根节点
+        int i = dic[preorder[root]];                            // 划分根节点、左子树、右子树
+        node->left = recur(root + 1, left, i - 1);              
+        node->right = recur(root + i - left + 1, i + 1, right); 
+        return node;                                            // 回溯返回根节点
+    }
+
+作者：jyd
+链接：https://leetcode-cn.com/problems/zhong-jian-er-cha-shu-lcof/solution/mian-shi-ti-07-zhong-jian-er-cha-shu-di-gui-fa-qin/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 ### 递归的调用顺序和 return之间的问题 【原题】反转链表 (双指针)
 
 ![image](https://user-images.githubusercontent.com/47411365/131963232-91b60e41-3da2-46aa-b49a-6062cb00838d.png)
