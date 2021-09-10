@@ -534,6 +534,48 @@ private:
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
+
+### 匹配树的子结构 递归
+Q：已知AB两树头节点，如何在A中找到那个匹配B的子树？
+
+A：进行递归遍历找到那个B的头结点
+
+Q：已知我有两个相同头结点，如何遍历得出它们一样？
+
+A：进行递归遍历，一直到B树被递归完（即B树的节点最终为null）
+
+Q：如何处理两个递归？
+
+A：两个函数都调用它们自己的递归
+#### recur(A, B) 函数：
+
+#### 终止条件：
+当节点 BB 为空：说明树 BB 已匹配完成（越过叶子节点），因此返回 true ；
+
+当节点 AA 为空：说明已经越过树 AA 叶子节点，即匹配失败，返回 false；
+
+当节点 AA 和 BB 的值不同：说明匹配失败，返回 falsefalse ；
+#### 返回值：
+判断 AA 和 BB 的左子节点是否相等，即 recur(A.left, B.left) ；
+
+判断 AA 和 BB 的右子节点是否相等，即 recur(A.right, B.right) ；
+
+#### isSubStructure(A, B) 函数：
+
+#### 特例处理：
+当 树 AA 为空 或 树 BB 为空 时，直接返回 false ；
+#### 返回值： 
+若树 BB 是树 AA 的子结构，则必满足以下三种情况之一，因此用或 || 连接；
+
+以 节点 AA 为根节点的子树 包含树 BB ，对应 recur(A, B)；
+
+树 BB 是 树 AA 左子树 的子结构，对应 isSubStructure(A.left, B)；
+
+树 BB 是 树 AA 右子树 的子结构，对应 isSubStructure(A.right, B)；
+
+```
+
+```
 ### 递归的调用顺序和 return之间的问题 【原题】反转链表 (双指针)
 
 ![image](https://user-images.githubusercontent.com/47411365/131963232-91b60e41-3da2-46aa-b49a-6062cb00838d.png)
