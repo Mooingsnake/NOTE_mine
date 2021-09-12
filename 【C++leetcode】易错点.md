@@ -779,6 +779,10 @@ https://leetcode-cn.com/problems/string-compression/solution/ya-suo-zi-fu-chuan-
     }
 
 ```
+### 匹配字符串
+只有( ) * 且* 表示可以替换为( ) 和空字符串
+使用栈
+容易错的部分：我只记录了* 有多少个，期待在遍历结束后删掉比较多少相互抵消( * ，但是会有 * 出现在(之前，所以需要记录* 的位置，我们可以用vector<int>记录
 
 ### K 站中转内最便宜的航班，DP,BFS,图
 
