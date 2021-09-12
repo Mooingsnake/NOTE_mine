@@ -508,7 +508,6 @@ A：我们可以通过中根inorder判断任意节点的左右子树，我们可
 换言之，根是可以被求出来的，那么node->left = recur(); 这个函数，当然可以返回一个根的值。而这个值是根据当前子树的左右边界和map了inorder一起决定的
 
 
-
 ```
 public:
     TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
@@ -574,8 +573,37 @@ A：两个函数都调用它们自己的递归
 树 BB 是 树 AA 右子树 的子结构，对应 isSubStructure(A.right, B)；
 
 ```
+    public boolean isSubStructure(TreeNode A, TreeNode B) {
+        return (A != null && B != null) && (recur(A, B) || isSubStructure(A.left, B) || isSubStructure(A.right, B));
+    }
+    boolean recur(TreeNode A, TreeNode B) {
+        if(B == null) return true;
+        if(A == null || A.val != B.val) return false;
+        return recur(A.left, B.left) && recur(A.right, B.right);
+    }
 
+作者：jyd
+链接：https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/solution/mian-shi-ti-26-shu-de-zi-jie-gou-xian-xu-bian-li-p/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
+### 二叉搜索树与双向链表
+
+一点牢骚：我真的气死了，又是递归我又不会做，你妈妈的。是的我的确知道二叉搜索树只要中序遍历就是有序的，中序遍历我也会写，不就是两个递归中间夹一个处理自己最后再返回。
+但是我 __不知道怎么处理上一个和下一个怎么衔接，不知道初始化写在哪里
+```
+        if(pre != nullptr) pre->right = cur;   // 不是第一次的情况下，pre往后连
+        else head = cur;   // 是第一次的情况下，
+        cur->left = pre;  // cur往前连
+        pre = cur;        // 下一个，在第一次的语义下也是初始化赋值。
+
+作者：jyd
+链接：https://leetcode-cn.com/problems/er-cha-sou-suo-shu-yu-shuang-xiang-lian-biao-lcof/solution/mian-shi-ti-36-er-cha-sou-suo-shu-yu-shuang-xian-5/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+
 ### 递归的调用顺序和 return之间的问题 【原题】反转链表 (双指针)
 
 ![image](https://user-images.githubusercontent.com/47411365/131963232-91b60e41-3da2-46aa-b49a-6062cb00838d.png)
