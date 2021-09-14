@@ -31,6 +31,63 @@ int main(){
 
 2.产生引用非法内存的指针：在尚有指针引用的情况下就释放了内存
 
+## 全局静态变量，局部静态变量，局部变量，全局变量
+一个中文的csdn解释：https://blog.csdn.net/yangfengby0909/article/details/6501147
+一个英文的教程网站：https://www.learncpp.com/cpp-tutorial/static-local-variables/
+
+__存储区域__: 全局变量和所有静态是放在内存的静态存储区域， 局部变量存放在内存的栈区
+__作用域__：全局变量在整个工程文件有效，静态全局只在定义的文件内有效（二者都是程序开始的时候初始化，在程序结束的时候消失）；局部变量只在函数内有效，局部静态也只在定义的函数内有效，但是程序只分配一次内存（且在第一次执行到定义的地方才初始化），函数返回也不会消失。
+
+局部静态最基本的使用情况：
+```
+#include <iostream>
+
+void incrementAndPrint()
+{
+    int value{ 1 }; // automatic duration by default
+    ++value;
+    std::cout << value << '\n';
+} // value is destroyed here
+
+int main()
+{
+    incrementAndPrint();   // 2
+    incrementAndPrint();   // 2
+    incrementAndPrint();    // 2
+
+    return 0;
+}
+```
+```
+#include <iostream>
+
+void incrementAndPrint()
+{
+    static int s_value{ 1 }; // static duration via static keyword.  This initializer is only executed once.
+    ++s_value;
+    std::cout << s_value << '\n';
+} // s_value is not destroyed here, but becomes inaccessible because it goes out of scope
+
+int main()
+{
+    incrementAndPrint();  // 2
+    incrementAndPrint();  // 3
+    incrementAndPrint();  // 4
+
+    return 0;
+}
+```
+局部静态使用起来像全局变量一样，但是因为只在函数内生效，所以变得更安全了！
+
+Best practice：记得初始化局部静态变量！
+
+一个关于静态局部常量的tip：如果这个局部常量经常使用且经常被初始化（从数据库取数据，开销很大），那么就可以使用静态的局部常量，因为它现在像全局变量一样了！
+
+Best practice：__永远不要使用__ 局部静态变量，除非它不需要被重置。
+
+解释：你在main函数里仅仅调用了几次同样的函数，这些函数每次都和上次结果不同，这已经很困惑了。 然后假设你又去做别的事情，做完以后重新调用这个函数，却发现数值还在增长。
+
+
 ## 智能指针
 ### 普通写法
 写法如下，一个可以多个指针指向同一个对象，一个只能一对一
