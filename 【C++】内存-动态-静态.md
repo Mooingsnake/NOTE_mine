@@ -60,7 +60,7 @@ sizeof("1234")是5，sizeof(string("1234"))是28     // 在我的机器上，在
 __why？__
 
 ### sizeof 与struct
-struct有默认的对齐方式：
+#### 默认的对齐方式：
 
 ![image](https://user-images.githubusercontent.com/47411365/133356227-97d606d3-f9ac-420e-9d5e-86d538e79604.png)
 
@@ -74,9 +74,13 @@ struct有默认的对齐方式：
 
 ![image](https://user-images.githubusercontent.com/47411365/133356733-c72dae0b-4c62-423c-89c2-aedee6496678.png)![image](https://user-images.githubusercontent.com/47411365/133356750-dd934b17-c7fa-4339-bdcd-482d57f71675.png)
 
+#### struct里面嵌套struct的时候
 
+![image](https://user-images.githubusercontent.com/47411365/133424806-7baab61d-abcc-4c31-802a-2eff01f2ef09.png)
 
+可以看见如果是13+1的形式，那就是14，是1对齐，如果是13+8，那就是16+8，是8对齐，主要看struct中的基本元素最大是多少。
 
+#### 如果想看C++对象模型的相关知识可以看另外一篇文章https://www.cnblogs.com/skynet/p/3343726.html
 
 
 ## 简述
