@@ -1,4 +1,86 @@
+## 前言-关于sizeof和union和内存对齐
+
+下面是基本类型的对应sizeof：
+
+![image](https://user-images.githubusercontent.com/47411365/133243622-10d6e628-951a-4853-b5bf-7fcb61c5f8fe.png)
+
+我也不知道为什么别人的表格里面long和unsigned long是32位 4， 64位 8，反正我的实测visual studio是这样.
+
+下面是一些例子（sum：55以及之后的部分是我别的例子剩下的，只看前几行纯数字就行）
+
+![image](https://user-images.githubusercontent.com/47411365/133358836-9c1451b9-3548-4557-9fd6-efc7ede83587.png)
+
+
+1.string在std里面是一个类，计算方法不一样 2.char[9]就是9  3.尽管我认为char a[8]的a是一个指针，但是这里能算出总长  4.所有的指针都是8位占位（我开的x64运行环境） 5."ssss"是char g[]自动增加以为休止位
+
+
+__一个解释union的网页__ ：https://www.cnblogs.com/jeakeven/p/5113508.html
+
+摘要：
+```
+struct student
+{
+     char mark;   // 1
+     long num;    // 4
+     float score;   // 4
+};
+
+...
+  sizeof(student);   // 4+4+4 = 12
+...
+```
+```
+union test
+{
+     char mark;
+     long num;
+     float score;  
+};
+
+sizeof(test);  //  4 
+```
+sizeof(union test)的值为4。因为共用体将一个char类型的mark、一个long类型的num变量和一个float类型的score变量存放在同一个地址开始的内存单元中
+
+### sizeof
+
+__一个把sizeof的东西基本都讲清楚的网页__ ：https://www.cnblogs.com/chio/archive/2007/06/11/778934.html
+
+
+
+我看不懂它讲的多级指针部分，但是有一点：strlen("abcd") == 4 ；sizeod("abcd") == 5；因为一个是字符串长度，一个是字符串容量
+
+sizeof("1234")是5，sizeof(string("1234"))是28     // 在我的机器上，在别人的机器上可能是16
+
+![image](https://user-images.githubusercontent.com/47411365/133237120-953122e6-d398-4f64-8726-8d813c99446a.png)
+
+需要明确的一点是，遇到"xxx"的时候，类型其实是左边这个，遇到string("xxxx")的时候作为值可以打印为xxxx，但是sizeof就是28
+
+![image](https://user-images.githubusercontent.com/47411365/133238156-1df3b8b7-e5b0-49b8-ad43-010da614b5b9.png)
+
+__why？__
+
+### sizeof 与struct
+struct有默认的对齐方式：
+
+![image](https://user-images.githubusercontent.com/47411365/133356227-97d606d3-f9ac-420e-9d5e-86d538e79604.png)
+
+1.cpu对一个边界的取值会寻找其中占内存最大的类型，比如最大是int，那么边界就是4； 最大时double，那么边界就是8.
+
+2.如果char-》double-》char排列，那么就会出现1（8）-》8（8）-》1（8）最终为24
+
+3.如果char-》char-》double，那么就是两个char可以挤在一个8边界的空间里，所以是16
+
+4.例子里面char和int挤在一起了，所以还是24 和 16
+
+![image](https://user-images.githubusercontent.com/47411365/133356733-c72dae0b-4c62-423c-89c2-aedee6496678.png)![image](https://user-images.githubusercontent.com/47411365/133356750-dd934b17-c7fa-4339-bdcd-482d57f71675.png)
+
+
+
+
+
+
 ## 简述
+
 内存分三种：
 
 1.栈内存，比如函数{}括号内的部分，在递归的时候能看的很清楚是通过栈的方式运行。将会在栈弹出的时候自行销毁
@@ -33,12 +115,14 @@ int main(){
 
 ## 全局静态变量，局部静态变量，局部变量，全局变量
 一个中文的csdn解释：https://blog.csdn.net/yangfengby0909/article/details/6501147
+
 一个英文的教程网站：https://www.learncpp.com/cpp-tutorial/static-local-variables/
 
 __存储区域__: 全局变量和所有静态是放在内存的静态存储区域， 局部变量存放在内存的栈区
+
 __作用域__：全局变量在整个工程文件有效，静态全局只在定义的文件内有效（二者都是程序开始的时候初始化，在程序结束的时候消失）；局部变量只在函数内有效，局部静态也只在定义的函数内有效，但是程序只分配一次内存（且在第一次执行到定义的地方才初始化），函数返回也不会消失。
 
-局部静态最基本的使用情况：
+__局部静态__ 最基本的使用情况：
 ```
 #include <iostream>
 
@@ -86,6 +170,9 @@ Best practice：记得初始化局部静态变量！
 Best practice：__永远不要使用__ 局部静态变量，除非它不需要被重置。
 
 解释：你在main函数里仅仅调用了几次同样的函数，这些函数每次都和上次结果不同，这已经很困惑了。 然后假设你又去做别的事情，做完以后重新调用这个函数，却发现数值还在增长。
+
+###  静态成员函数和静态成员变量
+
 
 
 ## 智能指针
