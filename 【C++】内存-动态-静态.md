@@ -41,6 +41,37 @@ sizeof(test);  //  4
 ```
 sizeof(union test)的值为4。因为共用体将一个char类型的mark、一个long类型的num变量和一个float类型的score变量存放在同一个地址开始的内存单元中
 
+用union测试大小端
+```
+#include <iostream>
+using namespace std;
+
+void checkCPU()
+{
+    union MyUnion{    // 用了union以后int a和char c共用一个地址的内存
+        int a;
+        char c;
+    }test;
+    test.a = 1;   //     0x 00 00 00 01  
+    if (test.c == 1)  // 0x 01
+        cout << "little endian" <<endl;     // 如果是小端，那么就是1从右往左排
+    else cout << "big endian" <<endl;      // 如果是大端，1从左往右排
+}
+
+int main()
+{
+    checkCPU();
+    return 0;
+}
+```
+
+有关的更多大小端可以参考这个网页：https://zhuanlan.zhihu.com/p/144718837  
+
+里面一些知识，包括一些文件大小端不一样，还有大小端记忆法，是可以参考的。不过我再补充一张vs实测的小端情况吧（memory查看的技巧就是直接取地址变量，微软，俺滴爸爸）
+
+![image](https://user-images.githubusercontent.com/47411365/133583104-bbbf45c4-7914-4699-a45b-78327e068405.png)
+
+
 ### sizeof
 
 __一个把sizeof的东西基本都讲清楚的网页__ ：https://www.cnblogs.com/chio/archive/2007/06/11/778934.html
