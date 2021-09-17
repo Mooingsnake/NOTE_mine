@@ -493,7 +493,9 @@ public:
         }
         return res;
     }
+    
 ```
+
 ### 平衡二叉树  递归 剪枝
 当左右子树已经不平衡的时候，就直接return函数，这个return在平衡的时候记录深度，在不平衡的时候返回-1结束游戏，达到剪枝的效果。
 
@@ -634,6 +636,62 @@ A：两个函数都调用它们自己的递归
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
+### 给一个数组判断是否为二叉搜索树后序遍历
+#### 1.递归分治（分别解决左子树和右子树）
+终止条件： 当 left≥right ，说明此子树节点数量<1，无需判别正确性，因此直接返回 true；
+
+返回值： 所有子树都需正确才可判定正确，因此使用 与逻辑符 && 连接。
+
+p = j： 判断 此树 是否正确。
+
+recur(i, m - 1)： 判断 此树的左子树 是否正确。
+
+recur(m, j - 1)： 判断 此树的右子树 是否正确。
+
+作者：jyd
+链接：https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/solution/mian-shi-ti-33-er-cha-sou-suo-shu-de-hou-xu-bian-6/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+#### 2. 辅助单调栈（坑）
+
+```
+
+```
+### 二叉树寻找和为target的路径（dfs）
+
+dfs是只有当到底的时候才进行返回，所以只有在root==nullptr的时候才会return。
+
+bfs是不停的return，到底return
+```
+public:
+    vector<vector<int>> ret;
+    vector<int> path;
+
+    void dfs(TreeNode* root, int target) {
+        if (root == nullptr) {
+            return;
+        }
+        path.emplace_back(root->val);
+        target -= root->val;
+        if (root->left == nullptr && root->right == nullptr && target == 0) {
+            ret.emplace_back(path);
+        }
+        dfs(root->left, target);
+        dfs(root->right, target);
+        path.pop_back();
+    }
+
+    vector<vector<int>> pathSum(TreeNode* root, int target) {
+        dfs(root, target);
+        return ret;
+    }
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/er-cha-shu-zhong-he-wei-mou-yi-zhi-de-lu-jing-lcof/solution/er-cha-shu-zhong-he-wei-mou-yi-zhi-de-lu-68dg/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 
 ### 递归的调用顺序和 return之间的问题 【原题】反转链表 (双指针)
 
