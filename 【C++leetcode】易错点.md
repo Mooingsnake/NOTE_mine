@@ -463,6 +463,37 @@ public:
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
+### 二叉树按层存储pro 
+```
+  vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        deque<TreeNode*> queue;    // 双边队列
+        queue.push_back(root);
+        if(root==nullptr){   //  只要有push_back(nullptr)
+            return res;
+        }
+        while(!queue.empty()){         
+            TreeNode* tmp;
+            vector<int> line;
+            for(int i = queue.size(); i > 0; i--){
+                if(res.size() % 2 == 1){
+                    tmp = queue.front();  // 正着取
+                    queue.pop_front();
+                    if(tmp->right!=nullptr) queue.push_back(tmp->right); 反着放
+                    if(tmp->left!=nullptr) queue.push_back(tmp->left);
+                }else{
+                    tmp = queue.back();
+                    queue.pop_back();
+                    if(tmp->left!=nullptr) queue.push_front(tmp->left);
+                    if(tmp->right!=nullptr) queue.push_front(tmp->right);
+                }
+                line.push_back(tmp->val);
+            }
+            res.push_back(line);
+        }
+        return res;
+    }
+```
 ### 平衡二叉树  递归 剪枝
 当左右子树已经不平衡的时候，就直接return函数，这个return在平衡的时候记录深度，在不平衡的时候返回-1结束游戏，达到剪枝的效果。
 
