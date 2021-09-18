@@ -669,17 +669,17 @@ public:
     vector<int> path;
 
     void dfs(TreeNode* root, int target) {
-        if (root == nullptr) {
+        if (root == nullptr) {     // 截止条件
             return;
         }
         path.emplace_back(root->val);
         target -= root->val;
-        if (root->left == nullptr && root->right == nullptr && target == 0) {
-            ret.emplace_back(path);
+        if (root->left == nullptr && root->right == nullptr && target == 0) { // 会返回的，我们把这个if线合并在root==nullptr里面了
+            ret.emplace_back(path);               // 既然条件满足，就放进去
         }
         dfs(root->left, target);
         dfs(root->right, target);
-        path.pop_back();
+        path.pop_back();      // 因为我们要记录多条路径，path 是一个全局变量，每当有一条线完整走完return以后就会从dfs(左)和dfs（右）运行到这一句，（欸↘我从王府井回来辣
     }
 
     vector<vector<int>> pathSum(TreeNode* root, int target) {
