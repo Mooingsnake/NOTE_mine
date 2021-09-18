@@ -61,6 +61,9 @@ v.reserve(25)； // 单纯修改一个capacity，表示能用的内存被扩大�
    v.push_back(i * 2); // Writes to elements with indices [25…30), not [20…25) ! <
  }
 ```
+最后，再强调一遍emplace_back和push_back之间的差别https://haoqchen.site/2020/01/17/emplace_back-vs-push_back/
+                                                                                    
+（上面网页的复读机）C++11以后，最主要的区别是，emplace_back支持in-place construction，也就是说emplace_back(10, “test”)可以只调用一次constructor，而push_back(MyClass(10, “test”))必须多一次构造和析构
 ##### 二位数组
 ```vector < vector < int > > Matrix;
 
