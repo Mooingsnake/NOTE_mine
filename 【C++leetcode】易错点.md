@@ -5,7 +5,8 @@
 - [排序](#sort)
 - [动态规划](#dp)
 - [BFS](#bfs)
-- [递归-二叉树-栈-队列](#recursion)
+- [递归-二叉树-队列](#recursion)
+- [栈](#stack)
 - [字符串](#string)
 - [一些函数](#functions)
 - [数据结构模拟](#数据结构模拟)
@@ -295,7 +296,7 @@ __总结__：
 写for(auto x: nums)的时候效率是0ms
 
 <span id ="recursion"></span>
-## 递归-迭代-二叉树-栈-队列
+## 递归-迭代-二叉树-队列
 最典型的递归是树的遍历（先中后根遍历）
 
 ![image](https://user-images.githubusercontent.com/47411365/132642841-cab76f5e-b905-462f-b28b-b9e4c1a5a92a.png)
@@ -691,6 +692,30 @@ public:
 链接：https://leetcode-cn.com/problems/er-cha-shu-zhong-he-wei-mou-yi-zhi-de-lu-jing-lcof/solution/er-cha-shu-zhong-he-wei-mou-yi-zhi-de-lu-68dg/
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+<span id ="stack"></span>
+## 栈
+### 栈的压入、弹出序列
+题目：已知压入序列，判断弹出序列是否合理
+
+解析：已知压入和弹出序列，那么当时情况唯一。所以理论上整个过程可以模拟。 __如何模拟？__  
+
+你就真的拿一个stack出来，然后压入，当栈顶和pop序列一致就弹出，弹到不一致了就接着压。
+
+大循环是压入，小循环是弹出。 你可以通过反复模拟发现的确是大循环套小循环。
+```
+    bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {
+       stack<int> stk;
+       int i =0;
+       for(auto x:pushed){
+           stk.push(x);
+           while(!stk.empty()&&stk.top()== popped[i]){
+               stk.pop();
+               i++;
+           }
+       }
+       return stk.empty();
+    }
 ```
 
 ### 递归的调用顺序和 return之间的问题 【原题】反转链表 (双指针)
