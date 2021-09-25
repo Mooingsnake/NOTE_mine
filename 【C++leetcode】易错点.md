@@ -758,26 +758,6 @@ for (const auto& kv : myMap) {
     target = {0, 1, 2, 3, 4, 5, 6}
     
 然后找arr里面有序的部分
-### 子问题：求最大递增子序列
-一：dp(n²)
-
-实际上对于动态规划，最后一步f(n) = f(n-1) + 1是容易得出的
-
-主要关键是每一次的f(n)它一定要包括nums[n]
-
-然后在所有dp[]之中选择最大值
-
-另外,下面的写法很不错
-```*max_element(dp.begin(), dp.end());```
-
-二：二分法和贪心(nlogn)
-
-在上面的动态规划里面，之所以出现了n²，是因为一个循环遍历nums，在循环里面每次都要回去找最大的那个dp[x]然后再加上本身+1
-
-二分法则是需要把dp重新变成n下最大递增子序列（没有必须包括nums[n]的限制），这样dp就是有序的，有序才能二分
-
-![image](https://user-images.githubusercontent.com/47411365/127093482-d4eb650a-3579-46f3-b192-5d8c721df863.png)
-
 我太难了难成傻逼我直接unravel，这段小小的代码在来姨妈的时候折磨了我整整一天一夜，凸(艹皿艹 )
 ```
  int n = target.size();
@@ -805,6 +785,56 @@ for (const auto& kv : myMap) {
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
+
+### 求最长上升子序列
+https://leetcode-cn.com/problems/longest-increasing-subsequence/solution/zui-chang-shang-sheng-zi-xu-lie-dong-tai-gui-hua-2/
+一：dp(n²)
+
+动态规划讲究的是依赖之前的结果。
+
+子序列必定是：dp[i]记录前i个字符内子序列的状态，当nums[7]时，可以遍历前六个nums[j]如果其中nums[4]<nums[7] && dp[4] = 4，那就可以得dp[7] = dp[4]+1
+
+最长嘛，就是前六个都比较完了以后的最大的那个。
+
+每次计算dp[i]必定会循环（0，i）,所以是O(n²)
+
+__我的错误__：
+如果最后不计算dp中的最大值，只采用dp[n-1]，是错误的
+
+用例：[1,3,6,7,9,4,10,5,6]，得出的dp[1,2,3,4,5,3,6,4,5]   ,dp明明是前i个子序列最长，为什么会出现前i-1个比前i个还多的情况？
+
+A：因为计算dp的时候因为比较了nums[i]，所以默认包含第i个
+
+二：动态规划 + 二分查找(nlogn)
+
+在上面的动态规划里面，之所以出现了n²，是因为一个循环遍历nums，在循环里面每次都要回去找最大的那个dp[x]然后再加上本身+1
+
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> dp(n,1);
+        vector<int> tail(n);
+        int res = 0;
+        for(auto num:nums){
+            int i = 0, j = res;
+            while(i<j){
+                int mid = (i + j) / 2;
+                if(num > tail[mid]){ // 那就说明我是后1/2部分
+                    i = mid + 1;
+                }else{
+                    j = mid;
+                }
+            }
+            tail[i] = num;   // 因为我每次都会更新tail
+            if(res == j) res++; // 检索到最大就是胜利
+        }
+        return res;
+    }
+
+作者：jyd
+链接：https://leetcode-cn.com/problems/longest-increasing-subsequence/solution/zui-chang-shang-sheng-zi-xu-lie-dong-tai-gui-hua-2/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
 
 ### 二叉树寻路
 1.既然这个二叉树是Z形状，那就可以通过max-当前+ min 的方式转换出来
