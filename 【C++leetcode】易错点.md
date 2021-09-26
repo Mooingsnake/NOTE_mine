@@ -60,7 +60,8 @@ arr.back();
 ```
 class Solution {
 public:
-    string minNumber(vector<int>& nums) {          
+    
+    minNumber(vector<int>& nums) {          
         vector<string> strs;
         for(int i = 0; i < nums.size(); i++)
             strs.push_back(to_string(nums[i]));
@@ -840,7 +841,7 @@ A：因为计算dp的时候因为比较了nums[i]，所以默认包含第i个
 链接：https://leetcode-cn.com/problems/longest-increasing-subsequence/solution/zui-chang-shang-sheng-zi-xu-lie-dong-tai-gui-hua-2/
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-
+```
 ### 最长递增子序列的个数
 在上一题朴素的dp情况下，需要计数出现的次数
 
@@ -941,6 +942,7 @@ private:
 	}
 ```
 <span id ="string"></span>
+	
 ## 字符串
 ### 类型强制转换
 int 转 string
