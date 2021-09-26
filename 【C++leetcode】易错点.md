@@ -988,8 +988,29 @@ https://leetcode-cn.com/problems/string-compression/solution/ya-suo-zi-fu-chuan-
         }
         return write;
     }
-
 ```
+
+### 最长公共子序列（二维dp）
+```
+    int longestCommonSubsequence(string text1, string text2) {
+        int n = text1.size();
+        int m = text2.size();
+        vector<vector<int>> dp (n+1,vector<int>(m+1,0));
+
+        for(int i = 1;i <= n;i++){
+            for(int j = 1;j <= m;j++){
+                if(text1[i-1] == text2[j-1]){
+                    dp[i][j] = dp[i-1][j -1]+1; // 处理一下这里的减一问题
+                }else{
+                    dp[i][j] = max(dp[i-1][j], dp[i][j-1]); // 在不相等的时候再去取上和左的数据
+                }
+            }
+        }
+        return dp[n][m];
+    }
+```
+### 两个字符串的删除操作（二维dp，和上一题类似）
+同上
 ### 匹配字符串
 只有( ) * 且* 表示可以替换为( ) 和空字符串
 
