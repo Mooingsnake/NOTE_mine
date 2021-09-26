@@ -838,6 +838,37 @@ A：因为计算dp的时候因为比较了nums[i]，所以默认包含第i个
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
+### 最长递增子序列的个数
+在上一题朴素的dp情况下，需要计数出现的次数
+
+```
+    int findNumberOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> dp(n,1);
+        vector<int> count(n,1); // 先全部赋值为1
+        for(int i = 0;i <n;i++){
+            for(int j = 0;j < i; j++){
+                if(nums[j]<nums[i] ){
+                    if( dp[j]+1>dp[i]){  // 头一次出现 比如出现dp[..,..,..,3,4,,..,..,..] count[..,..,..,..,..1,1,..,..,..]
+                        dp[i] = dp[j]+1;
+                        count[i] = count[j];  
+                    }         
+                    else if(dp[i] ==dp[j]+1){ // 第二次及以后出现dp[..,..,..,4,4..,..,..,] count[..,..,..,..,1,2,..,..,..,]
+                        count[i] += count[j];
+                    }
+                }    
+            }
+        }
+        int res = 0;
+       int max = *max_element(dp.begin(),dp.end()); 防止出现nums[2,2,2,2,2]的情况
+       for(int i = 0;i < n;i++){
+           if(dp[i] == max){
+               res += count[i];
+           }
+       }
+       return res;
+    }
+```
 
 ### 二叉树寻路
 1.既然这个二叉树是Z形状，那就可以通过max-当前+ min 的方式转换出来
