@@ -221,7 +221,7 @@ https://www.jianshu.com/p/3f165f976edd
 
 如果实在觉得要记得一个头结点又要遍历一个工具人结点困难，就用哨兵做头结点前一个，工具人结点 = 哨兵，所有的结点都是.next；
 
-### 反转链表 (双指针)
+### 反转链表 (迭代)
 1.while()里面是curr，还是curr->next?        2.如何正确记录前中后个节点且不会打架且可以迭代？
 ```
     ListNode* reverseList(ListNode* head) {
@@ -262,22 +262,49 @@ https://www.jianshu.com/p/3f165f976edd
     }
 ``` 
 // 循环结束node是nullptr，所以是pre，这很重要，  还有就是return 回最后一个元素的技巧，pre一直在变化的技巧
+
+### 反转链表Ⅱ (头插法，虚拟指针)
+![image](https://user-images.githubusercontent.com/47411365/134858032-71eab17d-645e-4936-a84d-7301931e8cd8.png)
+
+```
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        ListNode* dummy_node = new ListNode(0);  // 因为答案头结点不再是遍历的到底的那个节点了，所以得用来记录
+        dummy_node->next = head;
+        ListNode* g = dummy_node;   // g guard 守卫节点，x-k-k-k-x 第一个x的位置，永远不动
+        ListNode* p = dummy_node->next; // p pointer 指针节点 ， x-k-k-k-x 一直在往后捞，但是永远指着同一个节点
+
+        for(int i = 0; i < left-1; i++){ // 遍历到要反转的地方
+            g = g->next;
+            p = p->next;
+        }
+
+        for(int i =0 ; i < right - left;i++){ // 头插法，像扑克一样选一个最小3放最右边，然后一个个插到左边末尾
+            ListNode* removed = p->next;  // 不会写的请多画草稿
+            p->next = p->next->next;
+            removed->next = g->next;
+            g->next = removed;
+        }
+
+        return dummy_node->next;
+    }
+```
+
 ### 构造函数里不需要清空栈
 栈在声明时是空的
 
 ### vector.emplace_back()，push_back()
 ```
         if(n <=1) return n;
-        vector<long long>vec(n+1,0);
+        vector<long long>vec(n+1,0); // 注意这里
         vec[0] = 0;
         vec[1] = 1;
         for(int i = 2; i <= n; i++){
-            vec.emplace_back(((long long)vec[i - 1] % (long long)(1e9+7)+ vec[i - 2]%(long long)(1e9+7)) %(long long )((1e9+7)));
+            vec.emplace_back(((long long)vec[i - 1] % (long long)(1e9+7)+ vec[i - 2]%(long long)(1e9+7)) %(long long )((1e9+7)));  // emplace_back和push_back一样，都是在最后加
         } 
         return (int)vec[2];
     }
 ```
-这样的写法下，vec[1]以后的都是0，这是因为vector新建的时候就是（n+1,0）emplace_back()在后面增加
+这样的写法下，vec[1]以后的都是0，这是因为vector新建的时候就是（n+1,0）emplace_back()在[n+1]增加，另外emplace_back和push_back在c++11之前可能有右值引用的差别，但是C++11及以后差别真的不大
 
 还有个写法
 ```
@@ -289,7 +316,7 @@ __总结__：
 
 关于一个容器大小，初始化的时候分配了空间就是[n]下标流
 
-如果没分配空间，就是emplace_back函数
+如果没分配空间，就是emplace_back和push_back函数往后填。
 
 
 
