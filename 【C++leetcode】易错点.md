@@ -289,7 +289,34 @@ https://www.jianshu.com/p/3f165f976edd
     }
 ```
 ![image](https://user-images.githubusercontent.com/47411365/134863840-129e7829-afff-41ec-bdf1-bd34f623b7a4.png)
+### 分隔链表（均分）
+题目：已知一个链表，分成k份，每一份尽量均匀，多了放前面，如果k大于链表长度，剩下都是空
+```
+    vector<ListNode*> splitListToParts(ListNode* head, int k) {
+        int count = 0;
+        int n = 0;
+        ListNode* tmp = head;
+        while(tmp != nullptr) {
+            tmp = tmp->next;
+            n++;
+        }
 
+        int per = count / k, remainder = n % k;
+        ListNode* curr = head;
+        vector<ListNode*> res (k); 
+        for(int i =0;i < k && curr!=nullptr;i++){ // 如果为空了就不要继续了，默认状态没问题的
+            res[i] = curr;
+            int partSize = per + (i < remainder ? 1:0);
+            for(int j = 1 ; j < partSize;j++){  // 链接嘛，就是比节点数少一个
+                curr = curr->next;
+            }
+            ListNode* next = curr->next;
+            curr->next = nullptr;
+            curr = next;
+        }
+        return res;
+    }
+```
 ### 构造函数里不需要清空栈
 栈在声明时是空的
 
