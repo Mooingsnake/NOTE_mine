@@ -278,7 +278,7 @@ https://www.jianshu.com/p/3f165f976edd
             p = p->next;
         }
 
-        for(int i =0 ; i < right - left;i++){ // 头插法，像扑克一样选一个最小3放最右边，然后一个个插到左边末尾
+        for(int i =0 ; i < right - left;i++){ // 反转列表长度是right-left+1 ，但是这里少了一次，因为是头插法所以头部节点不参与反转，在p和g不动的情况下是不会空指针的。
             ListNode* removed = p->next;  // 不会写的请多画草稿
             p->next = p->next->next;
             removed->next = g->next;
@@ -288,6 +288,7 @@ https://www.jianshu.com/p/3f165f976edd
         return dummy_node->next;
     }
 ```
+![image](https://user-images.githubusercontent.com/47411365/134863840-129e7829-afff-41ec-bdf1-bd34f623b7a4.png)
 
 ### 构造函数里不需要清空栈
 栈在声明时是空的
