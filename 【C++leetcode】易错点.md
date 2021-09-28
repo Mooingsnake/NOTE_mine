@@ -752,6 +752,63 @@ public:
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
+### 路径总和(同上题，dfs，前缀和，我第一次自己写出来，注意nullptr)
+```
+class Solution {
+private:
+    vector<int> preSum;
+    int count;
+public:
+
+// 朴素思想：因为是路径，dfs求所有vector<vector<int>> 的路径，然后dp
+//  dp简化：每一条路都要依赖父节点，当前节点要么用要么不用，是否可以去掉路径遍历部分，单纯使用dfs，每个路劲遇到了targetsum就返回1，父节点x = x.left+x.right;
+//  dfs:
+/*
+vector<int> preSum; 因为路径是连续的，所以尝试用前缀和，因为递归的时候这个值只属于当前路径所以没有问题
+                    可以联想到子序列，那个不连续，所以用dp
+
+void dfs(TreeNode* root,int targetSum){
+    dfs(root.left)
+    preSum.push_back(preSum.back()+root.val);
+    int ptr = preSum.back();
+    for(auto s:preSum){
+        if((ptr - s) == targetSum)count++;
+    }
+    dfs(root.right)
+    preSum.pop_back();
+
+}
+*/
+void dfs(TreeNode* root,int targetSum){
+    if(root== nullptr) return ;
+
+    // 这部分是root的处理
+    preSum.push_back(preSum.back()+root->val); //[0,1]
+    int ptr = preSum.back();//[1]
+    for(int i = 0;i < preSum.size()-1;i++){
+        if(ptr - preSum[i] == targetSum)count++;
+    }
+
+    // 这是继续向下探索
+    dfs(root->left, targetSum);
+    dfs(root->right, targetSum);
+
+    preSum.pop_back();  // 这是回退的时候需要去掉当前的点，从王府井到地坛，诶，回到王府井的时候得把地坛去了。
+}
+    int pathSum(TreeNode* root, int targetSum) {
+        count = 0;
+        preSum.push_back(0);
+        dfs(root,targetSum);
+        return count;
+    }
+};
+
+```
+
+遇到的问题1：空指针，因为头一次在preSum的时候数组为空，但是我使用了preSum.back()
+遇到的问题2：一开始我的初始化push_back（root->val），然后重复了
+遇到的问题3：笑死了，dfs（）第一个放在了root处理的前面，结果错乱了。
+
 <span id ="stack"></span>
 ## 栈
 ### 栈的压入、弹出序列
