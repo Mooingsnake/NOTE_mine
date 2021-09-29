@@ -13,7 +13,7 @@
 - [并查集](#union-find-set)
 - [自动状态机](#DFA)
 
-<span id ="DFA"></span>
+
 
 <span id ="bound"></span>
 ## 边界问题
@@ -1433,7 +1433,7 @@ public:
 ## 并查集
 https://www.nowcoder.com/questionTerminal/11ee0516a988421abf40b315a2b28d08?answerType=1&f=discussion
 
-
+<span id ="DFA"></span>
 ## DFA 自动状态机
 基本思路是使用enum概括'0-9'的数字，还有别的，归类为一个状态，然后用嵌套的map表记录转移
 ### 表示数值的字符串
