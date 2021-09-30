@@ -12,7 +12,7 @@
 - [数据结构模拟](#数据结构模拟)
 - [并查集](#union-find-set)
 - [自动状态机](#DFA)
-
+- [具体数学](#math)
 
 
 <span id ="bound"></span>
@@ -1561,3 +1561,10 @@ public:
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
+<span id = "math"></span>
+## 具体数学
+### 矩形面积（容斥原理）
+![image](https://user-images.githubusercontent.com/47411365/135423832-519ada00-15e2-4ed5-ad08-755db9350b4a.png)
+已知四个点，求覆盖的面积
+
+__重叠的x：max（0，右边更小边-左边更大边）__
