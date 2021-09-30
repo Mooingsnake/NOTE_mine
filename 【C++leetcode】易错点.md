@@ -1565,6 +1565,19 @@ public:
 ## 具体数学
 ### 矩形面积（容斥原理）
 ![image](https://user-images.githubusercontent.com/47411365/135423832-519ada00-15e2-4ed5-ad08-755db9350b4a.png)
+
 已知四个点，求覆盖的面积
 
-__重叠的x：max（0，右边更小边-左边更大边）__
+### 题解： __重叠的x：max（0，右边更小边-左边更大边）__
+```
+public int computeArea(int ax1, int ay1, int ax2, int ay2, int bx1, int by1, int bx2, int by2) {
+        int x = Math.max(0, Math.min(ax2, bx2) - Math.max(ax1, bx1));
+        int y = Math.max(0, Math.min(ay2, by2) - Math.max(ay1, by1));
+        return (ax2 - ax1) * (ay2 - ay1) + (bx2 - bx1) * (by2 - by1) - (x * y);
+    }
+
+作者：AC_OIer
+链接：https://leetcode-cn.com/problems/rectangle-area/solution/gong-shui-san-xie-yun-yong-rong-chi-yuan-hzit/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
