@@ -1566,9 +1566,9 @@ public:
 ### 矩形面积（容斥原理）
 ![image](https://user-images.githubusercontent.com/47411365/135423832-519ada00-15e2-4ed5-ad08-755db9350b4a.png)
 
-已知四个点，求覆盖的面积
 
-### 题解： __重叠的x：max（0，右边更小边-左边更大边）__
+
+ __重叠的x：max（0，右边更小边-左边更大边）__
 ```
 public int computeArea(int ax1, int ay1, int ax2, int ay2, int bx1, int by1, int bx2, int by2) {
         int x = Math.max(0, Math.min(ax2, bx2) - Math.max(ax1, bx1));
