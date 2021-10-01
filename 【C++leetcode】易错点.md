@@ -117,7 +117,7 @@ public:
 
 <span id ="bitcal"></span>
 ## 位运算
-#### 这是异或
+### 这是异或
 寻找只出现一次的数，时间消耗是0（N）不允许有额外的空间，所以禁哈希表
 此时需要位运算
 ```
@@ -135,7 +135,7 @@ public:
 更效率的
 
 ```
-#### 这是简单进位
+### 这是简单进位
 ```
  int hammingWeight(uint32_t n) {
         int ret = 0;
@@ -159,7 +159,7 @@ public:
         return count;
     }
 ```
-#### 位运算计算加法
+### 位运算计算加法
 https://www.jianshu.com/p/3f165f976edd
 ```
  int add(int a, int b) {
@@ -173,8 +173,34 @@ https://www.jianshu.com/p/3f165f976edd
     }
 ```
 如果只是简单的(a&b)那么当a为负数的时候，左移会报错。
+### 数值的整数次方(二分法 x*=x，快速逼近那个值)
+```
+x & 1;      //快速判断末位1或者0
+while(x)  // 判断是否到0
+x >>= 1    // 右移一位
+```
+```
+    public double myPow(double x, int n) {
+        if(x == 0) return 0;
+        long b = n;
+        double res = 1.0;   // 从x^0 开始，之后每次进入循环，所以是1
+        if(b < 0) {
+            x = 1 / x;
+            b = -b;
+        }
+        while(b > 0) {
+            if((b & 1) == 1) res *= x;  // 如果有1了才计算res，别的时候不计算   因为：2^110101 = 2*2^1 * 2^4 * 2^16 * 2^32
+            x *= x;
+            b >>= 1;
+        }
+        return res;
+    }
 
-
+作者：jyd
+链接：https://leetcode-cn.com/problems/shu-zhi-de-zheng-shu-ci-fang-lcof/solution/mian-shi-ti-16-shu-zhi-de-zheng-shu-ci-fang-kuai-s/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 <span id ="fast_slow_ptr"></span>
 ### 快慢指针
 我只要跑的比我妈快就一定会在某一时刻遇见我妈（成环的时候），步长为1和2的时候最小公倍数就是相遇的契机。
@@ -1563,10 +1589,10 @@ public:
 ```
 <span id = "math"></span>
 ## 具体数学
+其实算法里面的数学部分不多，所以把做到的题目搞搞懂就差不多了。
+
 ### 矩形面积（容斥原理）
 ![image](https://user-images.githubusercontent.com/47411365/135423832-519ada00-15e2-4ed5-ad08-755db9350b4a.png)
-
-
 
  __重叠的x：max（0，右边更小边-左边更大边）__
 ```
@@ -1581,3 +1607,8 @@ public int computeArea(int ax1, int ay1, int ax2, int ay2, int bx1, int by1, int
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
+### 数值的整数次方（快速幂的两种解法：1.二进制  2.二分法）
+题目：自己实现pow(x,n)表示x^n   -2^31 <= n <= 2^31-1    
+![image](https://user-images.githubusercontent.com/47411365/135574518-dae9edcf-9118-4f74-944a-b536a1c26108.png)
+
+有意思的是，二进制和二分法的写法都是一样的，把n转换为二进制，如1001 ，然后遇到1才乘算，每一次循环必定平方：x^1 * x^（2^4)
