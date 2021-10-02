@@ -139,8 +139,42 @@ public:
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
-更效率的
+```
+### （进阶）数组中出现的数字（分组）
+题目：这个数组中有两个数字出现了一次，其他出现了两次
 
+解析：用异或全部运算，剩下就是两个只出现了一次的数a ^ b ，可知0表示相同，1表示该位相异，那么用某一个为1的位去异或一边，能分成两类：
+
+1. 和a一样这个位是1
+
+2. 和b一样这个位是0
+
+实际上这个分组甚至不需要用vector装，因为只要if（dif & x）就能区分了。
+
+__我的错误：__ 首先是分组重新运算使用了三次for，其实可以只用一次； 然后是取到“某个是1的位”，其实应该是设置int dif = 1; 然后 while(){  dif <<= 1; }
+
+__最大错误：__ if(ret&dif == 0) ×， 因为&的优先级比==还低，所以要有括号。
+```
+    vector<int> singleNumbers(vector<int>& nums) {
+        int ret = 0;
+        for (int n : nums)
+            ret ^= n;
+        int div = 1;
+        while ((div & ret) == 0)
+            div <<= 1;
+        int a = 0, b = 0;
+        for (int n : nums)
+            if (div & n)
+                a ^= n;
+            else
+                b ^= n;
+        return vector<int>{a, b};
+    }
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/shu-zu-zhong-shu-zi-chu-xian-de-ci-shu-lcof/solution/shu-zu-zhong-shu-zi-chu-xian-de-ci-shu-by-leetcode/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 ### 这是简单进位
 ```
@@ -232,7 +266,6 @@ x >>= 1    // 右移一位
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
-
 <span id ="fast_slow_ptr"></span>
 ### 快慢指针
 我只要跑的比我妈快就一定会在某一时刻遇见我妈（成环的时候），步长为1和2的时候最小公倍数就是相遇的契机。
