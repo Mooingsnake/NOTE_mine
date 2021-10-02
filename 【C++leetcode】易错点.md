@@ -13,6 +13,7 @@
 - [并查集](#union-find-set)
 - [自动状态机](#DFA)
 - [具体数学](#math)
+- [维护一个哨兵](#maintain)
 
 
 <span id ="bound"></span>
@@ -1643,3 +1644,8 @@ public int computeArea(int ax1, int ay1, int ax2, int ay2, int bx1, int by1, int
 ![image](https://user-images.githubusercontent.com/47411365/135574518-dae9edcf-9118-4f74-944a-b536a1c26108.png)
 
 有意思的是，二进制和二分法的写法都是一样的，把n转换为二进制，如1001 ，然后遇到1才乘算，每一次循环必定平方：x^1 * x^（2^4)
+
+<span id ="maintain"></span>
+## 维护一个哨兵
+### 股票最大利润
+维护一个最小值
