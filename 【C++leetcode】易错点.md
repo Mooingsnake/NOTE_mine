@@ -207,6 +207,31 @@ x >>= 1    // 右移一位
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
+
+### 数字转换为十六进制数 （x* 0xf, x >> (4 * i)）
+像游标卡尺一样滑来滑去，从左边滑到右边，前为0的时候用if(val> 0)忽略就行
+```
+    string toHex(int num) {
+        if (num == 0) {
+            return "0";
+        }
+        string sb;
+        for (int i = 7; i >= 0; i --) {
+            int val = (num >> (4 * i)) & 0xf;
+            if (sb.length() > 0 || val > 0) {
+                char digit = val < 10 ? (char) ('0' + val) : (char) ('a' + val - 10);
+                sb.push_back(digit);
+            }
+        }
+        return sb;
+    }
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/convert-a-number-to-hexadecimal/solution/shu-zi-zhuan-huan-wei-shi-liu-jin-zhi-sh-2srt/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
 <span id ="fast_slow_ptr"></span>
 ### 快慢指针
 我只要跑的比我妈快就一定会在某一时刻遇见我妈（成环的时候），步长为1和2的时候最小公倍数就是相遇的契机。
