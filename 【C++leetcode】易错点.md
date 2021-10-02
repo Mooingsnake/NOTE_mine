@@ -176,7 +176,8 @@ __最大错误：__ if(ret&dif == 0) ×， 因为&的优先级比==还低，所�
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
-### 这是简单进位
+### 二进制中1的个数（游标卡尺）
+就像游标卡尺一样 ,n & (1 << i)  你的i每次10 -> 100 真的很游标卡尺，但是你不能n>>=1  因为如果这个n是一个负数，那么它在内存里就是1111 1111这种的，左移一位填补1，除非你是正数，那没问题 
 ```
  int hammingWeight(uint32_t n) {
         int ret = 0;
@@ -192,7 +193,7 @@ __最大错误：__ if(ret&dif == 0) ×， 因为&的优先级比==还低，所�
 链接：https://leetcode-cn.com/problems/er-jin-zhi-zhong-1de-ge-shu-lcof/solution/er-jin-zhi-zhong-1de-ge-shu-by-leetcode-50bb1/
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-更效率的方式：
+更简洁的写法：
   int count = 0;
         for(int i = 0; i< 32;i++){
              count += ((n >> i) & 1);
@@ -205,7 +206,7 @@ https://www.jianshu.com/p/3f165f976edd
 ```
  int add(int a, int b) {
         while(b){
-            int carry = (unsigned int)(a & b)<<1;   // unsigned 是防止出错， 与运算代表进位 1&1 = 1，因为是进位所以左移
+            int carry = (unsigned int)(a & b)<<1;   // unsigned 是防止出错,毕竟如果是INT_MAX的话，左移是会变成-2的；   与运算代表进位 1&1 = 1，因为是进位所以左移
             int sum = a ^ b;				//  相加的本位，异或 
             a = sum ;//  每次不断更新b作为进位，让a做那个sum值，一直到进无可进的时候b会自动归0
             b = carry;
@@ -243,7 +244,7 @@ x >>= 1    // 右移一位
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
-### 数字转换为十六进制数 （x* 0xf, x >> (4 * i)）
+### 数字转换为十六进制数 （x & 0xf, x >> (4 & i)）
 像游标卡尺一样滑来滑去，从左边滑到右边，前为0的时候用if(val> 0)忽略就行
 ```
     string toHex(int num) {
@@ -252,7 +253,7 @@ x >>= 1    // 右移一位
         }
         string sb;
         for (int i = 7; i >= 0; i --) {
-            int val = (num >> (4 * i)) & 0xf;
+            int val = (num >> (4 * i)) & 0xf;  // 这里之所以可以右移，是因为i = 7，我们只观察32位，剩下因为右移补充的位数是不考虑的
             if (sb.length() > 0 || val > 0) {
                 char digit = val < 10 ? (char) ('0' + val) : (char) ('a' + val - 10);
                 sb.push_back(digit);
