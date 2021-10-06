@@ -447,6 +447,234 @@ __总结__：
 
 写for(auto x: nums)的时候效率是0ms
 
+
+<span if="Iteration"></span>
+## 迭代
+### 数字序列中某一位的数字
+0123456789101112131415…的格式序列化到一个字符序列中，已知第0位是0，第一位是1，求第n位，（n<= 2^32-1）
+解法： 首先知道每次不变的迭代量是：1.位数只能加一，2.起始从1-10-100以10倍递增，当确定本轮应该可以减多少个，如果余出来就退出循环
+
+我们锁定在哪个数以后，还可以借助to_string(num)来校准余下位数，来，试试看：
+
+```
+https://leetcode-cn.com/problems/shu-zi-xu-lie-zhong-mou-yi-wei-de-shu-zi-lcof/
+    int findNthDigit(int n) {
+        long start = 1;
+        long count = 9;
+        int digit = 1;
+        while(n > count){
+            n-=count;
+            digit++;
+            start *= 10;
+            count = digit * 9 * start;
+        }
+
+        long num = start + (n-1) /digit;
+        string str = to_string(num);
+        return str[(n-1)%digit]-'0';
+    }
+```
+
+
+<span id ="dp"></span>
+## 动态规划
+### 最大子数组之和
+学不会的动态规划，如何体现连续，和最大？
+1.让动态方程只能连续（可以抛弃/不抛弃之前的串，但永远加上当前的arr[i]当作下次循环的pre）
+2.用一个max来维护最大
+第二种 分治解法（线段树）
+
+### 从股票问题到最大子数组之和
+中间只差了一步转价格为价格变化的数组
+
+### 得到子序列最小操作次数
+要用map和数组，用下标的情况显示
+
+首先我们要求的是经过改变后的arr能找出target的匹配的子序列
+
+    arr = {1, 4, 5, 3, 0, 6, 2}
+    target = {0, 1, 2, 3, 4, 5, 6}
+    
+然后找arr里面有序的部分
+我太难了难成傻逼我直接unravel，这段小小的代码在来姨妈的时候折磨了我整整一天一夜，凸(艹皿艹 )
+```
+ int n = target.size();
+        unordered_map<int, int> pos;
+        for (int i = 0; i < n; ++i) {
+            pos[target[i]] = i;
+        }
+        vector<int> d;
+        for (int val : arr) {
+            if (pos.count(val)) { // 如果有含有target的元素
+                int idx = pos[val];  // 记录那个元素在target中的值
+                auto it = lower_bound(d.begin(), d.end(), idx); // 在新数组里找更小的，这里函数是二分
+                if (it != d.end()) { // 如果找到了
+                    *it = idx; // 就记录那个值
+                } else {
+                    d.push_back(idx); // 如果没找到，就加上去
+                }
+            }
+        }
+        return n - d.size();
+    }
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/minimum-operations-to-make-a-subsequence/solution/de-dao-zi-xu-lie-de-zui-shao-cao-zuo-ci-hefgl/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+### 求最长上升子序列
+https://leetcode-cn.com/problems/longest-increasing-subsequence/solution/zui-chang-shang-sheng-zi-xu-lie-dong-tai-gui-hua-2/
+一：dp(n²)
+
+动态规划讲究的是依赖之前的结果。
+
+子序列必定是：dp[i]记录前i个字符内子序列的状态，当nums[7]时，可以遍历前六个nums[j]如果其中nums[4]<nums[7] && dp[4] = 4，那就可以得dp[7] = dp[4]+1
+
+最长嘛，就是前六个都比较完了以后的最大的那个。
+
+每次计算dp[i]必定会循环（0，i）,所以是O(n²)
+
+__我的错误__：
+如果最后不计算dp中的最大值，只采用dp[n-1]，是错误的
+
+用例：[1,3,6,7,9,4,10,5,6]，得出的dp[1,2,3,4,5,3,6,4,5]   ,dp明明是前i个子序列最长，为什么会出现前i-1个比前i个还多的情况？
+
+A：因为计算dp的时候因为比较了nums[i]，所以默认包含第i个
+
+二：动态规划 + 二分查找(nlogn)
+
+在上面的动态规划里面，之所以出现了n²，是因为一个循环遍历nums，在循环里面每次都要回去找最大的那个dp[x]
+
+但是我们可以构造一个已知的最长子序列，然后开始二分，我们不需要知道这个子序列分别对应数组1 2 5 7下标，我们只需要知道，是否可以更新，是否可以添加新的
+```
+
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> dp(n,1);
+        vector<int> tail(n);
+        int res = 0;
+        for(auto num:nums){
+            int i = 0, j = res;
+            while(i<j){
+                int mid = (i + j) / 2;
+                if(num > tail[mid]){ // 那就说明我是后1/2部分
+                    i = mid + 1;
+                }else{
+                    j = mid;
+                }
+            }
+            tail[i] = num;   // 因为我每次都会更新tail
+            if(res == j) res++; // 检索到最大（res）就是胜利（res++）
+        }
+        return res;
+    }
+
+作者：jyd
+链接：https://leetcode-cn.com/problems/longest-increasing-subsequence/solution/zui-chang-shang-sheng-zi-xu-lie-dong-tai-gui-hua-2/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+### 最长递增子序列的个数
+在上一题朴素的dp情况下，需要计数出现的次数
+
+```
+    int findNumberOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> dp(n,1);
+        vector<int> count(n,1); // 先全部赋值为1
+        for(int i = 0;i <n;i++){
+            for(int j = 0;j < i; j++){
+                if(nums[j]<nums[i] ){
+                    if( dp[j]+1>dp[i]){  // 头一次出现 比如出现dp[..,..,..,3,4,,..,..,..] count[..,..,..,..,..1,1,..,..,..]
+                        dp[i] = dp[j]+1;
+                        count[i] = count[j];  
+                    }         
+                    else if(dp[i] ==dp[j]+1){ // 第二次及以后出现dp[..,..,..,4,4..,..,..,] count[..,..,..,..,1,2,..,..,..,]
+                        count[i] += count[j];
+                    }
+                }    
+            }
+        }
+        int res = 0;
+       int max = *max_element(dp.begin(),dp.end()); 防止出现nums[2,2,2,2,2]的情况
+       for(int i = 0;i < n;i++){
+           if(dp[i] == max){
+               res += count[i];
+           }
+       }
+       return res;
+    }
+```
+
+### 二叉树寻路
+1.既然这个二叉树是Z形状，那就可以通过max-当前+ min 的方式转换出来
+2.二叉树正常情况下就是2^i ~2^(i+1) -1 那么用log就能得出有几层
+3.父节点就是子节点除以2
+
+### 矩阵中战斗最弱的一行，二分查找，堆排序
+因为题目里面是1在前，0在后，所以可以用二分查找寻找最小。
+
+堆排序的查找时间是O（n），很合适。
+
+二分查找需要手写代码，堆排序可以使用现成代码：
+
+### 辗转相除法求公约数
+```
+int gcd(int a,int b){
+    int tmp;
+    while(b){
+        tmp = b; b = a % b ; a = tmp;
+    }
+    return a;
+}
+```
+## BFS 
+### 矩阵中的路径 时间：O(3^kMN) k是字符串word长度，mn是矩阵长宽,3^k是指每个方块的选择是去掉上一个方块方向的剩下三个选择   空间：O(mn)
+```
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        rows = board.size();
+        cols = board[0].size();
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < cols; j++) {
+                if(dfs(board, word, i, j, 0)) return true;
+            }
+        }
+        return false;
+    }
+private:
+    int rows, cols;
+    bool dfs(vector<vector<char>>& board, string word, int i, int j, int k) {
+        if(i >= rows || i < 0 || j >= cols || j < 0 || board[i][j] != word[k]) return false;  // 去掉越界情况和不相同情况
+        if(k == word.size() - 1) return true;							// 最终串完一整串的时候返回true
+        board[i][j] = '\0';									//表示访问过了现在是空的
+        bool res = dfs(board, word, i + 1, j, k + 1) || dfs(board, word, i - 1, j, k + 1) || 	// 四个方向找路
+                      dfs(board, word, i, j + 1, k + 1) || dfs(board, word, i , j - 1, k + 1);
+        board[i][j] = word[k];   // board还会在其他递归分支里用到，所以得还原，比如左-右-右-下，左-下-下-右的时候当然不希望第二个格子是空的
+        return res;
+    }
+```
+？？实话我没有看明白为什么这里四个dfs但是他认为是3^k，而且也没有看见他用'\0'当判定条件，噢这里可能是包含在 board[i][j] != word[k]里面了
+
+### acm 模式
+循环输出用例直到结尾：
+```
+	while (cin >> n >> a) {
+		int i = 0;
+		int bn = 0;
+		while (i < n) {
+			cin >> bn;
+			if (a > bn)a += bn;
+			else {
+				a += bcd(a, bn);
+			}
+			i++;
+		}
+		cout << a << endl;
+	}
+```
 <span id ="recursion"></span>
 ## 递归-二叉树-队列
 最典型的递归是树的遍历（先中后根遍历）
@@ -948,232 +1176,7 @@ for (const auto& kv : myMap) {
 }
 ```
 
-<span if="Iteration"></span>
-## 迭代
-### 数字序列中某一位的数字
-0123456789101112131415…的格式序列化到一个字符序列中，已知第0位是0，第一位是1，求第n位，（n<= 2^32-1）
-解法： 首先知道每次不变的迭代量是：1.位数只能加一，2.起始从1-10-100以10倍递增，当确定本轮应该可以减多少个，如果余出来就退出循环
 
-我们锁定在哪个数以后，还可以借助to_string(num)来校准余下位数，来，试试看：
-
-```
-https://leetcode-cn.com/problems/shu-zi-xu-lie-zhong-mou-yi-wei-de-shu-zi-lcof/
-    int findNthDigit(int n) {
-        long start = 1;
-        long count = 9;
-        int digit = 1;
-        while(n > count){
-            n-=count;
-            digit++;
-            start *= 10;
-            count = digit * 9 * start;
-        }
-
-        long num = start + (n-1) /digit;
-        string str = to_string(num);
-        return str[(n-1)%digit]-'0';
-    }
-```
-
-<span id ="dp"></span>
-## 动态规划
-### 最大子数组之和
-学不会的动态规划，如何体现连续，和最大？
-1.让动态方程只能连续（可以抛弃/不抛弃之前的串，但永远加上当前的arr[i]当作下次循环的pre）
-2.用一个max来维护最大
-第二种 分治解法（线段树）
-
-### 从股票问题到最大子数组之和
-中间只差了一步转价格为价格变化的数组
-
-### 得到子序列最小操作次数
-要用map和数组，用下标的情况显示
-
-首先我们要求的是经过改变后的arr能找出target的匹配的子序列
-
-    arr = {1, 4, 5, 3, 0, 6, 2}
-    target = {0, 1, 2, 3, 4, 5, 6}
-    
-然后找arr里面有序的部分
-我太难了难成傻逼我直接unravel，这段小小的代码在来姨妈的时候折磨了我整整一天一夜，凸(艹皿艹 )
-```
- int n = target.size();
-        unordered_map<int, int> pos;
-        for (int i = 0; i < n; ++i) {
-            pos[target[i]] = i;
-        }
-        vector<int> d;
-        for (int val : arr) {
-            if (pos.count(val)) { // 如果有含有target的元素
-                int idx = pos[val];  // 记录那个元素在target中的值
-                auto it = lower_bound(d.begin(), d.end(), idx); // 在新数组里找更小的，这里函数是二分
-                if (it != d.end()) { // 如果找到了
-                    *it = idx; // 就记录那个值
-                } else {
-                    d.push_back(idx); // 如果没找到，就加上去
-                }
-            }
-        }
-        return n - d.size();
-    }
-
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/minimum-operations-to-make-a-subsequence/solution/de-dao-zi-xu-lie-de-zui-shao-cao-zuo-ci-hefgl/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
-
-### 求最长上升子序列
-https://leetcode-cn.com/problems/longest-increasing-subsequence/solution/zui-chang-shang-sheng-zi-xu-lie-dong-tai-gui-hua-2/
-一：dp(n²)
-
-动态规划讲究的是依赖之前的结果。
-
-子序列必定是：dp[i]记录前i个字符内子序列的状态，当nums[7]时，可以遍历前六个nums[j]如果其中nums[4]<nums[7] && dp[4] = 4，那就可以得dp[7] = dp[4]+1
-
-最长嘛，就是前六个都比较完了以后的最大的那个。
-
-每次计算dp[i]必定会循环（0，i）,所以是O(n²)
-
-__我的错误__：
-如果最后不计算dp中的最大值，只采用dp[n-1]，是错误的
-
-用例：[1,3,6,7,9,4,10,5,6]，得出的dp[1,2,3,4,5,3,6,4,5]   ,dp明明是前i个子序列最长，为什么会出现前i-1个比前i个还多的情况？
-
-A：因为计算dp的时候因为比较了nums[i]，所以默认包含第i个
-
-二：动态规划 + 二分查找(nlogn)
-
-在上面的动态规划里面，之所以出现了n²，是因为一个循环遍历nums，在循环里面每次都要回去找最大的那个dp[x]
-
-但是我们可以构造一个已知的最长子序列，然后开始二分，我们不需要知道这个子序列分别对应数组1 2 5 7下标，我们只需要知道，是否可以更新，是否可以添加新的
-```
-
-    int lengthOfLIS(vector<int>& nums) {
-        int n = nums.size();
-        vector<int> dp(n,1);
-        vector<int> tail(n);
-        int res = 0;
-        for(auto num:nums){
-            int i = 0, j = res;
-            while(i<j){
-                int mid = (i + j) / 2;
-                if(num > tail[mid]){ // 那就说明我是后1/2部分
-                    i = mid + 1;
-                }else{
-                    j = mid;
-                }
-            }
-            tail[i] = num;   // 因为我每次都会更新tail
-            if(res == j) res++; // 检索到最大（res）就是胜利（res++）
-        }
-        return res;
-    }
-
-作者：jyd
-链接：https://leetcode-cn.com/problems/longest-increasing-subsequence/solution/zui-chang-shang-sheng-zi-xu-lie-dong-tai-gui-hua-2/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
-### 最长递增子序列的个数
-在上一题朴素的dp情况下，需要计数出现的次数
-
-```
-    int findNumberOfLIS(vector<int>& nums) {
-        int n = nums.size();
-        vector<int> dp(n,1);
-        vector<int> count(n,1); // 先全部赋值为1
-        for(int i = 0;i <n;i++){
-            for(int j = 0;j < i; j++){
-                if(nums[j]<nums[i] ){
-                    if( dp[j]+1>dp[i]){  // 头一次出现 比如出现dp[..,..,..,3,4,,..,..,..] count[..,..,..,..,..1,1,..,..,..]
-                        dp[i] = dp[j]+1;
-                        count[i] = count[j];  
-                    }         
-                    else if(dp[i] ==dp[j]+1){ // 第二次及以后出现dp[..,..,..,4,4..,..,..,] count[..,..,..,..,1,2,..,..,..,]
-                        count[i] += count[j];
-                    }
-                }    
-            }
-        }
-        int res = 0;
-       int max = *max_element(dp.begin(),dp.end()); 防止出现nums[2,2,2,2,2]的情况
-       for(int i = 0;i < n;i++){
-           if(dp[i] == max){
-               res += count[i];
-           }
-       }
-       return res;
-    }
-```
-
-### 二叉树寻路
-1.既然这个二叉树是Z形状，那就可以通过max-当前+ min 的方式转换出来
-2.二叉树正常情况下就是2^i ~2^(i+1) -1 那么用log就能得出有几层
-3.父节点就是子节点除以2
-
-### 矩阵中战斗最弱的一行，二分查找，堆排序
-因为题目里面是1在前，0在后，所以可以用二分查找寻找最小。
-
-堆排序的查找时间是O（n），很合适。
-
-二分查找需要手写代码，堆排序可以使用现成代码：
-
-### 辗转相除法求公约数
-```
-int gcd(int a,int b){
-    int tmp;
-    while(b){
-        tmp = b; b = a % b ; a = tmp;
-    }
-    return a;
-}
-```
-## BFS 
-### 矩阵中的路径 时间：O(3^kMN) k是字符串word长度，mn是矩阵长宽,3^k是指每个方块的选择是去掉上一个方块方向的剩下三个选择   空间：O(mn)
-```
-public:
-    bool exist(vector<vector<char>>& board, string word) {
-        rows = board.size();
-        cols = board[0].size();
-        for(int i = 0; i < rows; i++) {
-            for(int j = 0; j < cols; j++) {
-                if(dfs(board, word, i, j, 0)) return true;
-            }
-        }
-        return false;
-    }
-private:
-    int rows, cols;
-    bool dfs(vector<vector<char>>& board, string word, int i, int j, int k) {
-        if(i >= rows || i < 0 || j >= cols || j < 0 || board[i][j] != word[k]) return false;  // 去掉越界情况和不相同情况
-        if(k == word.size() - 1) return true;							// 最终串完一整串的时候返回true
-        board[i][j] = '\0';									//表示访问过了现在是空的
-        bool res = dfs(board, word, i + 1, j, k + 1) || dfs(board, word, i - 1, j, k + 1) || 	// 四个方向找路
-                      dfs(board, word, i, j + 1, k + 1) || dfs(board, word, i , j - 1, k + 1);
-        board[i][j] = word[k];   // board还会在其他递归分支里用到，所以得还原，比如左-右-右-下，左-下-下-右的时候当然不希望第二个格子是空的
-        return res;
-    }
-```
-？？实话我没有看明白为什么这里四个dfs但是他认为是3^k，而且也没有看见他用'\0'当判定条件，噢这里可能是包含在 board[i][j] != word[k]里面了
-
-### acm 模式
-循环输出用例直到结尾：
-```
-	while (cin >> n >> a) {
-		int i = 0;
-		int bn = 0;
-		while (i < n) {
-			cin >> bn;
-			if (a > bn)a += bn;
-			else {
-				a += bcd(a, bn);
-			}
-			i++;
-		}
-		cout << a << endl;
-	}
-```
 <span id ="string"></span>
 	
 ## 字符串
