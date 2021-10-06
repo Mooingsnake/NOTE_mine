@@ -1,3 +1,16 @@
+- [前言-关于sizeof和union和内存对齐](#before-all)
+     - [sizeof](#sizeof)
+     - [sizeof与struct](#sizeof-struct)
+- [简述内存三种类型](#bb)
+     - [全局静态变量，局部静态变量，局部变量，全局变量](#static-non-static)
+     - [静态成员变量和静态成员函数](#static-member-function-and-varible) 
+- [对象模型](#object-model)
+- [智能指针](#smart-pointer)
+
+
+
+
+<span id="before-all"></span>
 ## 前言-关于sizeof和union和内存对齐
 
 下面是基本类型的对应sizeof：
@@ -71,7 +84,7 @@ int main()
 
 ![image](https://user-images.githubusercontent.com/47411365/133583104-bbbf45c4-7914-4699-a45b-78327e068405.png)
 
-
+<span id="sizeof"></span>
 ### sizeof
 
 __一个把sizeof的东西基本都讲清楚的网页__ ：https://www.cnblogs.com/chio/archive/2007/06/11/778934.html
@@ -89,7 +102,7 @@ sizeof("1234")是5，sizeof(string("1234"))是28     // 在我的机器上，在
 ![image](https://user-images.githubusercontent.com/47411365/133238156-1df3b8b7-e5b0-49b8-ad43-010da614b5b9.png)
 
 __why？__
-
+<span id="sizeof-struct"></span>
 ### sizeof 与struct
 #### 默认的对齐方式：
 
@@ -113,8 +126,8 @@ __why？__
 
 #### 如果想看C++对象模型的相关知识可以看另外一篇文章https://www.cnblogs.com/skynet/p/3343726.html
 
-
-## 简述
+<span id="bb"></span>
+## 简述内存三种类型
 
 内存分三种：
 
@@ -147,7 +160,7 @@ int main(){
 1.内存泄漏：忘记释放内存
 
 2.产生引用非法内存的指针：在尚有指针引用的情况下就释放了内存
-
+<span id="static-non-static"></span>
 ## 全局静态变量，局部静态变量，局部变量，全局变量
 一个中文的csdn解释：https://blog.csdn.net/yangfengby0909/article/details/6501147
 
@@ -206,10 +219,69 @@ Best practice：__永远不要使用__ 局部静态变量，除非它不需要�
 
 解释：你在main函数里仅仅调用了几次同样的函数，这些函数每次都和上次结果不同，这已经很困惑了。 然后假设你又去做别的事情，做完以后重新调用这个函数，却发现数值还在增长。
 
+<span id="static-member-function-and-varible"></span>
 ###  静态成员函数和静态成员变量
+参考网址：https://www.learncpp.com/cpp-tutorial/static-member-variables/
+__静态成员和类的对象无关__
+
+静态成员函数同理也单独划拉一个区域，只能通过类名Dad::f();调用     静态成员变量更离谱，首先你赋值就得在外头这么赋值：
+![image](https://user-images.githubusercontent.com/47411365/136163860-b88feeab-5ee7-40ee-9162-7543f5228c3d.png)
+
+在int 里面赋值就会开始报错：
+
+![image](https://user-images.githubusercontent.com/47411365/136163984-49073822-7282-435f-8a71-39b3572fe796.png)
+
+从这里我们就可以看到，int main外面是静态空间，在那里赋值没问题，而且需要用{}表示，这部分同样类似全局变量，在程序开始运行的时候分配，程序终止的时候释放。
+
+<span id="object-model"></span>
+## 对象模型
+### 类的内存大小和继承
+1.类的的对象的内存大小不包括静态成员（static members），也不包括成员函数（non-static member function），只有成员变量（non-static member variable）
+
+2.如果继承了某个东西（不带虚函数），那就是子类里面放了一个父类（sizeof子类就是子类新成员变量+父类成员变量），继承的时候 __构造函数的初始化列表__ 应该这么写：
+```
+https://www.geeksforgeeks.org/when-do-we-use-initializer-list-in-c/   ← 构造函数初始化列表的参考网址
+#include <iostream>
+using namespace std;
+
+class A {
+	int i;
+public:
+	A(int);
+	~A() {
+		cout << "Destory A" << endl;
+	}
+};
+
+A::A(int arg) {
+	i = arg;
+	cout << "A's Constructor called: Value of i: " << i << endl;
+}
+
+// Class B 继承自 A 
+class B : A {
+public:
+     int j; 
+	B(int);
+	~B() {
+		cout << "Destory B" << endl;
+	}
+};
+
+B::B(int x) :A(x) {                                            // 这里调用了A的构造函数   { 初始化列表在这里！ }
+	cout << "B's Constructor called"<<endl;
+}
+
+int main(){
+     B obj(10);
+     cout << sizeof(obj)<<endl; // 8 = 4 + 4 
+}
+```
+![image](https://user-images.githubusercontent.com/47411365/136182652-5609f07a-235c-4be0-84a6-326d00f98b3c.png)
 
 
-
+PS:所以还是包抄型，ABBA  ，先有爹在扩展出儿，把儿子删了再删爹
+<span id="smart-pointer"></span>
 ## 智能指针
 ### 普通写法
 写法如下，一个可以多个指针指向同一个对象，一个只能一对一
