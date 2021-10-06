@@ -7,7 +7,7 @@
 - [动态规划](#dp)
 - [BFS](#bfs)
 - [递归-二叉树-队列](#recursion)
-- [栈](#stack)
+- [栈-队列](#stack-queue)
 - [字符串](#string)
 - [一些函数](#functions)
 - [数据结构模拟](#数据结构模拟)
@@ -447,6 +447,26 @@ __总结__：
 
 写for(auto x: nums)的时候效率是0ms
 
+### 递归的调用顺序和 return之间的问题 【原题】反转链表 (双指针)
+
+![image](https://user-images.githubusercontent.com/47411365/131963232-91b60e41-3da2-46aa-b49a-6062cb00838d.png)
+
+你仔细看好，你每次recur(a, b)是不是正常的，很明显第二个不对了，因为cur->next被改了
+
+
+### for_each的leetcode骚操作
+用于C++17：
+```
+for (const auto& [key, value] : myMap) {
+    std::cout << key << " has value " << value << std::endl;
+}
+```
+用于C++11
+```
+for (const auto& kv : myMap) {
+    std::cout << kv.first << " has value " << kv.second << std::endl;
+}
+```
 
 <span id="Iteration"></span>
 ## 迭代
@@ -1130,8 +1150,8 @@ void dfs(TreeNode* root,int targetSum){
 遇到的问题2：一开始我的初始化push_back（root->val），然后重复了
 遇到的问题3：笑死了，dfs（）第一个放在了root处理的前面，结果错乱了。
 
-<span id ="stack"></span>
-## 栈
+<span id ="stack-queue"></span>
+## 栈和队列
 ### 栈的压入、弹出序列
 题目：已知压入序列，判断弹出序列是否合理
 
@@ -1154,26 +1174,39 @@ void dfs(TreeNode* root,int targetSum){
        return stk.empty();
     }
 ```
+### 队列的最大值
+实现队列的数据结构，并且能在O（1）返回队列中的最大值
 
-### 递归的调用顺序和 return之间的问题 【原题】反转链表 (双指针)
-
-![image](https://user-images.githubusercontent.com/47411365/131963232-91b60e41-3da2-46aa-b49a-6062cb00838d.png)
-
-你仔细看好，你每次recur(a, b)是不是正常的，很明显第二个不对了，因为cur->next被改了
-
-
-### for_each的leetcode骚操作
-用于C++17：
+和维护最小值的栈不同，因为这里是队列的最大值，我们每次pop的是最首位，我困死了，你最好和最小栈一起细品
 ```
-for (const auto& [key, value] : myMap) {
-    std::cout << key << " has value " << value << std::endl;
-}
-```
-用于C++11
-```
-for (const auto& kv : myMap) {
-    std::cout << kv.first << " has value " << kv.second << std::endl;
-}
+class MaxQueue {
+    queue<int> que;
+    deque<int> deq;
+public:
+    MaxQueue() { }
+    int max_value() {
+        return deq.empty() ? -1 : deq.front();
+    }
+    void push_back(int value) {
+        que.push(value);
+        while(!deq.empty() && deq.back() < value)
+            deq.pop_back();
+        deq.push_back(value);
+    }
+    int pop_front() {
+        if(que.empty()) return -1;
+        int val = que.front();
+        if(val == deq.front())
+            deq.pop_front();
+        que.pop();
+        return val;
+    }
+};
+
+作者：jyd
+链接：https://leetcode-cn.com/problems/dui-lie-de-zui-da-zhi-lcof/solution/jian-zhi-offer-59-ii-dui-lie-de-zui-da-z-0pap/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
 
