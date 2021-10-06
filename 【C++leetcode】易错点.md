@@ -1,8 +1,9 @@
 - [边界](#bound)
+- [排序](#sort)
 - [位运算](#bitcal)
 - [快慢指针](#fast_slow_ptr)
 - [链表](#linknode)
-- [排序](#sort)
+- [迭代](#Iteration)
 - [动态规划](#dp)
 - [BFS](#bfs)
 - [递归-二叉树-队列](#recursion)
@@ -447,7 +448,7 @@ __总结__：
 写for(auto x: nums)的时候效率是0ms
 
 <span id ="recursion"></span>
-## 递归-迭代-二叉树-队列
+## 递归-二叉树-队列
 最典型的递归是树的遍历（先中后根遍历）
 
 ![image](https://user-images.githubusercontent.com/47411365/132642841-cab76f5e-b905-462f-b28b-b9e4c1a5a92a.png)
@@ -946,6 +947,34 @@ for (const auto& kv : myMap) {
     std::cout << kv.first << " has value " << kv.second << std::endl;
 }
 ```
+
+<span if="Iteration"></span>
+## 迭代
+### 数字序列中某一位的数字
+0123456789101112131415…的格式序列化到一个字符序列中，已知第0位是0，第一位是1，求第n位，（n<= 2^32-1）
+解法： 首先知道每次不变的迭代量是：1.位数只能加一，2.起始从1-10-100以10倍递增，当确定本轮应该可以减多少个，如果余出来就退出循环
+
+我们锁定在哪个数以后，还可以借助to_string(num)来校准余下位数，来，试试看：
+
+```
+https://leetcode-cn.com/problems/shu-zi-xu-lie-zhong-mou-yi-wei-de-shu-zi-lcof/
+    int findNthDigit(int n) {
+        long start = 1;
+        long count = 9;
+        int digit = 1;
+        while(n > count){
+            n-=count;
+            digit++;
+            start *= 10;
+            count = digit * 9 * start;
+        }
+
+        long num = start + (n-1) /digit;
+        string str = to_string(num);
+        return str[(n-1)%digit]-'0';
+    }
+```
+
 <span id ="dp"></span>
 ## 动态规划
 ### 最大子数组之和
