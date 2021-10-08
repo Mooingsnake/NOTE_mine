@@ -8,7 +8,7 @@
 - [BFS](#bfs)
 - [递归-二叉树-队列](#recursion)
 - [栈-队列](#stack-queue)
-- [字符串](#string)
+- [字符串串](#string)
 - [一些函数](#functions)
 - [数据结构模拟](#数据结构模拟)
 - [并查集](#union-find-set)
@@ -121,7 +121,10 @@ public:
 ## 位运算
 
 根据我的观察，位运算自动变成二进制， 然后你可以用（x & 0xf ），（x & 1） 这种操作获得末位，你还可以通过x >> n来调整末位
-### 只出现过一次的数字（异或）
+
+### 1.[位运算和map在一起的时候](#repeatdna)
+
+### 2.只出现过一次的数字（异或）
 寻找只出现一次的数，时间消耗是0（N）不允许有额外的空间，所以禁哈希表
 此时需要位运算
 
@@ -141,7 +144,7 @@ public:
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 ```
-### （进阶）数组中出现的数字（分组）
+### 3.（进阶）数组中出现的数字（分组）
 题目：这个数组中有两个数字出现了一次，其他出现了两次
 
 解析：用异或全部运算，剩下就是两个只出现了一次的数a ^ b ，可知0表示相同，1表示该位相异，那么用某一个为1的位去异或一边，能分成两类：
@@ -177,7 +180,7 @@ __最大错误：__ if(ret&dif == 0) ×， 因为&的优先级比==还低，所�
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
-### 二进制中1的个数（游标卡尺）
+### 4.二进制中1的个数（游标卡尺）
 就像游标卡尺一样 ,n & (1 << i)  你的i每次10 -> 100 真的很游标卡尺，但是你不能n>>=1  因为如果这个n是一个负数，那么它在内存里就是1111 1111这种的，左移一位填补1，除非你是正数，那没问题 
 ```
  int hammingWeight(uint32_t n) {
@@ -202,7 +205,7 @@ __最大错误：__ if(ret&dif == 0) ×， 因为&的优先级比==还低，所�
         return count;
     }
 ```
-### 位运算计算加法
+### 5.位运算计算加法
 https://www.jianshu.com/p/3f165f976edd
 ```
  int add(int a, int b) {
@@ -245,7 +248,7 @@ x >>= 1    // 右移一位
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
-### 数字转换为十六进制数 （x & 0xf, x >> (4 & i)）
+### 6.数字转换为十六进制数 （x & 0xf, x >> (4 & i)）
 像游标卡尺一样滑来滑去，从左边滑到右边，前为0的时候用if(val> 0)忽略就行
 ```
     string toHex(int num) {
@@ -498,6 +501,36 @@ https://leetcode-cn.com/problems/shu-zi-xu-lie-zhong-mou-yi-wei-de-shu-zi-lcof/
 
 <span id ="dp"></span>
 ## 动态规划
+### 把数字翻译成字符串 （常见空间优化：滚动数组）
+![image](https://user-images.githubusercontent.com/47411365/136577447-1358ec65-1657-4ce7-925f-ffb8cbc63d65.png)
+
+对于每次循环的状态，都只需要前i-1 和i-2的状态,你需要在意的是__初始化状态和i == 1的时候与通常状况不同__
+```
+    int translateNum(int num) {
+        string src = to_string(num);
+        int p = 0, q = 0, r = 1;
+        for (int i = 0; i < src.size(); ++i) {
+            p = q; 
+            q = r; 
+            r = 0;
+            r += q;
+            if (i == 0) {
+                continue;
+            }
+            auto pre = src.substr(i - 1, 2);
+            if (pre <= "25" && pre >= "10") {
+                r += p;
+            }
+        }
+        return r;
+    }
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/ba-shu-zi-fan-yi-cheng-zi-fu-chuan-lcof/solution/ba-shu-zi-fan-yi-cheng-zi-fu-chuan-by-leetcode-sol/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
 ### 最大子数组之和
 学不会的动态规划，如何体现连续，和最大？
 1.让动态方程只能连续（可以抛弃/不抛弃之前的串，但永远加上当前的arr[i]当作下次循环的pre）
@@ -1212,13 +1245,100 @@ public:
 
 <span id ="string"></span>
 	
-## 字符串
+## 字符串串
+<span id="repeatdna"></span>
+### 重复的DNA序列(哈希表 or 用位运算自定义哈希表)
+求出现过一次的长度为10的字串
+
+解法1（哈希O（n））
+
+__我的问题：__  1.多次记录同一个字串，只要用map，只当次数为1的字串记录就好  2. substr（i，i+10），没问题，但是for(int i = 0;i < n -10;i++)就有问题，i == n-10说明我们还能塞一个子序列，所以这里区间上应该包括n-10这个可能性。
+
+![image](https://user-images.githubusercontent.com/47411365/136598118-2648a65a-8ad4-4041-a302-4d1ab075228f.png)
+
+解法2：（用位运算自定义哈希表，超级，超级牛逼的位运算）
+```
+  // 把ACGT四个字符映射到2位的数字
+    static int[] MASK_MAP = new int[26];
+    static {
+        MASK_MAP['A' - 'A'] = 0;
+        MASK_MAP['C' - 'A'] = 1;
+        MASK_MAP['G' - 'A'] = 2;
+        MASK_MAP['T' - 'A'] = 3;
+    }
+
+    public List<String> findRepeatedDnaSequences(String s) {
+        int n = s.length();
+        List<String> ans = new ArrayList<>();
+        if (n <= 10) {
+            return ans;
+        }
+
+        // 记录每个hash出现的次数
+        int[] map = new int[1 << 20];
+        int hash = 0;
+        for (int i = 0; i < 10; i++) {
+            // 每2位一个字符
+            hash = hash << 2 | MASK_MAP[s.charAt(i) - 'A'];
+        }
+        map[hash]++;
+
+        for (int i = 1; i <= n - 10; i++) {
+            // & 0xfffff 表示打掉最高位的2位
+            hash = (hash << 2 | MASK_MAP[s.charAt(i + 10 - 1) - 'A']) & 0xfffff;
+            map[hash]++;
+            // 因为不存在hash冲突，所以可以直接使用
+            if (map[hash] == 2) {
+                ans.add(s.substring(i, i + 10));
+            }
+        }
+
+        return ans;
+    }
+
+作者：tong-zhu
+链接：https://leetcode-cn.com/problems/repeated-dna-sequences/solution/tong-ge-lai-shua-ti-la-yi-ti-liang-jie-h-9lr9/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+下面是C++版本
+```
+    vector<string> findRepeatedDnaSequences(string s) {
+        unordered_map<int,int> CHAR_MAP;
+        CHAR_MAP['A'-'A'] = 0;            //00
+        CHAR_MAP['C'-'A'] = 1;		//01
+        CHAR_MAP['G'-'A'] = 2;		//10
+        CHAR_MAP['T'-'A'] = 3;		//11
+        int n = s.size();
+        vector<string> ans;
+        if(n <= 10)return ans;
+
+        vector<int> map(1<<20);
+        int hash = 0;
+        for(int i = 0;i < 10;i++){                   // 给第一个字串整一个hash
+            hash = hash << 2 | CHAR_MAP[s[i]-'A'];
+        }
+        map[hash]++;//
+
+        for (int i = 1; i <= n - 10; i++) {    
+            // & 0xfffff 表示打掉最高位的2位
+            hash = (hash << 2 | CHAR_MAP[s[i + 10 - 1] - 'A']) & 0xfffff;  // 后面的字串就变成了 00110100## 每次左移和新的s[i]运算，因为挪位且只取前二十位，所以是与一个0xfffff
+            map[hash]++;
+            // 因为不存在hash冲突，所以可以直接使用
+            if (map[hash] == 2) {
+                ans.push_back(s.substr(i,  10));
+            }
+        }
+        return ans;
+    }
+```
 ### 类型强制转换
 int 转 string
 
-    string str = std::tostring(num);
+    string str = std::to_string(num);
     
 char 转string
+	
 ### 字符串倒转
 看清楚，迭代器可以直接加减，reverse是常用函数，最重要的是min(i+k,n)这样子就可以精准狙击各种第一遍和最后一遍k不足的情况。
 ```
