@@ -19,6 +19,34 @@
 
 <span id ="bound"></span>
 ## 边界问题
+### 构建乘积数组(如何处理arr[1]和arr[xx.size()-1] 和arr[i])?
+1.在绝大多数情况下，都应该去找单边适用的，比方说，我的循环可以不包括arr[0]，但是我必须包括arr[sss.size(-1)] ，对于这题目而言，我们追求的应该是这样的情况：
+
+![image](https://user-images.githubusercontent.com/47411365/136656749-2ccd2422-1104-4815-8555-d63ba41d761b.png)
+
+2.虽然我的脑子认为好几个变量会比较简单，但是我必须学会减少变量，这个题目破解在于，分成左边和右边，但是左边，右边，答案，其实只需要一个数组就够了
+
+```
+     vector<int> constructArr(vector<int>& a) {
+         
+         int n = a.size();
+         vector<int> res(n,1);
+         if(n == 0)return {};
+         int tmp = 1;
+         for(int i = 1;i < n;i++){
+             res[i] = res[i-1]* a[i-1];
+         }
+
+         for(int i = n-2;i>= 0;i--){
+             tmp *= a[i+1];
+             res[i]*=tmp;
+
+         }
+         return res;
+     }
+```
+
+3.数组出边界不可怕，你用你for循环的边界值带入进去就知道了。
 ### vector.size() = 0
 nums1 或者 nums2 为空的时候，用 nums1.size()-1 或者 nums2.size() - 1 是危险的。因为 vector.size() 返回的是无符号整数。
 无符号的 0 - 1 不会得到 -1（因为无符号）。整体来说，应该避免 size() 的结果做减法。一定要做，换成：(int)nums1.size()-1。做强制类型转换
