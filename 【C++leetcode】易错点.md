@@ -733,6 +733,21 @@ private:
 最典型的递归是树的遍历（先中后根遍历）
 
 ![image](https://user-images.githubusercontent.com/47411365/132642841-cab76f5e-b905-462f-b28b-b9e4c1a5a92a.png)
+### 不用乘除法和循环，判断语句，求1+2+3+...+n（递归代替循环，位运算短路表示终止
+
+```
+    int res = 0;
+    public int sumNums(int n) {
+        n > 1 && sumNums(n - 1) > 0;
+        res += n;
+        return res;
+    }
+
+作者：jyd
+链接：https://leetcode-cn.com/problems/qiu-12n-lcof/solution/mian-shi-ti-64-qiu-1-2-nluo-ji-fu-duan-lu-qing-xi-/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 
 ### 约瑟夫问题 （迭代 递归
 ```
