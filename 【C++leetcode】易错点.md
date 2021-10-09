@@ -1261,6 +1261,65 @@ public:
 <span id ="string"></span>
 	
 ## 字符串串
+### 把字符串转成整数（你的分类讨论基本功，顺着string的区域分布整理思路是关键）
+我的版本（C++
+```
+ int strToInt(string str) {
+        int sign = 1;
+        int num = 0;
+        int inf = 0;
+        int brfore = 0;    // 表示之前经历过0-9或者+-,下次再有就直接返回了
+        for (auto s : str) {
+            if (s >= '0' && s <= '9') {
+                long tmp = num;
+                if (tmp *10+(s-'0') > INT_MAX) {
+                    inf = 1;
+                    break;
+                }
+                num *= 10;
+                num += s - '0';
+                brfore = 1;
+            } 
+            else if(brfore)break;
+            else  if (s == ' ')continue;      
+            else if (s == '-' ){
+                sign = -1;
+                brfore = 1;
+            }
+            else if (s == '+'){
+                brfore = 1;
+            }
+            else {
+                break;
+            }
+        }
+        if (inf && sign > 0)return INT_MAX;
+        if (inf && sign < 0)return INT_MIN;
+        return num * sign;
+    }
+```
+佬的版本 ，这里一个很重要的点是，我的是for循环，每次讨论每个字符的情况，佬的是for循环到指定区域以后分类讨论，思路更清晰，而且隐含条件了我的int brfore = 1；
+```
+        int res = 0, bndry = Integer.MAX_VALUE / 10;  // 又是一个小小的细节，如何让尼的边界也放在int类型里面  A：在逼近最后倒数第二位的时候计算下一个！（不过还要记一个7好累啊
+        int i = 0, sign = 1, length = str.length();
+        if(length == 0) return 0;
+        while(str.charAt(i) == ' ')
+            if(++i == length) return 0;                  // 两行代码for循环到数字部分
+        if(str.charAt(i) == '-') sign = -1;
+        if(str.charAt(i) == '-' || str.charAt(i) == '+') i++;
+        for(int j = i; j < length; j++) {
+            if(str.charAt(j) < '0' || str.charAt(j) > '9') break;      
+            if(res > bndry || res == bndry && str.charAt(j) > '7')     // 注意可能会有溢出，对于int而言+-*/溢出时可能会报错的，位运算则>><<都不会报错
+                return sign == 1 ? Integer.MAX_VALUE : Integer.MIN_VALUE;   // 至少INT_MAX 正整数最大， INT_MIN 负整数最小
+            res = res * 10 + (str.charAt(j) - '0');
+        }
+        return sign * res;
+
+作者：jyd
+链接：https://leetcode-cn.com/problems/ba-zi-fu-chuan-zhuan-huan-cheng-zheng-shu-lcof/solution/mian-shi-ti-67-ba-zi-fu-chuan-zhuan-huan-cheng-z-4/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 <span id="repeatdna"></span>
 ### 重复的DNA序列(哈希表 or 用位运算自定义哈希表)
 求出现过一次的长度为10的字串
