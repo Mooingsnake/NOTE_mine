@@ -1262,6 +1262,9 @@ public:
 	
 ## 字符串串
 ### 把字符串转成整数（你的分类讨论基本功，顺着string的区域分布整理思路是关键）
+![image](https://user-images.githubusercontent.com/47411365/136649772-ec68038b-fd35-4418-a86c-e0bcbb645b70.png)
+
+
 我的版本（C++
 ```
  int strToInt(string str) {
