@@ -1,7 +1,16 @@
 POWER UP C++ WITH THE STANDARD TEMPLATE LIBRARY PART ONE
 
 网址：https://www.topcoder.com/thrive/articles/Power%20up%20C++%20with%20the%20Standard%20Template%20Library%20Part%20One
-
+ - [1容器](#container)
+ - [VECTOR](#VECTOR) 
+ - [PAIRS](#PAIRS)
+ - [ITERATORS](#iterators)
+ - [COMPILING STL PROGRAMS编译错误](#comiling)
+ - [DATA MANIPULATION IN VECTOR 数据操纵](#manipulation)
+ - [string](#string)
+ - [SET](#set)
+ - [unordered_map](#unordered_map)
+<span id="container"></span>
 ## 1容器
 
 对于C语言而言容器只有数组
@@ -11,16 +20,7 @@ POWER UP C++ WITH THE STANDARD TEMPLATE LIBRARY PART ONE
  单纯的定义vector<int> arr 也会让它在内存空间存在，但是需要通过emplace_back()或者push_back()动态分配空间，这两个函数效果一样，不过emplace_back()能把int参数插进vector<vector<int>>里面去，很灵活，但是会给阅读造成困难。
  从源码上（以及非常极端需要效率的时候）讲emplace_back()更快，因为它直接在内存新建，push_back()需要复制
  原文：https://abseil.io/tips/112
-
-## 注意事项
-
-嵌套的vector应该这样定义：
- ``` vector < vector < int > >//中间有一个空格```
-
-而不是：
- ``` vector < vector < int >>```因为编译器对于>>有别的定义
- STL是需要#include的，下面出现的所有容器都是STL
-
+<span id="VECTOR"></span>
 ## VECTOR
 
 唯一对C有兼容的容器，也就是一个数组
@@ -88,7 +88,22 @@ void some_function(vector < int > v) { // Never do it unless you’re sure what 
 ```
 当然如果const就无法修改v，可以考虑把const去掉
 
-
+## value_type 在容器中的使用
+ 这个关键词应用在容器上，可以指代容器内单个元素的类型，如vector<int>::value_type AnInt;    vector<int>::value_type就指代了一个int
+ 
+ 我们可以用在一个模板函数里面 from:https://stackoverflow.com/questions/44571362/what-is-the-use-of-value-type-in-stl-containers
+ ```
+ template<typename Container>
+typename Container::value_type sum(const Container& cont)
+{
+    typename Container::value_type total = 0;    // typename表示的是Container::value_type指代一个类，因为B::A有可能是一个变量，这个关键词可以去歧义
+    for (const auto& e : cont)  //const告诉别人我们不修改这个遍历结果  ，auto&表示是引用，我们不复制，不过没有const的时候可以改值
+        total += e;
+    return total;
+}
+ ```
+ 
+<span id="PAIRS"></span>
 ## PARIS
 
 说实话这里没怎么看懂
@@ -98,7 +113,7 @@ void some_function(vector < int > v) { // Never do it unless you’re sure what 
  int x = P.second.first; // extract first int
  int y = P.second.second; // extract second int
  ```
- 
+ <span id="iterators"></span>
  ## ITERATORS
  首先看C语言怎么表示
  ```
@@ -249,7 +264,7 @@ sort(X.rbegin(), X.rend()); // Sort array in descending order using with reverse
  http://c.biancheng.net/view/7384.html
  Q： 既然it+12345 就能方便的访问数组任意位置，那为什么要有next和prev
  当我们使用迭代器的时候，不希望迭代器改变值
- 
+ <span id="comiling"></span>
 ## COMPILING STL PROGRAMS
 STL的报错信息很重要
 【没懂宏这里怎么设置的】
@@ -265,7 +280,7 @@ void f(const vector < int > & v) {
   return r;
 }
 ```
-
+<span id="manipulation"></span>
 ## DATA MANIPULATION IN VECTOR 数据操纵
 ```
 vector < int > v;
@@ -282,6 +297,7 @@ vector < int > v2;
 // 把整个V2放在V1第一个数后面
 v.insert(1, all(v2));
 ```
+<span id="string"></span>
 ## STRING
 区别于vector<char> 主要在函数和内存分配上有差异
  ```
@@ -293,6 +309,7 @@ s1 = s.substr(0, 3), // “hel”
   s3 = s.substr(0, s.length() - 1), “hell”
 s4 = s.substr(1); // “ello”
  ```
+ <span id="set"></span>
  ## SET
  set可以随意增加，删去元素或者检测是否存在（O(log N)时间内）
  insert已经有的不会报错，什么都不干
@@ -329,9 +346,25 @@ if (s.find(42) != s.end()) {
   // 42 not presents in set
 }
  ```
+ <span id="unordered_map"></span>
  ## unordered_map
  ```
- 添加： mp[key] = value;
+ 添加： mp[key] = value; 
  删除 mp.erase(key);
  ```
+ ### insert() []  emplace() 三者差别
+ from:https://stackoverflow.com/questions/17172080/insert-vs-emplace-vs-operator-in-c-map
+ ```
+   mp[key] = value // 除了添加还可以修改
+ 
+K t; V u;
+std::map<K,V> m;           // std::map<K,V>::value_type is std::pair<const K,V>
+
+m.insert( std::pair<const K,V>(t,u) );      // 1
+m.insert( std::map<K,V>::value_type(t,u) ); // 2   1和2是一样的，是std::pair<const K,V> 
+m.insert( std::make_pair(t,u) );            // 3   是std::pair<K,V> 注意缺少const，不过不影响编译
+ m.insert( std::make_pair<const K,V>(t,u) );  // 4   变成和1，2一样的办法
+ 
+ m.emplace(t,u);      // 5 emplace()中的参数被发送给了当前value_type的构造函数，解决了mp[key]=value只能依赖默认构造函数的情况
+``` 
  
