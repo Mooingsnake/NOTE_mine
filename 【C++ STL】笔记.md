@@ -310,11 +310,16 @@ s1 = s.substr(0, 3), // “hel”
 s4 = s.substr(1); // “ello”
  ```
  <span id="set"></span>
- ## SET
- set可以随意增加，删去元素或者检测是否存在（O(log N)时间内）
+ ## SET（红黑树）
+ 参考网址：https://www.jianshu.com/p/834cc223bb57
+ 
+ 红黑树的数据结构（set，map，multiset，multimap）可以随意增加，删去或者查找（O(log N)时间内），这里的删除添加都是节点A连到节点B，不会有内存拷贝
+ 
  insert已经有的不会报错，什么都不干
- 是乱序的，所以push_back()是不会出现的，也不会有index的
- 除非用iterator做遍历
+
+ 是二叉树，所以push_back()是不会出现的，也不会有index的
+ 
+ 可以用iterator做遍历，就像平时题目里一样，前序后序遍历
  ```
  // Calculate the sum of elements in set
 set < int > S;
@@ -347,12 +352,29 @@ if (s.find(42) != s.end()) {
 }
  ```
  <span id="unordered_map"></span>
- ## unordered_map
+ ## unordered_map（哈希表hash table）
  ```
- 添加： mp[key] = value; 
- 删除 mp.erase(key);
+ 添加： mp[key] = value; 时间：O(1)
+ 删除   mp.erase(key);   时间：O(1)
+ 访问： mp[key];         时间：O(1)
  ```
- ### insert() []  emplace() 三者差别
+ ### map 和unorder_map的区别（红黑树vs哈希表）
+ from：https://www.youtube.com/watch?v=XHDNlgGBnm4
+ 
+![image](https://user-images.githubusercontent.com/47411365/136736343-18e84635-b4f2-486b-8af5-ed8a2a06acbb.png)
+
+ 左边的compare函数表示了红黑树的order，并且这里默认是个升序[]（int a,int b）{return a < b;}，你可以改成greater（也就是图上的那个单词
+                                                                                         
+ 右边的hash 函数表示哈希表没有排序                                                                                         
+ ![image](https://user-images.githubusercontent.com/47411365/136736773-d7e27101-4a99-4804-a22a-7b87bc9cd50f.png)
+                
+排序？  map √              unordered_map × 
+线程安全？  map ×          unordered_map √                                                                                          
+
+                                                                                          
+红黑树直达电梯：https://www.jianshu.com/p/e136ec79235c                                                                                          
+                                                                                          
+### insert() []  emplace() 三者差别
  from:https://stackoverflow.com/questions/17172080/insert-vs-emplace-vs-operator-in-c-map
  ```
    mp[key] = value // 除了添加还可以修改
@@ -367,4 +389,4 @@ m.insert( std::make_pair(t,u) );            // 3   是std::pair<K,V> 注意缺�
  
  m.emplace(t,u);      // 5 emplace()中的参数被发送给了当前value_type的构造函数，解决了mp[key]=value只能依赖默认构造函数的情况
 ``` 
- 
+
