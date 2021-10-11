@@ -10,6 +10,7 @@ POWER UP C++ WITH THE STANDARD TEMPLATE LIBRARY PART ONE
  - [string](#string)
  - [SET](#set)
  - [unordered_map](#unordered_map)
+ - [stringstream](#stringstream)
 <span id="container"></span>
 ## 1容器
 
@@ -329,16 +330,7 @@ for (set < int > ::const_iterator it = S.begin(); it != S.end(); it++) {
   r += * it;
 }
  ```
- 其实这种遍历是比较麻烦的，比如遇到了二维三维嵌套的时候
- 它那里说的是用遍历宏，然后就会变成这个样子
- ```
- set < pair < string, pair < int, vector < int > > > > SS;
-int total = 0;
-tr(SS, it) {
-  total += it - > second.first;
-}
- ```
- **对不起完全没有看懂**
+
  
 当然拉，我们使用find()查看一个set里面是否存在了这个目标,但是不要用全局的find()，那个是O（N）
  使用set::find()可以将消耗缩到O（log N），当然也return的是一个iterator，要么是找到的那个元素，要么是s.end()
@@ -350,6 +342,28 @@ if (s.find(42) != s.end()) {
 } else {
   // 42 not presents in set
 }
+ ```
+ 然后关于 erase（）这个函数,其实可以做成[,)区间，里面填iterator
+ ```
+ set < int > s;
+// …
+set < int > ::iterator it1, it2;
+it1 = s.find(10);
+it2 = s.find(100);
+// Will work if it1 and it2 are valid iterators, i.e. values 10 and 100 present in set.
+s.erase(it1, it2); // Note that 10 will be deleted, but 100 will remain in the container
+ ```
+其实构造函数也可以使用迭代器，
+ ```
+ int data[5] = {
+  5,
+  1,
+  4,
+  2,
+  3
+};
+set < int > S(data, data + 5);
+set <int> k(it,it+5);   // vector<int> 也可以喔，我们可以通过这种方法很快得到数组某一部分的集合
  ```
  <span id="unordered_map"></span>
  ## unordered_map（哈希表hash table）
@@ -372,7 +386,7 @@ if (s.find(42) != s.end()) {
 线程安全？  map ×          unordered_map √                                                                                          
 
                                                                                           
-红黑树直达电梯：https://www.jianshu.com/p/e136ec79235c                                                                                          
+红黑树直达电梯：https://www.bilibili.com/video/BV135411h7wJ                                                                                  
                                                                                           
 ### insert() []  emplace() 三者差别
  from:https://stackoverflow.com/questions/17172080/insert-vs-emplace-vs-operator-in-c-map
@@ -389,4 +403,20 @@ m.insert( std::make_pair(t,u) );            // 3   是std::pair<K,V> 注意缺�
  
  m.emplace(t,u);      // 5 emplace()中的参数被发送给了当前value_type的构造函数，解决了mp[key]=value只能依赖默认构造函数的情况
 ``` 
+<span id="stringstream"></span>
+### STRING STREAMS
+```
+ void f(const string & s) {
 
+  // Construct an object to parse strings
+  istringstream is(s);
+
+  // Vector to store data
+  vector < int > v;
+
+  // Read integer while possible and add it to the vector
+  int tmp;
+  while (is >> tmp) {
+    v.push_back(tmp);
+  }
+```
