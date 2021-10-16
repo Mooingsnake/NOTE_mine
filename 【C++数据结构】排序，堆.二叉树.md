@@ -43,6 +43,7 @@ attention:在极端有序的情况下速度是0（n）
 由于只需要找到不大于当前数的位置而并不需要交换，因此，直接插入排序是稳定的排序方法。
 
 ## nlogn排序
+归并和快速排序本质都是分治算法。
 ### 归并排序 nlogn - nlogn
 ![image](https://user-images.githubusercontent.com/47411365/125230841-3730f480-e30c-11eb-960b-0e755644cc45.png)
 通常使用递归二分的方法来归并:O(logn)，然后用O(n)的速度排序(互换)
@@ -107,6 +108,8 @@ void quickSort(T arr[],int n) {
 
 <span id="heap"></span>
 ## 堆
+堆排序：https://www.bilibili.com/video/BV1Eb41147dK?from=search&seid=7170942173101867701&spm_id_from=333.337.0.0
+
 1.堆是一颗具有特定性质的二叉树，堆的基本要求就是堆中所有结点的值必须 __大于或等于（或小于或等于）其孩子结点的值__，这也称为堆的性质；
 
 2.堆还有另一个性质，就是当 h > 0 时，所有叶子结点都处于第 h 或 h - 1 层（其中 h 为树的高度，完全二叉树），也就是说， __堆应该是一颗完全二叉树__；（完全二叉树和平衡二叉树：https://www.zhihu.com/question/280747707/answer/1184261690
