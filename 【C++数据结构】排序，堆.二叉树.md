@@ -5,6 +5,9 @@
 - [B树](#Btree)
 - [并查集](#union-find-set)
 - [图](#graph)
+- [队列](#queue)
+
+
 <span id ="sort"></span>
 ## O（n²）排序
 ### 总览
@@ -445,6 +448,8 @@ class 并查集{
 
 每探索一个点把所有路径列出，然后选择最小的连上去。不用回退，可以使用优先队列存储那些未包含的边
 
-
-
+<span id="queue"></span>
+## 队列
+### 循环队列
+https://www.jianshu.com/p/411f2d64c2c6
 
