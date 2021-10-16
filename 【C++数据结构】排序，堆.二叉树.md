@@ -7,6 +7,10 @@
 - [图](#graph)
 <span id ="sort"></span>
 ## O（n²）排序
+### 总览
+![image](https://user-images.githubusercontent.com/47411365/137577207-d17bd185-05bb-4a23-9b0b-e03816f787f3.png)
+
+
 ### 选择排序
 ![image](https://user-images.githubusercontent.com/47411365/125230656-d3a6c700-e30b-11eb-9cee-8e0447564338.png)
 
