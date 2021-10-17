@@ -160,6 +160,15 @@ int main(){
 1.内存泄漏：忘记释放内存
 
 2.产生引用非法内存的指针：在尚有指针引用的情况下就释放了内存
+
+### 下面是五种内存区域，并且每种内存区域都有只读的const区域：
+
+https://stackoverflow.com/questions/1576489/where-are-constant-variables-stored-in-c
+
+![image](https://user-images.githubusercontent.com/47411365/137638925-0504c689-cd7a-4890-8c01-9c240c8f661d.png)
+
+![image](https://user-images.githubusercontent.com/47411365/137638934-caf44ee6-2ab2-4b52-8b36-280304e0c2d1.png)
+
 <span id="static-non-static"></span>
 ## 全局静态变量，局部静态变量，局部变量，全局变量
 一个中文的csdn解释：https://blog.csdn.net/yangfengby0909/article/details/6501147
