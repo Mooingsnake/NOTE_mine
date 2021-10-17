@@ -161,7 +161,7 @@ int main(){
 
 2.产生引用非法内存的指针：在尚有指针引用的情况下就释放了内存
 
-### 下面是五种内存区域，并且每种内存区域都有只读的const区域：
+### 下面是C语言的五种内存区域，并且每种内存区域都有只读的const区域：
 
 https://stackoverflow.com/questions/1576489/where-are-constant-variables-stored-in-c
 
