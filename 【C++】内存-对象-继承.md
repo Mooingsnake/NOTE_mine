@@ -293,7 +293,7 @@ int main(){
 ![image](https://user-images.githubusercontent.com/47411365/136182652-5609f07a-235c-4be0-84a6-326d00f98b3c.png)
 
 
-PS:所以还是包抄型，ABBA  ，先有爹在扩展出儿，把儿子删了再删爹
+PS:所以还是包抄型，ABBA  ，先有基类再有派生类，删掉派生类再删基类，  树干先长，然后树枝，先减树枝然后树干。
 
 <span id="virtual-function"></span>
 ### 虚函数
