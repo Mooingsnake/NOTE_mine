@@ -1,4 +1,5 @@
 - [边界](#bound)
+- [滑动窗口](#slide-window)
 - [排序](#sort)
 - [位运算](#bitcal)
 - [快慢指针](#fast_slow_ptr)
@@ -68,6 +69,38 @@ int maxprice = 1e9;
 ### 大数注意
 (long)((long)+(long))
 
+
+<span id ="slide-window"></span>
+## 滑动窗口
+滑动窗口是一个简化的模型，所以你的代码应当是逻辑上干净简洁的：
+
+1.让左边界在那个取不到的数字上，这样就不需要 right-left +1了
+
+2.善用 k = max(k,i) 让k持续递增，持续更新。
+
+3.你的滑动窗口左边界，最开始的位置是-1吗？
+
+4.维护左指针的取值，可以用哈希表记录可能性。
+### 最长不含重复字符的子字符串
+要清楚这个字符串是agdveg 是j - dic[g] (当再次遇到g的时候)，这个窗口的长度 __不需要 a-b+1__ 
+```
+    public int lengthOfLongestSubstring(String s) {
+        Map<Character, Integer> dic = new HashMap<>();
+        int i = -1, res = 0;
+        for(int j = 0; j < s.length(); j++) {
+            if(dic.containsKey(s.charAt(j)))
+                i = Math.max(i, dic.get(s.charAt(j))); // 更新左指针 i
+            dic.put(s.charAt(j), j); // 哈希表记录
+            res = Math.max(res, j - i); // 更新结果
+        }
+        return res;
+    }
+
+作者：jyd
+链接：https://leetcode-cn.com/problems/zui-chang-bu-han-zhong-fu-zi-fu-de-zi-zi-fu-chuan-lcof/solution/mian-shi-ti-48-zui-chang-bu-han-zhong-fu-zi-fu-d-9/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 <span id ="sort"></span>
 ## 排序
 leetcode里面可以使用
