@@ -7,8 +7,8 @@
 - [迭代](#Iteration)
 - [动态规划](#dp)
 - [BFS](#bfs)
-- [递归-二叉树-队列](#recursion)
-- [栈-队列](#stack-queue)
+- [递归-二叉树](#recursion)
+- [栈-队列-堆](#stack-queue)
 - [字符串串](#string)
 - [一些函数](#functions)
 - [数据结构模拟](#数据结构模拟)
@@ -1260,7 +1260,7 @@ void dfs(TreeNode* root,int targetSum){
 遇到的问题3：笑死了，dfs（）第一个放在了root处理的前面，结果错乱了。
 
 <span id ="stack-queue"></span>
-## 栈和队列
+## 栈和队列和堆
 ### 栈的压入、弹出序列
 题目：已知压入序列，判断弹出序列是否合理
 
@@ -1319,8 +1319,40 @@ public:
 ```
 
 
+### 丑数
+题目： 因数是2，3，5的是丑数，求第n个丑数
+
+思路： 维护一个小顶堆，每次pop()出的那个数x，塞进3x，2x，5x，注意检测重复的数  时间O（nlogn）
+```
+    int nthUglyNumber(int n) {
+        vector<int> factors = {2, 3, 5};
+        unordered_set<long> seen;
+        priority_queue<long, vector<long>, greater<long>> heap;
+        seen.insert(1L);
+        heap.push(1L);
+        int ugly = 0;
+        for (int i = 0; i < n; i++) {
+            long curr = heap.top();
+            heap.pop();
+            ugly = (int)curr;
+            for (int factor : factors) {
+                long next = curr * factor;
+                if (!seen.count(next)) {
+                    seen.insert(next);
+                    heap.push(next);
+                }
+            }
+        }
+        return ugly;
+    }
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/chou-shu-lcof/solution/chou-shu-by-leetcode-solution-0e5i/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
 <span id ="string"></span>
-	
 ## 字符串串
 ### 把字符串转成整数（你的分类讨论基本功，顺着string的区域分布整理思路是关键）
 ![image](https://user-images.githubusercontent.com/47411365/136649772-ec68038b-fd35-4418-a86c-e0bcbb645b70.png)
