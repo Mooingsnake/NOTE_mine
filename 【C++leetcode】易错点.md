@@ -371,6 +371,40 @@ x >>= 1    // 右移一位
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
+### 删除重复的元素(升序排列)
+不使用pre也可以删除元素，我担心用cur->next可能会计算不了最后一个，或者越界，但这里并没有。 
+
+越界问题：运算的node应当和while（node）保持一致，不管是这一个cur还是下一个cur->next作为主体
+
+边界问题： 比较的就是n-1 & n 还是 n & n+1 其实作为标尺都是判断后者是否为空指针，没啥问题，就是需要注意起始点
+
+害怕会出现[1，1，...，1 ]->[ 1，1] 这样删不干净的情况？ 比较到不再一样，或者世界末日（循环条件结束，下一个为空）就好了！ 
+
+为什么我的while要写两次，你只用写一次？ 我需要在保证迭代的情况下解决连续111的问题，但是这里都解决了，见上一个回答。
+```
+    ListNode* deleteDuplicates(ListNode* head) {
+        if (!head) {
+            return head;
+        }
+
+        ListNode* cur = head;
+        while (cur->next) {
+            if (cur->val == cur->next->val) {
+                cur->next = cur->next->next;
+            }
+            else {
+                cur = cur->next;
+            }
+        }
+
+        return head;
+    }
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/solution/shan-chu-pai-xu-lian-biao-zhong-de-zhong-49v5/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 ### 两个链表合并
 我并没有发现当出while(l1&l2)循环之后就只剩下一条线，是可以直接拎过来用的。
 
