@@ -5,7 +5,9 @@
      - [全局静态变量，局部静态变量，局部变量，全局变量](#static-non-static)
      - [静态成员变量和静态成员函数](#static-member-function-and-varible) 
 - [对象模型](#object-model)
+     - [虚函数](#virtual-function)
 - [智能指针](#smart-pointer)
+
 
 
 
@@ -128,6 +130,7 @@ __why？__
 
 <span id="bb"></span>
 ## 简述内存三种类型
+参考网址：https://stackoverflow.com/questions/408670/stack-static-and-heap-in-c
 
 内存分三种：
 
@@ -244,6 +247,7 @@ __静态成员和类的对象无关__
 
 <span id="object-model"></span>
 ## 对象模型
+
 ### 类的内存大小和继承
 1.类的的对象的内存大小不包括静态成员（static members），也不包括成员函数（non-static member function），只有成员变量（non-static member variable）
 
@@ -290,6 +294,91 @@ int main(){
 
 
 PS:所以还是包抄型，ABBA  ，先有爹在扩展出儿，把儿子删了再删爹
+
+<span id="virtual-function"></span>
+### 虚函数
+#### 简介
+参考网址：https://www.programiz.com/cpp-programming/virtual-functions
+以下是解释：
+```
+   这是一个基本准则：base调用的函数是base的
+   Derived derived1;
+    Base* base1 = &derived1;
+
+    // calls function of Base class
+    base1->print();
+```
+Q:如何才能在拿着爹的名字各论各的？  A：使用虚函数
+
+一个具体的使用例子：
+```
+// C++ program to demonstrate the use of virtual function
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Animal {
+   private:
+    string type;
+
+   public:
+    // constructor to initialize type
+    Animal() : type("Animal") {}
+
+    // declare virtual function
+    virtual string getType() {
+        return type;
+    }
+};
+
+class Dog : public Animal {
+   private:
+    string type;
+
+   public:
+    // constructor to initialize type
+    Dog() : type("Dog") {}
+
+    string getType() override {
+        return type;
+    }
+};
+
+class Cat : public Animal {
+   private:
+    string type;
+
+   public:
+    // constructor to initialize type
+    Cat() : type("Cat") {}
+
+    string getType() override {
+        return type;
+    }
+};
+
+void print(Animal* ani) {
+    cout << "Animal: " << ani->getType() << endl;
+}
+
+int main() {
+    Animal* animal1 = new Animal();
+    Animal* dog1 = new Dog();
+    Animal* cat1 = new Cat();
+
+    print(animal1);
+    print(dog1);
+    print(cat1);
+
+    return 0;
+}
+```
+
+虚析构函数的作用是？ https://www.nowcoder.com/questionTerminal/f6f257ffe65e485d9fb102351331e8bc
+
+A:遇到父类名拿着子类对象的时候，如果贸然调用 delete dad; 会报错，因为调用了~Dad() 但是没有调用~Son()
+
 <span id="smart-pointer"></span>
 ## 智能指针
 ### 普通写法
@@ -335,3 +424,4 @@ delete []arr;
 ```
 ### allocator
   allocator 和 new不同的是，可以先分配一个空间但不和对象绑定，更自由。
+	
