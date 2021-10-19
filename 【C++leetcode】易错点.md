@@ -405,12 +405,25 @@ x >>= 1    // 右移一位
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
-### 两个链表合并
-我并没有发现当出while(l1&l2)循环之后就只剩下一条线，是可以直接拎过来用的。
+### 相交链表 （双指针，m+n == n+m）
+```
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        if (headA == nullptr || headB == nullptr) {    // 把headA headB 判断放在一起了
+            return nullptr;
+        }
+        ListNode *pA = headA, *pB = headB;
+        while (pA != pB) {                          pA指针走了n+m 的路， pB指针走了m+n 的路，一定会相遇。
+            pA = pA == nullptr ? headB : pA->next;     
+            pB = pB == nullptr ? headA : pB->next;
+        }
+        return pA;
+    }
 
-并不需要双指针
-
-如果实在觉得要记得一个头结点又要遍历一个工具人结点困难，就用哨兵做头结点前一个，工具人结点 = 哨兵，所有的结点都是.next；
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/intersection-of-two-linked-lists/solution/xiang-jiao-lian-biao-by-leetcode-solutio-a8jn/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 
 ### 反转链表 (迭代)
 1.while()里面是curr，还是curr->next?        2.如何正确记录前中后个节点且不会打架且可以迭代？
