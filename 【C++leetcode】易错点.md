@@ -355,23 +355,16 @@ x >>= 1    // 右移一位
 <span id ="linknode"></span>
 ## 链表
 ### 链表空指针
-首先是head == nullptr,head -> next == nullptr
-然后循环的写法也是以判断为先
-```
-        while (slow != fast) {
-            if (fast == nullptr || fast->next == nullptr) {
-                return false;
-            }
-            slow = slow->next;
-            fast = fast->next->next;
-        }
+考虑边界处理：head == nullptr,head -> next == nullptr
+![image](https://user-images.githubusercontent.com/47411365/137876930-1069c58d-8c7d-42a3-be45-bbed63111802.png)
 
+```
 作者：LeetCode-Solution
 链接：https://leetcode-cn.com/problems/linked-list-cycle/solution/huan-xing-lian-biao-by-leetcode-solution/
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
-### 删除重复的元素(升序排列)
+### 删除重复的元素：升序排列 （节点删除的简洁表达）
 不使用pre也可以删除元素，我担心用cur->next可能会计算不了最后一个，或者越界，但这里并没有。 
 
 越界问题：运算的node应当和while（node）保持一致，不管是这一个cur还是下一个cur->next作为主体
