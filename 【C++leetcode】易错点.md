@@ -2059,6 +2059,11 @@ public:
 <span id = "math"></span>
 ## 具体数学
 其实算法里面的数学部分不多，所以把做到的题目搞搞懂就差不多了。
+### 汉诺塔
+移动三个盘子的时候，就是把两个放在中间柱子上，把第三个放在右边柱子上；    然后再把那两个挪回去，然后再把一个放中间，一个放右边
+你会发现Tn <= 2T(n-1) +1,n >0   （Tn-1是一个数，且t0 = 0
+我建议你翻开《具体数学》这本书，而不是看这道题的解析：
+https://www.nowcoder.com/test/question/done?tid=49273454&qid=372705#summary
 
 ### 矩形面积（容斥原理）
 ![image](https://user-images.githubusercontent.com/47411365/135423832-519ada00-15e2-4ed5-ad08-755db9350b4a.png)
