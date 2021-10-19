@@ -439,13 +439,16 @@ x >>= 1    // 右移一位
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 
-![image](https://user-images.githubusercontent.com/47411365/131944136-01907dd3-5962-46f8-9db8-c518e5c69cac.png)
+![image](https://user-images.githubusercontent.com/47411365/137901520-82d5af69-7169-44ff-a202-1deb72aae4c9.png)
 
 移动，先用tmp记录下一个，然后断掉关系再平移挪位，然后建立关系。
 
 __递归解法：__
 
-![演示](https://user-images.githubusercontent.com/47411365/137886087-14f9f5ee-0eaa-45a8-bf13-ba7cefed83d1.png)
+![演示](https://user-images.githubusercontent.com/47411365/137886087-14f9f5ee-0eaa-45a8-bf13-ba7cefed83d1.png) 
+
+![image](https://user-images.githubusercontent.com/47411365/137905690-14146f05-cc0d-4553-9689-c7e302f7b7ec.png)
+
 
 ```
     ListNode* reverseList(ListNode* head) {
