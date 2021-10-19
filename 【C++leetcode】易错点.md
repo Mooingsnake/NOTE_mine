@@ -455,7 +455,7 @@ __递归解法：__
         ListNode* newHead = reverseList(head->next);
         head->next->next = head;
         head->next = nullptr;
-        return newHead;   👈 返回的还是末尾节点
+        return newHead;   👈 返回的是同一个末尾节点
     }
 
 作者：LeetCode-Solution
