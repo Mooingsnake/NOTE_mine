@@ -2,7 +2,6 @@
 - [滑动窗口](#slide-window)
 - [排序](#sort)
 - [位运算](#bitcal)
-- [快慢指针](#fast_slow_ptr)
 - [链表](#linknode)
 - [迭代](#Iteration)
 - [动态规划](#dp)
@@ -332,17 +331,11 @@ x >>= 1    // 右移一位
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
-<span id ="fast_slow_ptr"></span>
-### 快慢指针
-我只要跑的比我妈快就一定会在某一时刻遇见我妈（成环的时候），步长为1和2的时候最小公倍数就是相遇的契机。
-适合用在O（1）空间消耗的情况下
 
-什么时候决定结束？
-链表结束的时候
 
-实际上可以如果是一个环形的链表或者数组，那么可以看作是图的形式——
+<span id ="linknode"></span>
+## 链表
 
-我们需要一个额外空间记录visited，但是一旦记录了以后，成环就会变得简单。
 
 ### 双指针
 
@@ -351,9 +344,6 @@ x >>= 1    // 右移一位
 适合用在O（1）空间消耗的情况下
 
 双指针还可以用在判断子序列上面，需要注意的是指针一般指到最后一个元素+1，也就是end()的位置
-
-<span id ="linknode"></span>
-## 链表
 ### 链表空指针
 考虑边界处理：head == nullptr,head -> next == nullptr
 ![image](https://user-images.githubusercontent.com/47411365/137876930-1069c58d-8c7d-42a3-be45-bbed63111802.png)
@@ -467,6 +457,68 @@ __递归解法：__
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ``` 
 // 循环结束node是nullptr，所以是pre，这很重要，  还有就是return 回最后一个元素的技巧，pre一直在变化的技巧
+### 删除倒数第n的节点（递归法的返回值应用）
+我第一反应是套模板：
+
+![image](https://user-images.githubusercontent.com/47411365/138588919-9ec23e51-28ae-42a5-a3fd-481c4aa673f1.png)
+
+有两个解法：1.前面加一个dummy node 2.合理利用递归的返回值进行节点的链接
+```
+dummy node法：
+private:
+    int k = 0;
+    void recur(ListNode* head,int n){
+        if(head == nullptr) return;
+        recur(head->next,n);
+        if(k == n) head->next = head ->next->next;
+        k++;
+ }
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* dummy = new ListNode(0);
+        dummy->next = head;
+        recur(dummy,n);
+        return dummy->next;
+}
+```
+```
+递归的返回值：https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/comments/
+public:
+    int cur=0;
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+       if(!head) return NULL;
+       head->next = removeNthFromEnd(head->next,n); 👈每次都和下一个连起来
+       cur++;
+       if(n==cur) return head->next;  👈唯一一次和下下个连起来了
+       return head;
+    }
+```
+### 删除排序链表中的重复元素 II
+https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/comments/
+
+还是一个递归，但是这次厉害了，这次递归里面套迭代while
+
+我们需要知道一件事：不加while的递归，没办法一直删除某些东西，比方说333，只能删除中间的3，变成33，因为return的是node->next->next；那就一定决定了下一个试试下下个
+
+我们还需要知道一件事：递归的位置很重要，小心每一次的return，递归语句的前面不要随便return，你最好不要让你的程序提早结束。
+
+还有一件事：你可以好好利用while每次的删除，你只需要用head=f（head->next）；通过赋值来去掉那个东西就行， 
+
+```
+    ListNode* deleteDuplicates(ListNode* head) {        
+        if(head == nullptr || head->next == nullptr) return head;  
+
+        if(head->val == head->next->val){
+            while(head->next != nullptr && head->val == head->next->val){
+                head ->next = head->next->next;
+            }
+            head = deleteDuplicates(head->next);
+        }else{
+            head->next = deleteDuplicates(head->next);
+        }
+        return head;
+    }
+```
 
 ### 反转链表Ⅱ (头插法，虚拟指针)
 ![image](https://user-images.githubusercontent.com/47411365/134858032-71eab17d-645e-4936-a84d-7301931e8cd8.png)
