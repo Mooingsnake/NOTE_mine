@@ -10,7 +10,7 @@
 - [栈-队列-堆](#stack-queue)
 - [字符串串](#string)
 - [一些函数](#functions)
-- [数据结构模拟](#数据结构模拟)
+- [数据结构设计](#数据结构模拟)
 - [并查集](#union-find-set)
 - [自动状态机](#DFA)
 - [具体数学](#math)
@@ -1940,7 +1940,35 @@ public:
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
 ## 数据结构模拟
-<span id ="数据结构模拟"></span>
+<span id="数据结构模拟"></span>
+### 链表设计
+https://leetcode-cn.com/problems/design-linked-list/comments/   from代码随想录
+#### 报错1：
+![image](https://user-images.githubusercontent.com/47411365/139035923-dee75469-3768-4c72-9bb7-e183c7c0cbaf.png)
+
+需要手动初始化Node*  head = nullptr; 
+#### 错误2：
+不要用private:里面的head 来进行迭代:head = head->next;  
+#### 错误3：
+Node定义可以用struct写，但是不论class还是struct，结尾{}；一定要有;   并且定义要在使用的前面写
+#### 错误4
+删节点记得用delete 删
+#### 范式
+```
+1.迭代到指定位置
+        while(index--){ // 如果--index 就会陷入死循环
+            cur = cur->next;
+        }
+        return cur->val;
+```
+```
+2.删除某个下标是index的点
+        while(index--){
+            curr = curr->next;
+        }
+        Node* tmp  = curr->next;   //两句话解决问题
+        curr->next = curr->next->next;
+```
 ### 辅助栈
 #### 如果下面有min函数，那么就需要用std::min（）或者::min()
 ```
