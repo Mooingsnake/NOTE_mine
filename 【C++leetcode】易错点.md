@@ -335,15 +335,50 @@ x >>= 1    // 右移一位
 
 <span id ="linknode"></span>
 ## 链表
+### 成环链表（双指针技巧:fast = slow + nb(套了n圈)）
+from: https://leetcode-cn.com/problems/linked-list-cycle-ii/solution/linked-list-cycle-ii-kuai-man-zhi-zhen-shuang-zhi-/
+```
+    public ListNode detectCycle(ListNode head) {
+        ListNode fast = head, slow = head;
+        while (true) {
+            if (fast == null || fast.next == null) return null;
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) break;
+        }
+        fast = head;
+        while (slow != fast) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+        return fast;
+    }
 
+作者：jyd
+链接：https://leetcode-cn.com/problems/linked-list-cycle-ii/solution/linked-list-cycle-ii-kuai-man-zhi-zhen-shuang-zhi-/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 
-### 双指针
+### 相交链表 （双指针，m+n == n+m）
+```
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        if (headA == nullptr || headB == nullptr) {    // 把headA headB 判断放在一起了
+            return nullptr;
+        }
+        ListNode *pA = headA, *pB = headB;
+        while (pA != pB) {                          pA指针走了n+m 的路， pB指针走了m+n 的路，一定会相遇。
+            pA = pA == nullptr ? headB : pA->next;     
+            pB = pB == nullptr ? headA : pB->next;
+        }
+        return pA;
+    }
 
-双指针可以给两个链表使用，a指针遍历完去b链，反之同样。
-
-适合用在O（1）空间消耗的情况下
-
-双指针还可以用在判断子序列上面，需要注意的是指针一般指到最后一个元素+1，也就是end()的位置
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/intersection-of-two-linked-lists/solution/xiang-jiao-lian-biao-by-leetcode-solutio-a8jn/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 ### 链表空指针
 考虑边界处理：head == nullptr,head -> next == nullptr
 ![image](https://user-images.githubusercontent.com/47411365/137876930-1069c58d-8c7d-42a3-be45-bbed63111802.png)
@@ -388,25 +423,7 @@ x >>= 1    // 右移一位
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
-### 相交链表 （双指针，m+n == n+m）
-```
-    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
-        if (headA == nullptr || headB == nullptr) {    // 把headA headB 判断放在一起了
-            return nullptr;
-        }
-        ListNode *pA = headA, *pB = headB;
-        while (pA != pB) {                          pA指针走了n+m 的路， pB指针走了m+n 的路，一定会相遇。
-            pA = pA == nullptr ? headB : pA->next;     
-            pB = pB == nullptr ? headA : pB->next;
-        }
-        return pA;
-    }
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/intersection-of-two-linked-lists/solution/xiang-jiao-lian-biao-by-leetcode-solutio-a8jn/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
 
 ### 反转链表 (迭代)
 1.while()里面是curr，还是curr->next?        2.如何正确记录前中后个节点且不会打架且可以迭代？
@@ -493,7 +510,7 @@ public:
        return head;
     }
 ```
-### 删除排序链表中的重复元素 II
+### 删除排序链表中的重复元素 II （递归）
 https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/comments/
 
 还是一个递归，但是这次厉害了，这次递归里面套迭代while
