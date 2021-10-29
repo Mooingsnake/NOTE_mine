@@ -389,6 +389,35 @@ from: https://leetcode-cn.com/problems/linked-list-cycle-ii/solution/linked-list
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
+### 小错误：heap use after free 奇偶链表
+检查有没有让链表成环，成环以后会发生这个错误。
+
+学习一下这个比较莽的写法，我很谨慎的区分了每次的情况并且用flag^=1 每次置换了，但是官方解法里面没有这个问题。
+```
+    ListNode* oddEvenList(ListNode* head) {
+        if (head == nullptr) {
+            return head;
+        }
+        ListNode* evenHead = head->next;
+        ListNode* odd = head;
+        ListNode* even = evenHead;
+        while (even != nullptr && even->next != nullptr) {
+            odd->next = even->next;
+            odd = odd->next;
+            even->next = odd->next;
+            even = even->next;
+        }
+        odd->next = evenHead;
+        return head;
+    }
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/odd-even-linked-list/solution/qi-ou-lian-biao-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+
 ### 删除重复的元素：升序排列 （节点删除的简洁表达）
 不使用pre也可以删除元素，我担心用cur->next可能会计算不了最后一个，或者越界，但这里并没有。 
 
