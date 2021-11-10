@@ -86,7 +86,7 @@ namespace GameFramework.Resource
 ```
         ...
         
-        private readonly LoadAssetCallbacks m_LoadAssetCallbacks;
+        private readonly LoadAssetCallbacks m_LoadAssetCallbacks;   // 一个打包的回调函数集
         
         ...
         
@@ -94,11 +94,12 @@ namespace GameFramework.Resource
         {
            ...
             m_LoadAssetCallbacks = new LoadAssetCallbacks(LoadAssetSuccessCallback, LoadAssetFailureCallback, LoadAssetUpdateCallback, LoadAssetDependencyAssetCallback);
-           ...
+           ...   // 函数集里实装了4个函数
         }
         
         ...
         
+         //其中一个函数的实现
         private void LoadAssetSuccessCallback(string entityAssetName, object entityAsset, float duration, object userData)
         {
             ShowEntityInfo showEntityInfo = (ShowEntityInfo)userData;
@@ -148,15 +149,86 @@ https://github.com/cnImpulse/AGame/blob/2c3e12d2dd8023e4256a183f150fce392287c10e
 
             if (!EndLoad && ByteBufList.Count == Cfg.Tables.Assets.Length)
             {
-                Tables = new Cfg.Tables(LoadByteBuf);  --这里也是函数指针参数，原定义是Func<string,ByteBuf>,目测是为了方便表示，和委托性质差不多，一环套一环了属于是
+                Tables = new Cfg.Tables(LoadByteBuf);  --这里也是函数指针参数，构造函数内置了byte转Dictionary<>的操作
                 EndLoad = true;
             }
         }
         
      private ByteBuf LoadByteBuf(string file)
         {
-            return ByteBufList[file];
+            return ByteBufList[file]; // 搞到文件对应的byte数据
         }
 ```
 关于string为什么这么写，走这里：https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/tokens/interpolated
 
+## gameframework的事件订阅问题
+https://blog.csdn.net/m0_37920739/article/details/104723210?spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-3.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-3.no_search_link
+
+订阅是外网的说法，就是关注，意味着我关注的事件每次发生的时候我都能收到消息。
+
+要看gameframework的事件订阅原理，需要看EventPool（建议在人家的github上搜索关键词），我摘录一段最容易理解的话：
+
+![image](https://user-images.githubusercontent.com/47411365/141133862-b9dd2a75-6eb6-487f-ad93-e0beccbd35d5.png)
+
+Fire将保存需要的参数值到队列里，Subscribe是仅仅把多播事件保存到字典中，然后它们通过一个Id关联在一起，Id是类的hashcode，通过函数GetHashCode获取到的，保证key值必须是唯一、匹配
+
+当流程需要什么事件，就监听什么事件即可。实际调用就是通过Fire将参数压到队列里，参数循环取用时会找到对应主公把一切交给自己的主公。 
+
+那我们看这两个函数Fire和Subcribe：
+
+```    
+        private readonly GameFrameworkMultiDictionary<int, EventHandler<T>> m_EventHandlers;
+        private readonly Queue<Event> m_Events;
+
+        /// <summary>
+        /// 订阅事件处理函数。
+        /// </summary>
+        /// <param name="id">事件类型编号。</param>
+        /// <param name="handler">要订阅的事件处理函数。</param>
+        public void Subscribe(int id, EventHandler<T> handler)       // EventHandler也是个委托
+        {
+            if (handler == null)
+            {
+                throw new GameFrameworkException("Event handler is invalid.");
+            }
+
+            if (!m_EventHandlers.Contains(id))
+            {
+                m_EventHandlers.Add(id, handler);
+            }
+            else if ((m_EventPoolMode & EventPoolMode.AllowMultiHandler) != EventPoolMode.AllowMultiHandler)
+            {
+                throw new GameFrameworkException(Utility.Text.Format("Event '{0}' not allow multi handler.", id.ToString()));
+            }
+            else if ((m_EventPoolMode & EventPoolMode.AllowDuplicateHandler) != EventPoolMode.AllowDuplicateHandler && Check(id, handler))
+            {
+                throw new GameFrameworkException(Utility.Text.Format("Event '{0}' not allow duplicate handler.", id.ToString()));
+            }
+            else
+            {
+                m_EventHandlers.Add(id, handler);
+            }
+        }
+        
+        ·········
+        
+         /// <summary>
+        /// 抛出事件，这个操作是线程安全的，即使不在主线程中抛出，也可保证在主线程中回调事件处理函数，但事件会在抛出后的下一帧分发。
+        /// </summary>
+        /// <param name="sender">事件源。</param>
+        /// <param name="e">事件参数。</param>
+        public void Fire(object sender, T e)
+        {
+            if (e == null)
+            {
+                throw new GameFrameworkException("Event is invalid.");
+            }
+
+            Event eventNode = Event.Create(sender, e);
+            lock (m_Events)
+            {
+                m_Events.Enqueue(eventNode);
+            }
+        }
+
+```
