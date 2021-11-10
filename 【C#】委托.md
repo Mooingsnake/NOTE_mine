@@ -170,9 +170,9 @@ https://blog.csdn.net/m0_37920739/article/details/104723210?spm=1001.2101.3001.6
 
 ![image](https://user-images.githubusercontent.com/47411365/141133862-b9dd2a75-6eb6-487f-ad93-e0beccbd35d5.png)
 
-Fire将保存需要的参数值到队列里，Subscribe是仅仅把多播事件保存到字典中，然后它们通过一个Id关联在一起，Id是类的hashcode，通过函数GetHashCode获取到的，保证key值必须是唯一、匹配
+__Fire将保存需要的参数值到队列里，Subscribe是仅仅把多播事件保存到字典中__，然后它们通过一个Id关联在一起，Id是类的hashcode，通过函数GetHashCode获取到的，保证key值必须是唯一、匹配
 
-当流程需要什么事件，就监听什么事件即可。实际调用就是通过Fire将参数压到队列里，参数循环取用时会找到对应主公把一切交给自己的主公。 
+当流程需要什么事件，就监听什么事件即可。  __实际调用就是通过Fire将参数压到队列里，参数循环取用时会找到对应主公把一切交给自己的主公。 __
 
 那我们看这两个函数Fire和Subcribe：
 
