@@ -1,5 +1,6 @@
 ## 编译到链接的八股文
 下文来源：leetcode https://leetcode-cn.com/leetbook/read/cpp-interview-highlights/e4ns5g/
+、
 __编译预处理__：处理以 # 开头的指令（#define ，#include， #pragma once）；
 
 __编译优化__：将源码 .cpp 文件翻译成 .s 汇编代码；
