@@ -1,4 +1,58 @@
-## 首先解决下宏定义是声明
+## 编译到链接的八股文
+下文来源：leetcode https://leetcode-cn.com/leetbook/read/cpp-interview-highlights/e4ns5g/
+__编译预处理__：处理以 # 开头的指令（#define ，#include， #pragma once）；
+
+__编译优化__：将源码 .cpp 文件翻译成 .s 汇编代码；
+
+__汇编__：将汇编代码 .s 翻译成机器指令 .o 文件；
+
+__链接__：汇编程序生成的目标文件，即 .o 文件. 链接并不会立即执行，因为可能会出现：.cpp 文件中的函数引用了另一个 .cpp 文件中定义的符号或者调用了某个库文件中的函数。那链接的目的就是将这些文件对应的目标文件连接成一个整体，从而生成可执行的程序 .exe 文件。
+
+两种链接优缺点：
+
+静态链接：浪费空间，每个可执行程序都会有目标文件的一个副本，这样如果目标文件进行了更新操作，就需要重新进行编译链接生成可执行程序（更新困难）；优点就是执行的时候运行速度快，因为可执行程序具备了程序运行的所有内容。
+
+动态链接：节省内存、更新方便，但是动态链接是在程序运行时，每次执行都需要链接，相比静态链接会有一定的性能损失。
+
+下面的评论（ljmiao）：
+
+静态链接是将程序调用的库一起打包到可执行文件中，这样执行时就不需要调用别的库了，速度快，但是链接的时候可能同一个库链接了好几次，导致空间浪费，而且如果该库更新了的话，整个程序需要重新编译；
+
+动态链接是在程序执行时才载入引用的库，因此方便更新。
+![image](https://user-images.githubusercontent.com/47411365/141247854-81a1b12d-72aa-42ac-a24d-cb1195a664bb.png)
+
+![image](https://user-images.githubusercontent.com/47411365/141247890-605fe1d8-6436-456a-993a-37c4f4abb5b2.png)
+
+## 编译和链接的区别
+来源：https://www.bilibili.com/video/BV1VJ411M7WR?p=7
+
+lnk2019：当前文件里声明了，我就是链接不到它老家（定义）在哪， 1.检查库有没有少加 2.检查定义的函数返回值，参数列表，函数名是否匹配
+
+c2084：我只负责编译当前文件，但你连续声明了两次同样名字的函数
+
+c3861： identifier not found 我编译文件的时候没看到你声明了。
+
+link has already defined：你在多个文件重复定义了同样名字的函数
+
+```
+void f2(){}
+int main() {
+   f();    // C3861
+   f2();   // OK
+}
+```
+```
+extern char B[100];   // B isn't available to the linker  在外部没有char B的定义
+int main() {
+   B[0] = ' ';   // LNK2019
+}
+```
+
+b站的那个错误我没有重现出来，反正是看视频的，不过也不考，害。
+
+
+
+## 宏定义
 ### 一个简单的函数宏定义
 ```
 #define LOG(X) std::cout << X << std::endl  
@@ -116,6 +170,6 @@ https://stackoverflow.com/questions/56015870/what-is-the-purpose-of-using-multip
 结论：多人项目可能不太容易，如果要使用一种vec —> ray ->main  结构，还好解决，还是全.h
 如果要写什么.cpp测试文件，要注意结构。
 
-### 问题6，我想复习link的规则
 
-https://www.bilibili.com/read/cv11865625
+
+
