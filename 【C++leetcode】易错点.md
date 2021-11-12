@@ -335,6 +335,72 @@ x >>= 1    // 右移一位
 
 <span id ="linknode"></span>
 ## 链表
+### 扁平化多级双向链表
+#### 单递归函数加while O（n²）
+```
+class Solution {
+    public Node flatten(Node head) {
+        Node dummy = new Node(0);
+        dummy.next = head;
+        while (head != null) {
+            if (head.child == null) {
+                head = head.next;
+            } else {
+                Node tmp = head.next;
+                Node chead = flatten(head.child);
+                head.next = chead;
+                chead.prev = head;
+                head.child = null;
+                while (head.next != null) head = head.next;
+                head.next = tmp;
+                if (tmp != null) tmp.prev = head;
+                head = tmp;
+            }
+        }
+        return dummy.next;
+    }
+}
+
+作者：AC_OIer
+链接：https://leetcode-cn.com/problems/flatten-a-multilevel-doubly-linked-list/solution/gong-shui-san-xie-yi-ti-shuang-jie-di-gu-9wfz/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+#### 递归优化（因为刚刚每次把下一层接回去的时候都要重新遍历到最后，所以是O（n²））
+dfs能返回尾节点，防止每层都要遍历到最后的情况发生
+
+```
+    public Node flatten(Node head) {
+        dfs(head);
+        return head;
+    }
+    Node dfs(Node head) {
+        Node last = head;
+        while (head != null) {
+            if (head.child == null) {
+                last = head;
+                head = head.next;
+            } else {
+                Node tmp = head.next;
+                Node childLast = dfs(head.child);
+                head.next = head.child;
+                head.child.prev = head;
+                head.child = null;
+                if (childLast != null) childLast.next = tmp;
+                if (tmp != null) tmp.prev = childLast;
+                last = head;
+                head = childLast;
+            }
+        }
+        return last;
+    }
+
+作者：AC_OIer
+链接：https://leetcode-cn.com/problems/flatten-a-multilevel-doubly-linked-list/solution/gong-shui-san-xie-yi-ti-shuang-jie-di-gu-9wfz/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
 ### 成环链表（双指针技巧:fast = slow + nb(套了n圈)）
 from: https://leetcode-cn.com/problems/linked-list-cycle-ii/solution/linked-list-cycle-ii-kuai-man-zhi-zhen-shuang-zhi-/
 ```
