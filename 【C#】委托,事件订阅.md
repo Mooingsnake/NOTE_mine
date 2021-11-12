@@ -232,3 +232,29 @@ __Fire将保存需要的参数值到队列里，Subscribe是仅仅把多播事�
         }
 
 ```
+具体为什么Fire是用来处理每个事件的，可以来看LoadSceneSuccessEventArgs这个类，里面有一个Create()方法能返回当前类 ,这个Create只在Fire中被调用
+```
+namespace UnityGameFramework.Runtime
+{
+    /// <summary>
+    /// 加载场景成功事件。
+    /// </summary>
+    public sealed class LoadSceneSuccessEventArgs : GameEventArgs
+    {
+        /// <summary>
+        /// 创建加载场景成功事件。
+        /// </summary>
+        /// <param name="e">内部事件。</param>
+        /// <returns>创建的加载场景成功事件。</returns>
+        public static LoadSceneSuccessEventArgs Create(GameFramework.Scene.LoadSceneSuccessEventArgs e)
+        {
+            LoadSceneSuccessEventArgs loadSceneSuccessEventArgs = ReferencePool.Acquire<LoadSceneSuccessEventArgs>();
+            loadSceneSuccessEventArgs.SceneAssetName = e.SceneAssetName;
+            loadSceneSuccessEventArgs.Duration = e.Duration;
+            loadSceneSuccessEventArgs.UserData = e.UserData;
+            return loadSceneSuccessEventArgs;
+        }
+    }
+}
+```
+![image](https://user-images.githubusercontent.com/47411365/141481736-eae9fdd3-0b56-44ba-b1b3-c3cdd9b2a18c.png)
