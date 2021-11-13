@@ -105,3 +105,11 @@ public class ExampleClass : MonoBehaviour
         //Load an AudioClip (Assets/Resources/Audio/audioClip01.mp3)  //⬛ 音频文件是 AudioClip
         var audioClip = Resources.Load<AudioClip>("Audio/audioClip01");
 ```
+如果Resource.Load不好用，可以用这个：(from:https://docs.unity3d.com/ScriptReference/AssetDatabase.LoadAssetAtPath.html)
+```
+    [MenuItem("AssetDatabase/LoadAssetExample")]
+    static void ImportExample()
+    {
+        Texture2D t = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/Textures/texture.jpg", typeof(Texture2D));
+    }
+```
