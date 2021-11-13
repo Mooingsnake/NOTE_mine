@@ -402,7 +402,35 @@ dfs能返回尾节点，防止每层都要遍历到最后的情况发生
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
+#### 迭代（）
+![image](https://user-images.githubusercontent.com/47411365/141626975-e0f42115-39b7-4a68-8cd6-41b79ddbef52.png)
 
+
+```
+    public Node flatten(Node head) {
+        Node dummy = new Node(0);
+        dummy.next = head;
+        for (; head != null; head = head.next) {
+            if (head.child != null) {
+                Node tmp = head.next;
+                Node child = head.child;
+                head.next = child;
+                child.prev = head;
+                head.child = null;
+                Node last = head;  
+                while (last.next != null) last = last.next;
+                last.next = tmp;
+                if (tmp != null) tmp.prev = last;
+            }
+        }
+        return dummy.next;
+    }
+
+作者：AC_OIer
+链接：https://leetcode-cn.com/problems/flatten-a-multilevel-doubly-linked-list/solution/gong-shui-san-xie-yi-ti-shuang-jie-di-gu-9wfz/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
 ### 成环链表（双指针技巧:fast = slow + nb(套了n圈)）
 from: https://leetcode-cn.com/problems/linked-list-cycle-ii/solution/linked-list-cycle-ii-kuai-man-zhi-zhen-shuang-zhi-/
 ```
