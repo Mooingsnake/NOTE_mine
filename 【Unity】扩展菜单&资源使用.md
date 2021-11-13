@@ -65,6 +65,8 @@ public class MenuTest : MonoBehaviour   // 不知道为什么需要MonoBehaviour
 }
 ```
 ## 可以对场景-资源Asset 进行操作
+
+关于Resource的解释：https://docs.unity3d.com/ScriptReference/Resources.html
 ```
 using UnityEngine;
 using System.Collections;
@@ -76,24 +78,29 @@ public class ExampleClass : MonoBehaviour
         GameObject go = GameObject.CreatePrimitive(PrimitiveType.Plane);
         Renderer rend = go.GetComponent<Renderer>();
         rend.material.mainTexture = Resources.Load("glass") as Texture; // 这里就是读取资源。有时候前面的类型定义太长可以直接用object
-        
+
+    }
+    
+}
+```
+
+下面是常用的路径表示和类型总结
+```
         来看文件路径格式
-        //Load a text file (Assets/Resources/Text/textFile01.txt)
+        //Load a text file (Assets/Resources/Text/textFile01.txt)   // ⬛就所有数据类型都是textAsset，.bytes也是
         var textFile = Resources.Load<TextAsset>("Text/textFile01");
 
-        //Load text from a JSON file (Assets/Resources/Text/jsonFile01.json)
+        //Load text from a JSON file (Assets/Resources/Text/jsonFile01.json)  //⬛ json也归属于textAsset
         var jsonTextFile = Resources.Load<TextAsset>("Text/jsonFile01");
         //Then use JsonUtility.FromJson<T>() to deserialize jsonTextFile into an object
 
         //Load a Texture (Assets/Resources/Textures/texture01.png)
-        var texture = Resources.Load<Texture2D>("Textures/texture01");
+        var texture = Resources.Load<Texture2D>("Textures/texture01");  //⬛ 图片是Texture2D
 
         //Load a Sprite (Assets/Resources/Sprites/sprite01.png)
-        var sprite = Resources.Load<Sprite>("Sprites/sprite01");
+        var sprite = Resources.Load<Sprite>("Sprites/sprite01");  // ⬛sprite 是Sprite
+  
 
-        //Load an AudioClip (Assets/Resources/Audio/audioClip01.mp3)
+        //Load an AudioClip (Assets/Resources/Audio/audioClip01.mp3)  //⬛ 音频文件是 AudioClip
         var audioClip = Resources.Load<AudioClip>("Audio/audioClip01");
-    }
-    
-}
 ```
