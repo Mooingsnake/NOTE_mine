@@ -86,9 +86,10 @@ public class ExampleClass : MonoBehaviour
 
 下面是常用的路径表示和类型总结
 ```
+        ⛎这个函数只允许寻找Asset/Resource目录下面的文件，我们一般不用这个函数，而且这玩意不需要后缀
         来看文件路径格式
         //Load a text file (Assets/Resources/Text/textFile01.txt)   // ⬛就所有数据类型都是textAsset，.bytes也是
-        var textFile = Resources.Load<TextAsset>("Text/textFile01");
+        var textFile = Resources.Load<TextAsset>("Text/textFile01");  
 
         //Load text from a JSON file (Assets/Resources/Text/jsonFile01.json)  //⬛ json也归属于textAsset
         var jsonTextFile = Resources.Load<TextAsset>("Text/jsonFile01");
