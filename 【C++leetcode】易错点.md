@@ -366,7 +366,9 @@ class Solution {
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ```
-#### 递归优化（因为刚刚每次把下一层接回去的时候都要重新遍历到最后，所以是O（n²））
+#### 递归优化（没有null检测触底return的递归）
+因为刚刚每次把下一层接回去的时候都要重新遍历到最后，所以是O（n）
+
 dfs能返回尾节点，防止每层都要遍历到最后的情况发生
 
 ```
@@ -375,9 +377,9 @@ dfs能返回尾节点，防止每层都要遍历到最后的情况发生
         return head;
     }
     Node dfs(Node head) {
-        Node last = head;
+        Node last = head;  // 这里没有触底返回，而是设置了一个last，为了保证每次返回的都是最后一个点而不是nullptr。
         while (head != null) {
-            if (head.child == null) {
+            if (head.child == null) { // last一个个往后推
                 last = head;
                 head = head.next;
             } else {
@@ -386,7 +388,7 @@ dfs能返回尾节点，防止每层都要遍历到最后的情况发生
                 head.next = head.child;
                 head.child.prev = head;
                 head.child = null;
-                if (childLast != null) childLast.next = tmp;
+                if (childLast != null) childLast.next = tmp;  // 防止nullptr的情况在这里
                 if (tmp != null) tmp.prev = childLast;
                 last = head;
                 head = childLast;
