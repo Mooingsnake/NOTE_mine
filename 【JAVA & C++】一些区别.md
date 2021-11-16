@@ -1,3 +1,62 @@
+## C++11 的新特性 
+from:leetcode C++面试突击（付费内容，我也没怎么看懂）
+
+1.```auto``` 类型推导
+
+注意：编译器推导出来的类型和初始值的类型并不完全一样，编译器会适当地改变结果类型使其更符合初始化规则。
+
+2.```decltype``` 类型推导
+
+关键字：decltype 是“declare type”的缩写，译为“声明类型”。和 auto 的功能一样，都用来在编译时期进行自动类型推导。如果希望从表达式中推断出要定义的变量的类型，但是不想用该表达式的值初始化变量，这时就不能再用 auto。decltype 作用是选择并返回操作数的数据类型。
+
+二者区别：
+```
+auto var = val1 + val2; 
+decltype(val1 + val2) var1 = 0; 
+```
+3.```lambda```表达式
+耳熟能详了我不介绍了
+```
+[capture list] (parameter list) -> return type
+{
+   function body;     
+};
+```
+4.for循环
+```
+for (declaration : expression){
+    statement
+}
+```
+5.右值引用
+
+6.标准库 move() 函数
+
+7.智能指针
+
+8.delete 函数和 default 函数
+```
+#include <iostream>
+using namespace std;
+
+class A
+{
+public:
+	A() = default; // 表示使用默认的构造函数
+	~A() = default;	// 表示使用默认的析构函数
+	A(const A &) = delete; // 表示类的对象禁止拷贝构造
+	A &operator=(const A &) = delete; // 表示类的对象禁止拷贝赋值
+};
+int main()
+{
+	A ex1;
+	A ex2 = ex1; // error: use of deleted function 'A::A(const A&)'
+	A ex3;
+	ex3 = ex1; // error: use of deleted function 'A& A::operator=(const A&)'
+	return 0;
+}
+
+```
 ## 关于new
 我真的难受死了为什么找不到那个关于C++ 里面不new也是实例化对象new了也能实例化对象
 以前写的笔记找也找不到
