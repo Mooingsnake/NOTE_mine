@@ -11,8 +11,14 @@
 <span id ="sort"></span>
 ## O（n²）排序
 ### 总览
-![image](https://user-images.githubusercontent.com/47411365/137577207-d17bd185-05bb-4a23-9b0b-e03816f787f3.png)
 
+
+
+### 冒泡排序O（n²）
+A和A+1比较，如果大了就换位置，一次可能只有A和A+1冒泡，但是多冒几次就好了。
+
+
+![image](https://user-images.githubusercontent.com/47411365/142257963-7d0224d8-522c-40d9-bdc7-53bc05a2e12a.png)
 
 ### 选择排序  O(n²)
 ![image](https://user-images.githubusercontent.com/47411365/125230656-d3a6c700-e30b-11eb-9cee-8e0447564338.png)
