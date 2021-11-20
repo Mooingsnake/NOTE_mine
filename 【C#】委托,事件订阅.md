@@ -1,11 +1,16 @@
+ - [定论](#dinglun)
+ - [基本用法 delegate & event](#basic)
+ - [进阶用法 EventHandler<TEventArgs>](#EventHandler)
+ - [具体使用gameframework](#gf)
+<span id="dinglun"></span>
 ## 定论
 委托就是一个函数指针，我们可以在C++里面找到对应的部分，是lambda和函数指针：
 ```
     sort(arr.begin(), arr.end(), [](int a, int b){return a>b;})
 ```
 ![image](https://user-images.githubusercontent.com/47411365/140749624-1b7ca5e5-5eea-4d76-9f67-05afde3b7cef.png)
-
-## 基本用法
+<span id="basic"></span>
+## 基本用法 delegate & event
 微软官方的说法是调用者自己也提供了一部分的算法实现，下面是bilibili的视频：
 
 From：https://www.bilibili.com/video/BV1t3411176r/?spm_id_from=333.788.recommend_more_video.0
@@ -42,6 +47,81 @@ C++ 用void (* f)(int a, int b);表示的函数指针，在C#里是用delegate�
 
 ![image](https://user-images.githubusercontent.com/47411365/140891773-e8ef3192-e038-48e1-8d68-40854d6acd9d.png)
 
+<span id="EventHandler"></span>
+## 进阶用法 EventHandler<TEventArgs>
+    
+![image](https://user-images.githubusercontent.com/47411365/142733663-adb327ec-dfd5-4dc8-a1cf-bf264c008c7b.png)
+    
+```
+using System;
+
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Counter c = new Counter(new Random().Next(10)); // 随机一个10以内数
+            c.ThresholdReached += c_ThresholdReached;   // 订阅这个事件
+
+            Console.WriteLine("press 'a' key to increase total");
+            while (Console.ReadKey(true).KeyChar == 'a')
+            {
+                Console.WriteLine("adding one");
+                c.Add(1);
+            }
+        }
+
+        static void c_ThresholdReached(object sender, ThresholdReachedEventArgs e) // 用户自己实现事件
+        {
+            Console.WriteLine("The threshold of {0} was reached at {1}.", e.Threshold,  e.TimeReached);
+            Environment.Exit(0);
+        }
+    }
+
+    class Counter
+    {
+        private int threshold;
+        private int total;
+
+        public Counter(int passedThreshold)
+        {
+            threshold = passedThreshold;
+        }
+
+        public void Add(int x)
+        {
+            total += x;
+            if (total >= threshold) // 加到随机数以后进入
+            {
+                ThresholdReachedEventArgs args = new ThresholdReachedEventArgs();  
+                args.Threshold = threshold;
+                args.TimeReached = DateTime.Now;
+                OnThresholdReached(args); // 事件被调用的地方
+            }
+        }
+
+        protected virtual void OnThresholdReached(ThresholdReachedEventArgs e)  
+        {
+            EventHandler<ThresholdReachedEventArgs> handler = ThresholdReached;
+            if (handler != null)
+            {
+                handler(this, e);  // (sender ,e)
+            }
+        }
+
+        public event EventHandler<ThresholdReachedEventArgs> ThresholdReached; // 声明有这么一个玩意，你看是event。
+    }
+
+    public class ThresholdReachedEventArgs : EventArgs // 别处注册的具体事件，一般只用写成员变量用来记录当时情况就行。
+    {
+        public int Threshold { get; set; }
+        public DateTime TimeReached { get; set; }
+    }
+}
+```
+    
+<span id="gf"></span>
 ## 具体使用（gameframework）
 https://github.com/EllanJiang/GameFramework/search?q=LoadAssetSuccessCallback
 
