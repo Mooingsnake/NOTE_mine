@@ -17,3 +17,42 @@ BuiltinData主要设置了可以变的信息（图一在ProcedureLaunch.cs里面
 
 ## 为什么会有这样的差别
 这两个真的有差别吗？我可以在config里面放可变数据吗？
+
+config实际上存储的是一个字典表：
+
+![image](https://user-images.githubusercontent.com/47411365/143691530-9e522008-f171-42a6-a8f6-45e87802da0c.png)
+
+
+实际上，Config里面读取配置信息的时候调用的也是DataProvider ，也就是DataTableComponent的套路。
+
+![image](https://user-images.githubusercontent.com/47411365/143691115-7ae143d1-176c-4b34-8bac-0ccc7db97dbf.png)
+
+from:ConfigManager.cs
+
+因为走了框架所以需要随时监听有没有加载完成：
+
+![image](https://user-images.githubusercontent.com/47411365/143691472-f002a2f5-ec38-4c4d-af7b-b854dfe3c87c.png)
+
+
+===================分割线=========================
+BuiltinData里面的InitDictionary方法则是需要解析XML文件，所以还需要接入一个xml解析器：
+
+![image](https://user-images.githubusercontent.com/47411365/143691208-c602c72d-de77-46e5-980b-1cf76ea5f74d.png)
+
+并没有通过gf的资源加载方法，而是使用了微软给C#的自带xml解析器：
+
+![image](https://user-images.githubusercontent.com/47411365/143691310-884c7d23-3a67-4dca-8d32-da18de84d2ab.png)
+
+xmlDocument就是官方提供的xml对象，xmlDocument.LoadXml(dictionaryString); 这句就是系统的加载函数，所以不存在异步，可以放心使用。
+
+因为加载没走框架库，所以在ProcedureLaunch.cs没有提到任何订阅.Event.Subcribe()这样的函数。
+
+================？？？============
+
+等下，为什么这里还有Dictionary的事件监听?如果是全部自己搞的那就不可能呀！
+
+![image](https://user-images.githubusercontent.com/47411365/143691726-085b4f2e-5a1f-4f25-a5c5-7ff4114d7c49.png)
+
+首先可以肯定的是Dictionary也来自最普通的数据读取，我们需要知道它哪里调用了这个东西。
+
+
