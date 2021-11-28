@@ -35,6 +35,7 @@ from:ConfigManager.cs
 
 
 ===================分割线=========================
+
 BuiltinData里面的InitDictionary方法则是需要解析XML文件，所以还需要接入一个xml解析器：
 
 ![image](https://user-images.githubusercontent.com/47411365/143691208-c602c72d-de77-46e5-980b-1cf76ea5f74d.png)
@@ -55,4 +56,8 @@ xmlDocument就是官方提供的xml对象，xmlDocument.LoadXml(dictionaryString
 
 首先可以肯定的是Dictionary也来自最普通的数据读取，我们需要知道它哪里调用了这个东西。
 
+然后我搜了一下，貌似并没有用XMLHelper里面的那个函数，或者说整个这一整个类都没有用到，用的还是LocalizationComponent里面的内容。而这个组件里面的确有关于字典加载成功事件的注册：
 
+![image](https://user-images.githubusercontent.com/47411365/143765903-6ff0e38e-98bf-48f6-a0f5-bccb8525f817.png)
+
+需要注意的是github里面BuiltinDataComponent里面的ParseData函数跳转到了XmlLocalizationHelper，但是其实不是这个函数，需要做一个区分。
