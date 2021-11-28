@@ -46,7 +46,10 @@ BuiltinData里面的InitDictionary方法则是需要解析XML文件，所以还�
 
 xmlDocument就是官方提供的xml对象，xmlDocument.LoadXml(dictionaryString); 这句就是系统的加载函数，所以不存在异步，可以放心使用。
 
-因为加载没走框架库，所以在ProcedureLaunch.cs没有提到任何订阅.Event.Subcribe()这样的函数。
+因为加载没走框架库，所以在ProcedureLaunch.cs没有提到任何订阅.Event.Subcribe()这样的函数。（__下图打脸现场__）
+
+![image](https://user-images.githubusercontent.com/47411365/143766959-fb635068-791f-459c-a2c8-3b95884210c9.png)
+
 
 ================？？？============
 
