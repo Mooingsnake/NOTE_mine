@@ -45,6 +45,8 @@ https://github.com/EllanJiang/UnityGameFramework/blob/86bd9dc64f8502c2e726d11bdd
 
 ![image](https://user-images.githubusercontent.com/47411365/144075771-68e72489-c646-409a-a1cb-b85db66eba74.png)
 
+=============================================我是未来的画图zy，我发现这里不严谨，其实不经过component=========
+
 进configcomponent里面看看
 
 ![image](https://user-images.githubusercontent.com/47411365/144075850-9ce7d75f-4da7-4bae-acc9-c272a5a81a1f.png)
@@ -80,10 +82,79 @@ https://github.com/EllanJiang/UnityGameFramework/blob/86bd9dc64f8502c2e726d11bdd
 
 画图吧，我麻了、
 
+=======================================画了图来纠正了==========================
+
+![image](https://user-images.githubusercontent.com/47411365/144084810-22c85431-dede-4885-82d4-34a1a109cf21.png)
+
+其实来自IConfigManager，所以我们得搜索这个类，又出来两个
+
+![image](https://user-images.githubusercontent.com/47411365/144085053-81071660-9b8f-4ec7-8700-9af199a737ae.png)
+
+先忽略上面那个同样继承了但是好像继承的比较复杂的情况，看看下面那个
+
+![image](https://user-images.githubusercontent.com/47411365/144085717-a83bf70b-fec2-454a-8291-06ffd3bd0591.png)
+
+再上去看看声明和初始化：
+
+![image](https://user-images.githubusercontent.com/47411365/144085828-70c35ca4-b6f8-42ec-96a6-a6e579b955a6.png)
+
+what form of power is this？
+
+（顺带如果刚刚搜索IConfigManager的时候往下看）
+
+![image](https://user-images.githubusercontent.com/47411365/144086173-b9c52b50-eb02-4090-b454-31e758a0dd7f.png)
+
+为什么可以继承带自己泛型的类啊！！！！！！
+
+不过看清楚了，因为IConfigManager的基类是DataProvider<IConfigManager>，所以子类确实可以被赋值成
+  
+```
+  m_DataProvider = new DataProvider<IConfigManager>(this);
+```
+
+然后我搜了一下，少见多怪了，其实这个写法C++里面也有 https://stackoverflow.com/questions/8336220/how-can-a-class-inherit-from-a-template-based-on-itself
+  
+确实按道理说不应该能够，但是这个写法保证了这句话可以过编译，它的名字叫做 Curiously Recurring Template Pattern, or CRTP for short。
+  
+  关于CRTP的东西这里不再赘述，你只要知道这是一种让基类可以痛快的使用派生类的成员函数的手段就可以了（为什么要这样？某种程度而言是因为多态的虚函数消耗太大了，你就当是新型多态（学名静态多态，因为在静态编译期就可以让基类使用自己的基类方法了。））
+  
+  https://github.com/EllanJiang/GameFramework/blob/2ce0bf15d8f29c270c5e266b18f0c4c1840e934e/GameFramework/Base/DataProvider/DataProvider.cs#L361
+  
+  这里很明显就是在调用自己的派生类的成员函数了，应该？
+  
+  来看崩溃现场
+  
+  来自DataProvider 
+  
+![image](https://user-images.githubusercontent.com/47411365/144102435-e6beb12e-4399-467f-9a40-a83ea11ac213.png)
+
+  ![image](https://user-images.githubusercontent.com/47411365/144102539-60b831f9-e463-4205-801d-11b1cd4b5aed.png)
+
+你妈你们两个是互相锁死了是吧，我连夜爬上崆峒山。
+ 
+ 要相信肯定还有我不知道的展开！直接开始搜ParseData！
+
+  ![image](https://user-images.githubusercontent.com/47411365/144102720-5e6d33b2-734e-4f72-9999-c7d1c161c9b2.png)
+
+ 落泪了，好像
+  
+  ![image](https://user-images.githubusercontent.com/47411365/144103064-411fac63-c5b3-4850-a441-539841b0d3c7.png)
+  
+https://github.com/EllanJiang/UnityGameFramework/blob/b3f3d9eb818f93082346603a7cb871a84b72e53b/Scripts/Runtime/Config/DefaultConfigHelper.cs#L131
 
 
 
+调用者应该是在DataProvider里面的这个：
+  
+  ![image](https://user-images.githubusercontent.com/47411365/144106160-3ea892fc-9f95-4a9c-a1eb-2e6847098c72.png)
 
+  给一下链接吧https://github.com/EllanJiang/GameFramework/blob/2ce0bf15d8f29c270c5e266b18f0c4c1840e934e/GameFramework/Base/DataProvider/DataProvider.cs#L361
+
+ owner的赋值也有意思：
+
+![image](https://user-images.githubusercontent.com/47411365/144106302-5f07f346-f48a-4c87-a52d-40c9a0f7dc5e.png)
+
+至此应该差不多了
 
 
 
