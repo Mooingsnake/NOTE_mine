@@ -1,4 +1,4 @@
-## 情况还原
+## 情况还原（因为当时config感觉没调好，就一直追着config，但是其实是localization）
 ![image](https://user-images.githubusercontent.com/47411365/144073659-883f1c67-8954-4858-b182-54a7952c555f.png)
 
 ![image](https://user-images.githubusercontent.com/47411365/144073763-a92893c6-e22e-4888-ad5d-4bdae682e577.png)
