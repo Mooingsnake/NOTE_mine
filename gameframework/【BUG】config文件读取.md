@@ -156,6 +156,38 @@ https://github.com/EllanJiang/UnityGameFramework/blob/b3f3d9eb818f93082346603a7c
 
 至此应该差不多了
 
+  ====================第二日下午 ==== 还没完======================
+
+按理说如果真的进入的是这里，那就应该有对应的语句报错，但是其实并没有。
+
+其实我 __漏了一点__ 
+
+![image](https://user-images.githubusercontent.com/47411365/144176187-04b84463-2dc0-4125-a955-a292d1654380.png)
+
+ 前几个warning也同样重要，搜索前面的warning信息，我才发现报错的是这一条：https://github.com/EllanJiang/UnityGameFramework/blob/b3f3d9eb818f93082346603a7cb871a84b72e53b/Scripts/Runtime/Config/DefaultConfigHelper.cs#L100
+
+我们解析错了！我们解析到的string，后面的解析方法，是txt的简单格式，不是xml！
+ 
+![image](https://user-images.githubusercontent.com/47411365/144176423-2a299138-574d-4161-8620-877dd0527720.png)
+ 
+那么哪里可以设置解析器设置成自己的xml格式呢？
+  
+先确认一个概念，xxxManager，比如ConfigManager的，表示的是一个人大而全的管理器，它管辖所有部分，但不不特别实现具体功能。 xxxHelper，会有defaultxxxxHelper这种作者实现好的，可以解析txt和byte的具体实现，但是如果你想实现一个xml的解析器，也可以，甚至你只需要继承DefaultxxxHelper就行了。
+ 
+![image](https://user-images.githubusercontent.com/47411365/144177553-54150978-d9c2-46e9-b1f5-ee4c1863765f.png)
+
+  
+重读强调一遍：__Manager是全能管理器，Helper可以只实现其中的五六个函数__  当然我们需要指定对应的解析器，我知道localization的，在编辑器界面
+  
+![image](https://user-images.githubusercontent.com/47411365/144177417-3586de36-8a18-4ad4-8463-165453f78acc.png)
+
+ 但是StarForce里面，config的解析器用的也是默认解析器，所以问题在于。。。？
+  
+  奇迹出现了！！！当我加上xml解析器然后勾选上以后，其他的报错也没有了！！！！果然是这个原因！！！
+ 
+ ![image](https://user-images.githubusercontent.com/47411365/144179269-290eee8f-59e8-4df2-ade6-91b36123511b.png)
+ 
+ 啊，真好
 
 
 
