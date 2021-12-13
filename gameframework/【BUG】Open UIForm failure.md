@@ -116,4 +116,4 @@ UnityGameFramework.Runtime.EditorResourceComponent:LoadAsset (string,System.Type
 ```
 https://github.com/EllanJiang/UnityGameFramework/blob/b2d2ef63517d2cab5f0def57e691a2d794b6a7f5/Scripts/Runtime/Resource/ResourceComponent.cs#L1244
 
-我要困死了，明天搞
+这里就可以看清楚了，我们缺了Assets/ ，回去一看果然是UIextension.cs这里面没有好好加上路径名
